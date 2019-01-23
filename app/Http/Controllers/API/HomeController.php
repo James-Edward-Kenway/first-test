@@ -63,7 +63,6 @@ class HomeController extends Controller
 
 
     
-    //this is working with only one depth children
     public function Products(Request $request){
 
         $brand_id = $request->get('brand_id');
@@ -106,7 +105,7 @@ class HomeController extends Controller
         }
 
 
-        $products = $products->paginate(1)->toArray();
+        $products = $products->paginate(20)->toArray();
 
 
         $attrs = ['brand_id'=>$brand_id, 'product_category_id'=>$pro_cat_id, 'order'=>$order, 'order_type'=>$order_type, 'attributes'=>$attributes];
@@ -123,6 +122,70 @@ class HomeController extends Controller
         }
 
         return response($products);
+
+
+    }
+
+
+    public function Services(Request $request){
+
+        $brand_id = $request->get('brand_id');
+        
+        //this will also determine attribute groups
+        $pro_cat_id = @$request->get('service_category_id');
+        
+        //ids of the attributes
+        $attributes = @$request->get('attributes');
+        
+        //order, might include price, created_at
+        $order = @$request->get('order');
+
+        //order_type, one of these: asc or desc
+        $order_type = @$request->get('order_type');
+
+        if($order != "price" && $order != "created_at"){
+            $order = "id";
+        }
+
+        if($order_type!="asc"&&$order_type!="desc"){
+            $order_type = "asc";
+        }
+
+        $services = Service::orderBy($order, $order_type);
+
+        if(\is_numeric($brand_id)){
+            $services->where('brand_id',$brand_id);
+        }
+
+        if(is_numeric($pro_cat_id)){
+            $services->where('product_category_id',$pro_cat_id);
+        }
+
+
+        if(\is_array($attributes)){
+            $services->whereHas('attributes',function($q) use($attributes){
+                $q->whereIn('id',$attributes);
+            })->orderBy($order, $order_type);
+        }
+
+
+        $services = $services->paginate(20)->toArray();
+
+
+        $attrs = ['brand_id'=>$brand_id, 'product_category_id'=>$pro_cat_id, 'order'=>$order, 'order_type'=>$order_type, 'attributes'=>$attributes];
+        $services['first_page_url'] .= '&'.http_build_query($attrs);
+
+        $services['last_page_url'] .= '&'.http_build_query($attrs);
+        
+        if($services['next_page_url']!=null){
+            $services['next_page_url'] .= '&'.http_build_query($attrs);
+        }
+        
+        if($services['prev_page_url']!=null){
+            $services['prev_page_url'] .= '&'.http_build_query($attrs);
+        }
+
+        return response($services);
 
 
     }

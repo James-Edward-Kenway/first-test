@@ -163,11 +163,67 @@
 >> bu attributlani hech biri ajburiy emas
 >> ular *brand_id, product_category_id, attributes, order, order_type*
 
-`
+```
 brand_id = (son) brendni idsi **124**
 product_category_id = (son) kategoriya idsi **29**
 attributes = (array) tanlangan atributlani idlari **[1,2,3,7,5]**
 order = (price|created_at)
 order_type = (asc|desc)
-`
+```
 
+### Apidan kelgan javob produkta uchun
+
+
+```
+{
+  "current_page": 1,
+  "data": [
+    {
+      "id": 1,
+      "product_category_id": 10,
+      "brand_id": 1,
+      "user_id": 1,
+      "title": "Real Title of the product but fake",
+      "description": "Real Title of the product but fakeReal Title of the product but fakeReal Title of the product but fakeReal Title of the product but fake",
+      "image": "ss",
+      "price": "3600.00",
+      "created_at": "2019-01-31 00:00:00",
+      "updated_at": "2019-01-24 00:00:00"
+    },
+    {
+      "id": 2,
+      "product_category_id": 10,
+      "brand_id": 1,
+      "user_id": 1,
+      "title": "2222Real Title of the product but fake",
+      "description": "222Real Title of the product but fakeReal Title of the product but fakeReal Title of the product but fakeReal Title of the product but fake",
+      "image": "ss",
+      "price": "3600.00",
+      "created_at": "2019-01-31 00:00:00",
+      "updated_at": "2019-01-24 00:00:00"
+    },
+    {
+      "id": 3,
+      "product_category_id": 10,
+      "brand_id": 1,
+      "user_id": 1,
+      "title": "525 Title of the product but fake",
+      "description": "252525 Title of the product but fakeReal Title of the product but fakeReal Title of the product but fakeReal Title of the product but fake",
+      "image": "ss",
+      "price": "3600.00",
+      "created_at": "2019-01-31 00:00:00",
+      "updated_at": "2019-01-24 00:00:00"
+    }
+  ],
+  "first_page_url": "http://j.asiagood.uz/api/products?page=1&order=id&order_type=asc",
+  "from": 1,
+  "last_page": 1,
+  "last_page_url": "http://j.asiagood.uz/api/products?page=1&order=id&order_type=asc",
+  "next_page_url": null,
+  "path": "http://j.asiagood.uz/api/products",
+  "per_page": 20,
+  "prev_page_url": null,
+  "to": 3,
+  "total": 3
+}
+```

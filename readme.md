@@ -1,12 +1,11 @@
 # asiagood documentation for backend Restful api
 
-  > Home api request
+### Home api request
 
-# api url for the home page loading
+> api url for the home page loading
+>> http://{ip/hostname}/api/home
 
->http://{ip/hostname}/api/home
-
-# response to the request above
+### response to the request above
 ```
 {
   "brand": [
@@ -77,13 +76,11 @@
 ```
 # Service Categories api request
 
-< api url for the home page loading
+> api url for the home page loading
+>>http://{ip/hostname}/api/sub_service_category/{id}
+>>>id = service_category_id `example: http://{ip/hostname}/api/sub_service_category/1`
 
->http://{ip/hostname}/api/sub_service_category/{id}
->>id = service_category_id
-`example: http://{ip/hostname}/api/sub_service_category/1`
-
-``response to the request above``
+###response to the request above
 ```
 [
   {

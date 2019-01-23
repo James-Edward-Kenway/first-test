@@ -62,7 +62,7 @@ class HomeController extends Controller
 
     
     //this is working with only one depth children
-    public function subProductCategory($id){
+    public function subPCategory($id){
 
         $product = ProductCategory::find($id);
 

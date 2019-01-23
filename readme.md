@@ -75,15 +75,15 @@
   ]
 }
 ```
-  > Service Categories api request
+# Service Categories api request
 
-# api url for the home page loading
+> api url for the home page loading
 
 >http://{ip/hostname}/api/sub_service_category/{id}
 >>id = service_category_id
 `example: http://{ip/hostname}/api/sub_service_category/1`
 
-# response to the request above
+>> response to the request above
 ```
 [
   {

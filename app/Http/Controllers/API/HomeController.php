@@ -132,7 +132,7 @@ class HomeController extends Controller
         $brand_id = $request->get('brand_id');
         
         //this will also determine attribute groups
-        $pro_cat_id = @$request->get('service_category_id');
+        $ser_cat_id = @$request->get('service_category_id');
         
         //ids of the attributes
         $attributes = @$request->get('attributes');
@@ -158,7 +158,7 @@ class HomeController extends Controller
         }
 
         if(is_numeric($pro_cat_id)){
-            $services->where('product_category_id',$pro_cat_id);
+            $services->where('product_category_id',$ser_cat_id);
         }
 
 
@@ -172,7 +172,7 @@ class HomeController extends Controller
         $services = $services->paginate(20)->toArray();
 
 
-        $attrs = ['brand_id'=>$brand_id, 'product_category_id'=>$pro_cat_id, 'order'=>$order, 'order_type'=>$order_type, 'attributes'=>$attributes];
+        $attrs = ['brand_id'=>$brand_id, 'service_category_id'=>$ser_cat_id, 'order'=>$order, 'order_type'=>$order_type, 'attributes'=>$attributes];
         $services['first_page_url'] .= '&'.http_build_query($attrs);
 
         $services['last_page_url'] .= '&'.http_build_query($attrs);

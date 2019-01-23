@@ -155,7 +155,7 @@
 ]
 ```
 
-# Products api request
+# Products va Services api request
 
 > ### api url for loading Products
 >> http://{ip/hostname}/api/products
@@ -163,12 +163,17 @@
 >> bu attributlani hech biri ajburiy emas
 >> ular *brand_id, product_category_id, attributes, order, order_type*
 
+> ### api url for loading Services
+>> http://{ip/hostname}/api/services
+
 ```
 brand_id = (son) brendni idsi **124**
 product_category_id = (son) kategoriya idsi **29**
 attributes = (array) tanlangan atributlani idlari **[1,2,3,7,5]**
 order = (price|created_at)
 order_type = (asc|desc)
+
+serviceladayam shular bor lekin *product_category_id* ni o'rnida *service_category_id* bo'ladi.
 ```
 
 ### Apidan kelgan javob produkta uchun
@@ -227,3 +232,6 @@ order_type = (asc|desc)
   "total": 3
 }
 ```
+
+## filterda kotegoriyani tanlaganda filter uchun ishlatiladigan attribute laga so'rov jo'natiladi.
+> chunki attribute la kotegoriyaga qarab o'zgaradi.

@@ -14,5 +14,7 @@ use Illuminate\Http\Request;
 */
 
 Route::get('home','API\HomeController@index');
+
 Route::get('sub_service_category/{id}','API\HomeController@subServiceCategory');
-Route::get('home','API\HomeController@index');
+
+Route::get('sub_product_category/{id}','API\HomeController@subProductCategory');

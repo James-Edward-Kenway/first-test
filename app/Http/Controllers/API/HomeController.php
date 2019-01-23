@@ -25,11 +25,12 @@ class HomeController extends Controller
         
         $result['product_category'] = ProductCategory::where('parent_id',0)->get()->toArray();
 
-        
+
         return response($result);
     }
 
 
+    //this is working with only one depth children
     public function subServiceCategory($id){
 
         $service = ServiceCategory::find($id);
@@ -38,6 +39,21 @@ class HomeController extends Controller
         
         if($service != null){
             $result = $service->children()->with('children')->get()->toArray();
+        }
+        
+        return response($result);
+    }
+
+
+    //this is working with only one depth children
+    public function subProductCategory($id){
+
+        $product = ProductCategory::find($id);
+
+        $result = [];
+        
+        if($product != null){
+            $result = $product->children()->with('children')->get()->toArray();
         }
         
         return response($result);

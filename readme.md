@@ -75,3 +75,80 @@
   ]
 }
 ```
+  > Service Categories api request
+
+# api url for the home page loading
+
+>http://{ip/hostname}/api/sub_service_category/{id}
+>>id = service_category_id
+`example: http://{ip/hostname}/api/sub_service_category/1`
+
+# response to the request above
+```
+[
+  {
+    "id": 3,
+    "parent_id": 1,
+    "order": 0,
+    "name": "{\"uz\":\"Electronics 1\",\"ru\":\"Electronics 1\"}",
+    "image64": "http://url/or/ip",
+    "image128": "http://url/or/ip",
+    "created_at": "2019-01-31 00:00:00",
+    "updated_at": "2019-01-31 00:00:00",
+    "children": [
+      {
+        "id": 5,
+        "parent_id": 3,
+        "order": 0,
+        "name": "{\"uz\":\"Electronics 1-1\",\"ru\":\"Electronics 1-1\"}",
+        "image64": "http://url/or/ip",
+        "image128": "http://url/or/ip",
+        "created_at": "2019-01-31 00:00:00",
+        "updated_at": "2019-01-31 00:00:00"
+      },
+      {
+        "id": 6,
+        "parent_id": 3,
+        "order": 0,
+        "name": "{\"uz\":\"Electronics 1-2\",\"ru\":\"Electronics 1-2\"}",
+        "image64": "http://url/or/ip",
+        "image128": "http://url/or/ip",
+        "created_at": "2019-01-31 00:00:00",
+        "updated_at": "2019-01-30 00:00:00"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "parent_id": 1,
+    "order": 0,
+    "name": "{\"uz\":\"Electronics 2\",\"ru\":\"Electronics 2\"}",
+    "image64": "http://url/or/ip",
+    "image128": "http://url/or/ip",
+    "created_at": "2019-01-31 00:00:00",
+    "updated_at": "2019-01-30 00:00:00",
+    "children": [
+      {
+        "id": 7,
+        "parent_id": 4,
+        "order": 0,
+        "name": "{\"uz\":\"Electronics 2-1\",\"ru\":\"Electronics 2-1\"}",
+        "image64": "http://url/or/ip",
+        "image128": "http://url/or/ip",
+        "created_at": "2019-01-31 00:00:00",
+        "updated_at": "2019-01-31 00:00:00"
+      },
+      {
+        "id": 8,
+        "parent_id": 4,
+        "order": 0,
+        "name": "{\"uz\":\"Electronics 2-1\",\"ru\":\"Electronics 2-2\"}",
+        "image64": "http://url/or/ip",
+        "image128": "http://url/or/ip",
+        "created_at": "2019-01-31 00:00:00",
+        "updated_at": "2019-01-30 00:00:00"
+      }
+    ]
+  }
+]
+```

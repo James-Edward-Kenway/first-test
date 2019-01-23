@@ -80,7 +80,7 @@
 >>http://{ip/hostname}/api/sub_service_category/{id}
 >>>id = service_category_id `example: http://{ip/hostname}/api/sub_service_category/1`
 
-###response to the request above
+### response to the request above
 ```
 [
   {

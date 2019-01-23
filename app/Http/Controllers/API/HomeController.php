@@ -4,6 +4,9 @@ namespace App\Http\Controllers\API;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\ServiceCategory;
+use App\ProductCategory;
+use App\Brand;
 
 class HomeController extends Controller
 {
@@ -14,8 +17,15 @@ class HomeController extends Controller
      */
     public function index()
     {
-        //
-        return response(['response yeah!!']);
+        $result = [];
+
+        $result['brand'] = Brand::all()->toArray();
+
+        $result['service_category'] = ServiceCategory::where('parent_id',0)->get()->toArray();
+        
+        $result['product_category'] = ProductCategory::where('parent_id',0)->get()->toArray();
+
+        return response($result);
     }
 
     /**

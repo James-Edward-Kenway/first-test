@@ -25,6 +25,7 @@ class HomeController extends Controller
         
         $result['product_category'] = ProductCategory::where('parent_id',0)->get()->toArray();
 
+        
         return response($result);
     }
 
@@ -36,7 +37,7 @@ class HomeController extends Controller
         $result = [];
         
         if($service != null){
-            $result = $service->children()->with('children')->with('children')->get()->toArray();
+            $result = $service->children()->with('children')->get()->toArray();
         }
         
         return response($result);

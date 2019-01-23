@@ -7,6 +7,7 @@
 {http://address.uz/api/home}
 
 # response to the request above
+```
 {
   "brand": [
     {
@@ -67,3 +68,4 @@
     }
   ]
 }
+```

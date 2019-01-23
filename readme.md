@@ -1,10 +1,10 @@
 # asiagood documentation for backend Restful api
 
-[Home api request]
+  > Home api request
 
 # api url for the home page loading
 
-{http://address.uz/api/home}
+>http://{ip/hostname}/api/home
 
 # response to the request above
 ```
@@ -12,6 +12,7 @@
   "brand": [
     {
       "id": 1,
+      "order": 0,
       "name": "{\"uz\":\"Apple\",\"ru\":\"Apple\"}",
       "image64": "http://url/ok",
       "image128": "http://url/ok",
@@ -20,6 +21,7 @@
     },
     {
       "id": 2,
+      "order": 0,
       "name": "{\"uz\":\"Microsoft\",\"ru\":\"Microsoft\"}",
       "image64": "http://url/ok",
       "image128": "http://url/ok",
@@ -31,6 +33,7 @@
     {
       "id": 1,
       "parent_id": 0,
+      "order": 0,
       "name": "{\"uz\":\"Electronics\",\"ru\":\"Electronics\"}",
       "image64": "http://url",
       "image128": "http://url",
@@ -40,6 +43,7 @@
     {
       "id": 2,
       "parent_id": 0,
+      "order": 0,
       "name": "{\"uz\":\"Electronics\",\"ru\":\"Electronics\"}",
       "image64": "http://url",
       "image128": "http://url",
@@ -51,6 +55,7 @@
     {
       "id": 1,
       "parent_id": 0,
+      "order": 0,
       "name": "{\"uz\":\"Electronics\",\"ru\":\"Electronics\"}",
       "image64": "http://url",
       "image128": "http://url",
@@ -60,6 +65,7 @@
     {
       "id": 2,
       "parent_id": 0,
+      "order": 0,
       "name": "{\"uz\":\"Electronics\",\"ru\":\"Electronics\"}",
       "image64": "http://url",
       "image128": "http://url",

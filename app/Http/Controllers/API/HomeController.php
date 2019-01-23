@@ -28,6 +28,20 @@ class HomeController extends Controller
         return response($result);
     }
 
+
+    public function subServiceCategory($id){
+
+        $service = ServiceCategory::find($id);
+
+        $result = [];
+        
+        if($service != null){
+            $result['parent'] = $service->toArray();
+            $result['items'] = $service->children->toArray();
+        }
+        
+        return response($result);
+    }
     /**
      * Store a newly created resource in storage.
      *

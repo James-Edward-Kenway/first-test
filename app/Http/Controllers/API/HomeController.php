@@ -62,9 +62,26 @@ class HomeController extends Controller
 
     
     //this is working with only one depth children
-    public function subPCategory($id){
+    public function Products(Request $request){
 
-        $product = ProductCategory::find($id);
+        $brand_id = $request->get('brand_id');
+        
+        //this will also determine attribute groups
+        $pro_cat_id = $request->get('product_category_id');
+        
+        //ids of the attributes
+        $attributes = $request->get('attributes');
+        
+        //order, might include price, created_at
+        $order = $request->get('order');
+
+        //order_type, one of these: asc or desc
+        $order_type = $request->get('order_type');
+
+
+
+        $product = Product::where('brand_id',$brand_id)->where('product_category_id',$pro_cat_id)
+        ->whereIN;
 
         $result = [];
         
@@ -74,6 +91,8 @@ class HomeController extends Controller
         
         return response($result);
     }
+
+
     /**
      * Store a newly created resource in storage.
      *

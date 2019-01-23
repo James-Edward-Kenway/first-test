@@ -158,14 +158,16 @@
 # Products api request
 
 > ### api url for loading Products
->> #### http://{ip/hostname}/api/products
->>
->>
->>
->>
-> api url for the product categories data loading
->>http://{ip/hostname}/api/sub_product_category/{id}
->>>id = product_category_id `example: http://{ip/hostname}/api/sub_product_category/1`
+>> http://{ip/hostname}/api/products
+>> bunda bir nechta attributla mavjud
+>> bu attributlani hech biri ajburiy emas
+>> ular *brand_id, product_category_id, attributes, order, order_type*
 
-`product category and service category works in the same way!`
-### response to the request above
+`
+brand_id = (son) brendni idsi **124**
+product_category_id = (son) kategoriya idsi **29**
+attributes = (array) tanlangan atributlani idlari **[1,2,3,7,5]**
+order = (price|created_at)
+order_type = (asc|desc)
+`
+

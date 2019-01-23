@@ -155,3 +155,17 @@
 ]
 ```
 
+# Products api request
+
+> ### api url for loading Products
+>> #### http://{ip/hostname}/api/products
+>>
+>>
+>>
+>>
+> api url for the product categories data loading
+>>http://{ip/hostname}/api/sub_product_category/{id}
+>>>id = product_category_id `example: http://{ip/hostname}/api/sub_product_category/1`
+
+`product category and service category works in the same way!`
+### response to the request above

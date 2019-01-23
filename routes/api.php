@@ -18,3 +18,5 @@ Route::get('home','API\HomeController@index');
 Route::get('sub_service_category/{id}','API\HomeController@subServiceCategory');
 
 Route::get('sub_product_category/{id}','API\HomeController@subProductCategory');
+
+Route::get('products','API\HomeController@Products');

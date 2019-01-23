@@ -190,6 +190,23 @@ class HomeController extends Controller
 
     }
 
+    public function ServiceAttributes($id){
+
+        $groups = ServiceCategory::find($id)->attributesGroups()->with('children')->get();
+
+        return $groups;
+
+    }
+
+
+    public function ProductAttributes($id){
+
+        $groups = ProductCategory::find($id)->attributesGroups()->with('children')->get();
+
+        return $groups;
+
+    }
+
 
     /**
      * Store a newly created resource in storage.

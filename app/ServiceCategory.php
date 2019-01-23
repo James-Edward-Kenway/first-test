@@ -11,4 +11,8 @@ class ServiceCategory extends Model
     public function children(){
         return $this->hasMany('App\ServiceCategory', 'parent_id', 'id');
     }
+
+    public function attributesGroups(){
+        return $this->belongsToMany('App\AttributeCategory', 'attribute_categories_services_categories', 'service_category_id', 'attribute_category_id');
+    }
 }

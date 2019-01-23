@@ -12,4 +12,8 @@ class ProductCategory extends Model
     public function children(){
         return $this->hasMany('App\ProductCategory', 'parent_id', 'id');
     }
+
+    public function attributesGroups(){
+        return $this->belongsToMany('App\AttributeCategory', 'attribute_categories_product_categories', 'product_category_id', 'attribute_category_id');
+    }
 }

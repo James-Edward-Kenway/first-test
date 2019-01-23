@@ -58,6 +58,22 @@ class HomeController extends Controller
         
         return response($result);
     }
+
+
+    
+    //this is working with only one depth children
+    public function subProductCategory($id){
+
+        $product = ProductCategory::find($id);
+
+        $result = [];
+        
+        if($product != null){
+            $result = $product->children()->with('children')->get()->toArray();
+        }
+        
+        return response($result);
+    }
     /**
      * Store a newly created resource in storage.
      *

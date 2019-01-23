@@ -36,8 +36,7 @@ class HomeController extends Controller
         $result = [];
         
         if($service != null){
-            $result['parent'] = $service->toArray();
-            $result['items'] = $service->children->toArray();
+            $result = $service->children()->with('children')->with('children')->get()->toArray();
         }
         
         return response($result);

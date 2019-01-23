@@ -19,6 +19,16 @@ class CreateAttributeCategoriesTable extends Migration
             $table->string('name',512);
             $table->timestamps();
         });
+
+        Schema::create('attribute_categories_product_categories', function (Blueprint $table) {
+            $table->integer('attribute_category_id',0,1);
+            $table->integer('product_category_id',0,1);
+        });
+
+        Schema::create('attribute_categories_services_categories', function (Blueprint $table) {
+            $table->integer('attribute_category_id',0,1);
+            $table->integer('service_category_id',0,1);
+        });
     }
 
     /**
@@ -28,6 +38,8 @@ class CreateAttributeCategoriesTable extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('attribute_categories_product_categories');
+        Schema::dropIfExists('attribute_categories_services_categories');
         Schema::dropIfExists('attribute_categories');
     }
 }

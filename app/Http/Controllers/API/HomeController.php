@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\API;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\Request;
 use App\Http\Controllers\Controller;
 use App\ServiceCategory;
 use App\ProductCategory;
 use App\Brand;
 use App\Product;
+use Illuminate\Support\Facades\URL;
 
 class HomeController extends Controller
 {
@@ -65,7 +66,7 @@ class HomeController extends Controller
     //this is working with only one depth children
     public function Products(Request $request){
 
-        $brand_id = @$request->get('brand_id');
+        $brand_id = $request->get('brand_id');
         
         //this will also determine attribute groups
         $pro_cat_id = @$request->get('product_category_id');
@@ -79,38 +80,51 @@ class HomeController extends Controller
         //order_type, one of these: asc or desc
         $order_type = @$request->get('order_type');
 
-        if($order != "price"&&$order != "created_at"){
-            $order = "";
+        if($order != "price" && $order != "created_at"){
+            $order = "id";
         }
 
         if($order_type!="asc"&&$order_type!="desc"){
-            $order_type = "";
+            $order_type = "asc";
         }
 
-        if(!\is_array($attributes)){
-            $attributes = [];
+        $products = Product::orderBy($order, $order_type);
+
+        if(\is_numeric($brand_id)){
+            $products->where('brand_id',$brand_id);
         }
 
-        $products = Product::where('brand_id',$brand_id)->where('product_category_id',$pro_cat_id)
-        ->where('attributes',function($q) use($attributes){
-            $q->whereIn('id',$attributes);
-        })->orderBy($order, $order_type)->paginate(20);
-
-        dd($products);
-        $result = [];
-        $result['products'] = $products->toArray();
-
-        $result['metadata'] = [
-
-        ];
+        if(is_numeric($pro_cat_id)){
+            $products->where('product_category_id',$pro_cat_id);
+        }
 
 
+        if(\is_array($attributes)){
+            $products->whereHas('attributes',function($q) use($attributes){
+                $q->whereIn('id',$attributes);
+            })->orderBy($order, $order_type);
+        }
 
-        if($product != null){
-            $result = $product->children()->with('children')->get()->toArray();
+
+        $products = $products->paginate(1)->toArray();
+
+
+        $attrs = ['brand_id'=>$brand_id, 'product_category_id'=>$pro_cat_id, 'order'=>$order, 'order_type'=>$order_type, 'attributes'=>$attributes];
+        $products['first_page_url'] .= '&'.http_build_query($attrs);
+
+        $products['last_page_url'] .= '&'.http_build_query($attrs);
+        
+        if($products['next_page_url']!=null){
+            $products['next_page_url'] .= '&'.http_build_query($attrs);
         }
         
-        return response($result);
+        if($products['prev_page_url']!=null){
+            $products['prev_page_url'] .= '&'.http_build_query($attrs);
+        }
+
+        return response($products);
+
+
     }
 
 

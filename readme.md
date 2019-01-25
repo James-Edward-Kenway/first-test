@@ -170,10 +170,12 @@
 name = (string) nomidan qidirish
 brand_id = (son) brendni idsi **124**
 product_category_id = (son) kategoriya idsi **29**
-attributes = (array) tanlangan atributlani idlari **[1,2,3,7,5]**
+attributes[] = (array) tanlangan atributlani idlari **1**
 order = (price|created_at)
 order_type = (asc|desc)
 
+> misol uchun
+>> http://{ip/hostname}/api/services?brand_id=1&name=iphone&service_category_id=1&attributes[]=1&attribute[]=2&attributes[]=3&order=price&order_type=asc
 serviceladayam shular bor lekin *product_category_id* ni o'rnida *service_category_id* bo'ladi.
 ```
 
@@ -244,7 +246,7 @@ serviceladayam shular bor lekin *product_category_id* ni o'rnida *service_catego
 
 >> http://{ip/hostname}/api/service_attributes/{id}
 >>> id = (son) servislani kotegoriyasini idsi
-> `kelgan javob attribut kotegoriyalari. misol uchun, "Rangi" bu attribut kotegoriyasi va childrenda barcha attributla joylashgan. misol uchun Rangi:Oq bo'lishi mumkin.`
+> `kelgan javob attribut kotegoriyalari. misol uchun, "Rangi" bu attribut kotegoriyasi va childrenda barcha attributla joylashgan. misol uchun Rangi:Oq bo'lishi mumkin. produktalani filter qilishda attributlar ning idsi jo'natiladi.`
 
 
 ```

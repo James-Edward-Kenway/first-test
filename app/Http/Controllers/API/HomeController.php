@@ -9,6 +9,7 @@ use App\ProductCategory;
 use App\Brand;
 use App\Product;
 use Illuminate\Support\Facades\URL;
+use App\Service;
 
 class HomeController extends Controller
 {
@@ -66,9 +67,9 @@ class HomeController extends Controller
     public function Products(Request $request){
 
 
-        $name = $request->get('name');
+        $name = @$request->get('name');
 
-        $brand_id = $request->get('brand_id');
+        $brand_id = @$request->get('brand_id');
         
         //this will also determine attribute groups
         $pro_cat_id = @$request->get('product_category_id');
@@ -104,11 +105,10 @@ class HomeController extends Controller
             $products->where('name',$name);
         }
 
-
         if(\is_array($attributes)){
-            $products->whereHas('attributes',function($q) use($attributes){
-                $q->whereIn('id',$attributes);
-            })->orderBy($order, $order_type);
+            $products->join('attribute_categories_product_categories', function($q){
+                $q->on('products.id','=','attribute_categories_product_categories.product_category_id');
+            })->whereIn('attribute_categories_product_categories.attribute_category_id', $attributes);
         }
 
 
@@ -137,9 +137,9 @@ class HomeController extends Controller
     public function Services(Request $request){
 
         
-        $name = $request->get('name');
+        $name = @$request->get('name');
 
-        $brand_id = $request->get('brand_id');
+        $brand_id = @$request->get('brand_id');
         
         //this will also determine attribute groups
         $ser_cat_id = @$request->get('service_category_id');
@@ -170,15 +170,15 @@ class HomeController extends Controller
             $services->where('name',$name);
         }
 
-        if(is_numeric($pro_cat_id)){
-            $services->where('product_category_id',$ser_cat_id);
+        if(is_numeric($ser_cat_id)){
+            $services->where('service_category_id',$ser_cat_id);
         }
 
 
         if(\is_array($attributes)){
-            $services->whereHas('attributes',function($q) use($attributes){
-                $q->whereIn('id',$attributes);
-            })->orderBy($order, $order_type);
+            $services->join('attribute_categories_service_categories', function($q){
+                $q->on('services.id','=','attribute_categories_service_categories.service_category_id');
+            })->whereIn('attribute_categories_service_categories.attribute_category_id', $attributes);
         }
 
 
@@ -199,7 +199,6 @@ class HomeController extends Controller
         }
 
         return response($services);
-        
     }
 
     public function ServiceAttributes($id){
@@ -215,6 +214,11 @@ class HomeController extends Controller
         $groups = ProductCategory::find($id)->attributesGroups()->with('children')->get();
 
         return $groups;
+    }
+
+    public function Brands(){
+        $brands = Brand::all();
+        return $brands;
     }
 
 

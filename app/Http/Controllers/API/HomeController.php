@@ -65,6 +65,9 @@ class HomeController extends Controller
     
     public function Products(Request $request){
 
+
+        $name = $request->get('name');
+
         $brand_id = $request->get('brand_id');
         
         //this will also determine attribute groups
@@ -95,6 +98,10 @@ class HomeController extends Controller
 
         if(is_numeric($pro_cat_id)){
             $products->where('product_category_id',$pro_cat_id);
+        }
+
+        if($name!=null){
+            $products->where('name',$name);
         }
 
 
@@ -129,6 +136,9 @@ class HomeController extends Controller
 
     public function Services(Request $request){
 
+        
+        $name = $request->get('name');
+
         $brand_id = $request->get('brand_id');
         
         //this will also determine attribute groups
@@ -155,6 +165,9 @@ class HomeController extends Controller
 
         if(\is_numeric($brand_id)){
             $services->where('brand_id',$brand_id);
+        }
+        if($name!=null){
+            $services->where('name',$name);
         }
 
         if(is_numeric($pro_cat_id)){
@@ -195,7 +208,6 @@ class HomeController extends Controller
         $groups = ServiceCategory::find($id)->attributesGroups()->with('children')->get();
 
         return $groups;
-
     }
 
 
@@ -204,7 +216,6 @@ class HomeController extends Controller
         $groups = ProductCategory::find($id)->attributesGroups()->with('children')->get();
 
         return $groups;
-
     }
 
 

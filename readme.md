@@ -167,6 +167,7 @@
 >> http://{ip/hostname}/api/services
 
 ```
+name = (string) nomidan qidirish
 brand_id = (son) brendni idsi **124**
 product_category_id = (son) kategoriya idsi **29**
 attributes = (array) tanlangan atributlani idlari **[1,2,3,7,5]**
@@ -235,3 +236,70 @@ serviceladayam shular bor lekin *product_category_id* ni o'rnida *service_catego
 
 ## filterda kotegoriyani tanlaganda filter uchun ishlatiladigan attribute laga so'rov jo'natiladi.
 > chunki attribute la kotegoriyaga qarab o'zgaradi.
+
+### kotegoriya tanlanganda kelishi kerak bo'lgan filterlar
+
+>> http://{ip/hostname}/api/product_attributes/{id}
+>>> id = (son) produktalani kotegoriyasini idsi
+
+>> http://{ip/hostname}/api/service_attributes/{id}
+>>> id = (son) servislani kotegoriyasini idsi
+`kelgan javob attribut kotegoriyalari. misol uchun, "Rangi" bu attribut kotegoriyasi va childrenda barcha attributla joylashgan. misol uchun Rangi:Oq bo'lishi mumkin.`
+```
+[
+  {
+    "id": 1,
+    "order": 0,
+    "name": "{\"uz\":\"Rangi\",\"ru\":\"Color\"}",
+    "created_at": "2019-01-30 00:00:00",
+    "updated_at": "2019-01-30 00:00:00",
+    "pivot": {
+      "product_category_id": 1,
+      "attribute_category_id": 1
+    },
+    "children": [
+      {
+        "id": 1,
+        "attribute_category_id": 1,
+        "title": "{\"uz\":\"Oq\",\"ru\":\"White\"}",
+        "created_at": "2019-01-29 00:00:00",
+        "updated_at": "2019-01-29 00:00:00"
+      },
+      {
+        "id": 2,
+        "attribute_category_id": 1,
+        "title": "{\"uz\":\"Qora\",\"ru\":\"Black\"}",
+        "created_at": "2019-01-23 00:00:00",
+        "updated_at": "2019-01-23 00:00:00"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "order": 0,
+    "name": "{\"uz\":\"O\\'lchami\",\"ru\":\"Size\"}",
+    "created_at": "2019-01-30 00:00:00",
+    "updated_at": "2019-01-30 00:00:00",
+    "pivot": {
+      "product_category_id": 1,
+      "attribute_category_id": 2
+    },
+    "children": [
+      {
+        "id": 3,
+        "attribute_category_id": 2,
+        "title": "{\"uz\":\"2x2\",\"ru\":\"5x5\"}",
+        "created_at": "2019-01-29 00:00:00",
+        "updated_at": "2019-01-29 00:00:00"
+      },
+      {
+        "id": 4,
+        "attribute_category_id": 2,
+        "title": "{\"uz\":\"3x3\",\"ru\":\"5x5\"}",
+        "created_at": "2019-01-23 00:00:00",
+        "updated_at": "2019-01-23 00:00:00"
+      }
+    ]
+  }
+]
+```

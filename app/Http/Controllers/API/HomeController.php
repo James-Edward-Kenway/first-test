@@ -199,8 +199,6 @@ class HomeController extends Controller
         }
 
         return response($services);
-
-
     }
 
     public function ServiceAttributes($id){

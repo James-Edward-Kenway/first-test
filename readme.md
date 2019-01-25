@@ -247,8 +247,6 @@ serviceladayam shular bor lekin *product_category_id* ni o'rnida *service_catego
 > `kelgan javob attribut kotegoriyalari. misol uchun, "Rangi" bu attribut kotegoriyasi va childrenda barcha attributla joylashgan. misol uchun Rangi:Oq bo'lishi mumkin.`
 
 
-
-
 ```
 [
   {

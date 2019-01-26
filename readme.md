@@ -307,3 +307,7 @@ serviceladayam shular bor lekin *product_category_id* ni o'rnida *service_catego
   }
 ]
 ```
+
+# Brands
+> brendlani olish
+>> http://{ip/hostname}/api/brands

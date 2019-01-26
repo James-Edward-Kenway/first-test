@@ -64,7 +64,7 @@ class HomeController extends Controller
 
 
     
-    public function Products(Request $request){
+    public function products(Request $request){
 
 
         $name = @$request->get('name');
@@ -134,7 +134,7 @@ class HomeController extends Controller
     }
 
 
-    public function Services(Request $request){
+    public function services(Request $request){
 
         
         $name = @$request->get('name');
@@ -164,14 +164,14 @@ class HomeController extends Controller
         $services = Service::orderBy($order, $order_type);
 
         if(\is_numeric($brand_id)){
-            $services->where('brand_id',$brand_id);
+            $services->where('brand_id', $brand_id);
         }
         if($name!=null){
-            $services->where('name',$name);
+            $services->where('name', $name);
         }
 
         if(is_numeric($ser_cat_id)){
-            $services->where('service_category_id',$ser_cat_id);
+            $services->where('service_category_id', $ser_cat_id);
         }
 
 
@@ -201,7 +201,7 @@ class HomeController extends Controller
         return response($services);
     }
 
-    public function ServiceAttributes($id){
+    public function serviceAttributes($id){
 
         $groups = ServiceCategory::find($id)->attributesGroups()->with('children')->get();
 
@@ -209,16 +209,28 @@ class HomeController extends Controller
     }
 
 
-    public function ProductAttributes($id){
+    public function productAttributes($id){
 
         $groups = ProductCategory::find($id)->attributesGroups()->with('children')->get();
 
         return $groups;
     }
 
-    public function Brands(){
+    public function brands(){
         $brands = Brand::all();
         return $brands;
+    }
+
+
+    public function serviceCategory(){
+        $cats = ServiceCategory::all();
+        return $cats;
+    }
+
+    
+    public function productCategory(){
+        $cats = ProductCategory::all();
+        return $cats;
     }
 
 

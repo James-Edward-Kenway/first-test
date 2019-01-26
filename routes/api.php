@@ -34,3 +34,5 @@ Route::get('product_category','API\HomeController@productCategory');
 Route::get('service_category','API\HomeController@serviceCategory');
 
 Route::get('user/register','API\UserController@register');
+
+Auth::routes();

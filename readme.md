@@ -311,3 +311,11 @@ serviceladayam shular bor lekin *product_category_id* ni o'rnida *service_catego
 # Brands
 > brendlani olish
 >> http://{ip/hostname}/api/brands
+
+# Registratsiya va login
+> registratsiyadan keyin kelishi kerak bo'lgan javob:
+
+```
+```
+
+> logindan keyin kelishi kerak bo'lgan javob

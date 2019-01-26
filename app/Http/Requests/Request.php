@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
 
 class Request extends FormRequest
 {
@@ -13,6 +14,7 @@ class Request extends FormRequest
      */
     public function authorize()
     {
+
         return true;
     }
 
@@ -26,5 +28,16 @@ class Request extends FormRequest
         return [
             //
         ];
+    }
+
+    /**
+     * Failed validation disable redirect
+     *
+     * @param Validator $validator
+     */
+    protected function failedValidation(Validator $validator)
+    {
+
+        throw new HttpResponseException(response()->json([1232], 203));
     }
 }

@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Http\Requests\Request;
 
 class User extends Authenticatable
 {
@@ -30,5 +31,9 @@ class User extends Authenticatable
 
     public function tokens(){
         return $this->hasMany('App\Token','user_id','id');
+    }
+    public static function getByToken(){
+        $token = Token::current();
+        return Token::current()!=null?Token::current()->user()->first():null;
     }
 }

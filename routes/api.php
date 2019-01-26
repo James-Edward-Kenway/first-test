@@ -36,3 +36,11 @@ Route::get('service_category','API\HomeController@serviceCategory');
 Route::get('user/register','API\UserController@register');
 
 Auth::routes();
+
+Route::get('check', 'API\UserController@check');
+
+Route::middleware('auth:api')->group(function(){
+
+
+});
+

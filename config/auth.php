@@ -42,7 +42,7 @@ return [
         ],
 
         'api' => [
-            'driver' => 'token',
+            'driver' => 'mytoken',
             'provider' => 'users',
         ],
     ],
@@ -63,6 +63,7 @@ return [
     | Supported: "database", "eloquent"
     |
     */
+    
 
     'providers' => [
         'users' => [

@@ -166,6 +166,7 @@ class HomeController extends Controller
         if(\is_numeric($brand_id)){
             $services->where('brand_id', $brand_id);
         }
+
         if($name!=null){
             $services->where('name', $name);
         }
@@ -176,9 +177,9 @@ class HomeController extends Controller
 
 
         if(\is_array($attributes)){
-            $services->join('attribute_categories_service_categories', function($q){
-                $q->on('services.id','=','attribute_categories_service_categories.service_category_id');
-            })->whereIn('attribute_categories_service_categories.attribute_category_id', $attributes);
+            $services->join('attribute_categories_services_categories', function($q){
+                $q->on('services.id','=','attribute_categories_services_categories.service_category_id');
+            })->whereIn('attribute_categories_services_categories.attribute_category_id', $attributes);
         }
 
 

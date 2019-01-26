@@ -32,3 +32,5 @@ Route::get('brands','API\HomeController@brands');
 Route::get('product_category','API\HomeController@productCategory');
 
 Route::get('service_category','API\HomeController@serviceCategory');
+
+

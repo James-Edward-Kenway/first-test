@@ -6,5 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Action extends Model
 {
+    public $fillable = ['title', 'description', 'images', 'address'];
     //
 }

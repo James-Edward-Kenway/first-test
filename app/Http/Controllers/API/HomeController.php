@@ -10,6 +10,8 @@ use App\Brand;
 use App\Product;
 use Illuminate\Support\Facades\URL;
 use App\Service;
+use App\Action;
+use App\Discount;
 
 class HomeController extends Controller
 {
@@ -234,6 +236,17 @@ class HomeController extends Controller
         return $cats;
     }
 
+    public function actions(Request $request)
+    {
+        $actions = Action::orderBy('created_at')->paginate(20);
+        return $actions;
+    }
+
+    public function discounts(Request $request)
+    {
+        $discounts = Discount::orderBy('created_at')->paginate(20);
+        return $discounts;
+    }
 
     /**
      * Store a newly created resource in storage.

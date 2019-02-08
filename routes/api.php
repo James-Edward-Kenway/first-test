@@ -39,6 +39,8 @@ Route::get('actions', 'HomeController@actions');
 
 Route::get('discounts', 'HomeController@discounts');
 
+Route::get('banners', 'HomeController@banners');
+
 Auth::routes();
 
 Route::get('check', 'UserController@check');

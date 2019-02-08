@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\URL;
 use App\Service;
 use App\Action;
 use App\Discount;
+use App\Banner;
 
 class HomeController extends Controller
 {
@@ -246,6 +247,12 @@ class HomeController extends Controller
     {
         $discounts = Discount::orderBy('created_at')->paginate(20);
         return $discounts;
+    }
+
+    public function banners(Request $request)
+    {
+        $banners = Banner::orderBy('created_at')->paginate(20);
+        return $banners;
     }
 
     /**

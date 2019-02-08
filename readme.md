@@ -317,8 +317,12 @@ serviceladayam shular bor lekin *product_category_id* ni o'rnida *service_catego
 >> http://{ip/hostname}/api/actions
 
 # discountlar
-> aksiyalarni olish (pagination)
+> discountlani olish (pagination)
 >> http://{ip/hostname}/api/discounts
+
+# bannerlar
+> bannerlani olish (pagination)
+>> http://{ip/hostname}/api/banners
 
 # Registratsiya va login
 > registratsiyadan keyin kelishi kerak bo'lgan javob:

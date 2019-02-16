@@ -308,6 +308,8 @@ serviceladayam shular bor lekin *product_category_id* ni o'rnida *service_catego
 ]
 ```
 
+# >> Buyogiga javoblar yozilmay. chunki siz o'rganib qoldingiz. va javobni so'rov yuborib ko'rib bilishingiz mumkin.
+
 # Brands
 > brendlani olish
 >> http://{ip/hostname}/api/brands
@@ -324,10 +326,152 @@ serviceladayam shular bor lekin *product_category_id* ni o'rnida *service_catego
 > bannerlani olish (pagination)
 >> http://{ip/hostname}/api/banners
 
+# trending products (trendagi produktalar)
+> produktalani olish (pagination)
+>> http://{ip/hostname}/api/trending_products
+
+# popular services (popularniy servislar)
+> servislani olish (pagination)
+>> http://{ip/hostname}/api/popular_services
+
 # Registratsiya va login
-> registratsiyadan keyin kelishi kerak bo'lgan javob:
+## Registratsiya
 
-```
-```
+> registratsiya qilish 
+>> http://{ip/hostname}/api/user/register?name=(ism familiya)&password=(parol:kami 6 ta belgi)&email=(email@mail.ru)
 
-> logindan keyin kelishi kerak bo'lgan javob
+## Login
+
+> login qilish
+>> http://{ip/hostname}/api/user/login?email=(email@mail.ru)&password=(parol:kami 6 ta belgi)
+>login registratsiyadan keyin token keladi. shu tokenni va user_id ni har bir so'rovda yuborish kerak. hozircha shu orqali registratsiyadan o'tganligi aniqlanadi. misol uchun: `http://{ip/hostname}/api/store/delete?store_id=(magazin idsi)&user_id=(userni idisi login va registratsiyadan keyin kelgan)&token=(token logindan keyin kelgan)`
+
+# Magazinlar
+> user registratsiya yoki login qilgan bo'lishi shart!
+
+## Qo'shish
+> magazin qo'shish
+>> http://{ip/hostname}/api/store/add?name=(nomi)&description=(tarifi)&address=(address)&phone=(tel nomeri)
+
+## O'chirish
+> magazin O'chirish
+>> http://{ip/hostname}/api/store/delete?store_id=(magazin idsi)
+
+## O'zgartirish
+> magazin O'zgartirish
+>> http://{ip/hostname}/api/store/update?store_id=(magazin idsi)&name=(nomi)&description=(tarifi)&address=(address)&phone=(tel nomeri)
+
+## Olish
+> magazin haqidagi informatsiyani olish (*registratsiya bo'lishi shartmas!*)
+>> http://{ip/hostname}/api/store/show?store_id=(magazin idsi)
+
+# wishlist (izabrannie)
+
+> wishlist (product_id lani beradi! faqat id lani beradi!)
+>> http://{ip/hostname}/api/user/wishlist_product_ids
+
+> wishlist (service_id lani beradi! faqat id lani beradi!)
+>> http://{ip/hostname}/api/user/wishlist_service_ids
+
+> wishlist (productlani olish!)
+>> http://{ip/hostname}/api/user/wishlist_products
+
+> wishlist (servicelani olish!)
+>> http://{ip/hostname}/api/user/wishlist_services
+
+> wishlist (servicelani qo'shish!)
+>> http://{ip/hostname}/api/user/add_wishlist_service?service_id=(qo'shilishi kerak bo'lgan service idisi)
+
+> wishlist (productlani qo'shish!)
+>> http://{ip/hostname}/api/user/add_wishlist_product?product_id=(qo'shilishi kerak bo'lgan product idisi)
+
+> wishlist (servicelani o'chirish!)
+>> http://{ip/hostname}/api/user/delete_wishlist_service?service_id=(o'chirilishi kerak bo'lgan service idisi)
+
+> wishlist (productlani o'chirish!)
+>> http://{ip/hostname}/api/user/delete_wishlist_product?product_id=(o'chirilishi kerak bo'lgan product idisi)
+
+# Likes (layklar)
+
+> likes (product_id lani beradi! faqat id lani beradi!)
+>> http://{ip/hostname}/api/user/product_likes_ids
+
+> likes (service_id lani beradi! faqat id lani beradi!)
+>> http://{ip/hostname}/api/user/service_likes_ids
+
+
+> likes (product lani beradi!)
+>> http://{ip/hostname}/api/user/product_likes
+
+> likes (service lani beradi!)
+>> http://{ip/hostname}/api/user/service_likes
+
+
+> likes (product lani qo'shish!)
+>> http://{ip/hostname}/api/user/add_product_likes?product_id=(qo'shilishi kerak bo'lgan produktani idisi)
+
+> likes (service lani qo'shish!)
+>> http://{ip/hostname}/api/user/add_service_likes?service_id=(qo'shilishi kerak bo'lgan serviceni idisi)
+
+
+> likes (product lani o'chirish!)
+>> http://{ip/hostname}/api/user/delete_product_likes?product_id=(o'chirish kerak bo'lgan produktani idisi)
+
+> likes (service lani o'chirish!)
+>> http://{ip/hostname}/api/user/delete_service_likes?service_id=(o'chirish kerak bo'lgan serviceni idisi
+
+
+# products
+> productalani o'zgartirish uchun user registratsiyadan o'tgan bo'lishi kerak!
+
+> productalani qo'shish (hozircha shu!)
+>> http://{ip/hostname}/api/store/add_product?name=(nomi)&description=(tarifi)&store_id=(magazin id)&price=(product price)&brand_id=(tanlangan brend_id)
+
+> productalani o'zgartiring (hozircha shu!)
+>> http://{ip/hostname}/api/store/update_product?product_id=(o'zgartirilishi kerak bo'lgan product idisi)&name=(nomi)&description=(tarifi)&store_id=(magazin id)&price=(product price)&brand_id=(tanlangan brend_id)
+
+> productalani o'chirish (hozircha shu!)
+>> http://{ip/hostname}/api/store/delete_product?product_id=(o'zgartirilishi kerak bo'lgan product idisi)&store_id=(magazin id)
+
+
+# services
+> servislani o'zgartirish uchun user registratsiyadan o'tgan bo'lishi kerak!
+
+> servislani qo'shish (hozircha shu!)
+>> http://{ip/hostname}/api/store/add_service?name=(nomi)&description=(tarifi)&store_id=(magazin id)&price=(service price)
+
+> servislani o'zgartishi (hozircha shu!)
+>> http://{ip/hostname}/api/store/update_service?service_id=(o'zgarilishi kerak bo'lgan servis idisi)&name=(nomi)&description=(tarifi)&store_id=(magazin id)&price=(service price)
+
+> servislani o'chirish (hozircha shu!)
+>> http://{ip/hostname}/api/store/delete_service?service_id=(o'chirilishi kerak bo'lgan servis idisi)&store_id=(magazin id)
+
+
+# actions (aksiyalar)
+> aksiyalani o'zgartirish uchun user registratsiyadan o'tgan bo'lishi kerak!
+
+> aksiyalani qo'shish (hozircha shu!)
+>> http://{ip/hostname}/api/store/add_action?title=(sarlovhasi)&description=(tarifi)&store_id=(magazin id)&address=(address)
+
+> aksiyalani o'zgartirish (hozircha shu!)
+>> http://{ip/hostname}/api/store/update_action?action_id=(aksiyani idisi)&title=(sarlovhasi)&description=(tarifi)&store_id=(magazin id)&address=(address)
+
+> aksiyalani o'chirish (hozircha shu!)
+>> http://{ip/hostname}/api/store/delete_discount?action_id(aksiya idisi)&store_id=(magazin id)
+
+# discount (skidkala)
+> skidkalani o'zgartirish uchun user registratsiyadan o'tgan bo'lishi kerak!
+
+> skidkalani qo'shish (hozircha shu!)
+>> http://{ip/hostname}/api/store/add_discount?title=(sarlovhasi)&description=(tarifi)&store_id=(magazin id)&discount=(service price)&address=(address)
+
+> skidkalani o'zgartirish (hozircha shu!)
+>> http://{ip/hostname}/api/store/update_discount?discount_id(skidka idisi)&title=(sarlovhasi)&description=(tarifi)&store_id=(magazin id)&discount=(service price)&address=(address)
+
+> skidkalani o'chirish (hozircha shu!)
+>> http://{ip/hostname}/api/store/delete_discount?discount_id(skidka idisi)&store_id=(magazin id)
+
+# Exceptions (Istesno holatlar)
+
+`http response kodlari: 401 - registratsiya yoki login qilinishi kerak bo'lgan bo'limlarga. registratsiya yoki login qilmagan user so'rov yuborsa holat kelib chiqishi mumkin!`
+`http response kodlari: 405 - to'g'ri permission bo'lmaganda kelib chiqadi, yani magazin egasi bo'lmagan odam magazin malumotlarini o'zgartishga intilsa sodir bo'ladi!`

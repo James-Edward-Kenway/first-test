@@ -16,7 +16,9 @@ class CreateActionsTable extends Migration
         Schema::create('actions', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('store_id',0,1)->default(0);
-            $table->text('title');
+            $table->integer('user_id',0,1)->default(0);
+            $table->tinyInteger('status',0,1)->default(3);
+            $table->varchar('title', 128);
             $table->text('description');
             $table->text('address');
             $table->text('images');

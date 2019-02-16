@@ -32,8 +32,38 @@ class User extends Authenticatable
     public function tokens(){
         return $this->hasMany('App\Token','user_id','id');
     }
+
     public static function getByToken(){
         $token = Token::current();
         return Token::current()!=null?Token::current()->user()->first():null;
+    }
+    
+    public function roles(){
+        return $this->hasMany('App\RolesOfStores','store_id','id');
+    }
+
+    public function canManipulate($id,$role){
+        $store = RolesOfStores::where('user_id',$this->id)->where('store_id',$id)->whereIn('role',[1,$role])->first();
+        if($store!=null){
+            return true;
+        } 
+        return false;
+    }
+
+    
+    public function wishlistProducts(){
+        return $this->belongsToMany('App\Product', 'product_wishlist','user_id', 'product_id');
+    }
+
+    public function wishlistServices(){
+        return $this->belongsToMany('App\Service', 'service_wishlist','user_id', 'service_id');
+    }
+
+    public function productLikes(){
+        return $this->belongsToMany('App\Product', 'product_likes','user_id', 'product_id');
+    }
+
+    public function serviceLikes(){
+        return $this->belongsToMany('App\Service', 'service_likes','user_id', 'service_id');
     }
 }

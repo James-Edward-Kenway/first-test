@@ -101,7 +101,30 @@ class HomeController extends Controller
         }
 
         if(is_numeric($pro_cat_id)){
-            $products->where('product_category_id',$pro_cat_id);
+
+            $pro_cat_arr = [];
+            $list = [];
+            $cat = ProductCategory::find($pro_cat_id);
+
+            if($cat!=null){
+
+                $list = array_prepend($list, $cat, $cat->id);
+                ref:
+                if(!empty($list)){
+                    $arr = head($list);
+                    array_forget($list, $arr->id);
+
+                    if(!$arr->children->isEmpty()){
+                        foreach($arr->children as $child){
+                            $list = array_prepend($list, $child, $child->id);
+                        }
+                    }else{
+                        $pro_cat_arr = array_prepend($pro_cat_arr, $arr->id);
+                    }
+                    goto ref;
+                }
+                $products->whereIn('product_category_id',$pro_cat_arr);
+            }
         }
 
         if($name!=null){
@@ -253,6 +276,18 @@ class HomeController extends Controller
     {
         $banners = Banner::orderBy('created_at')->paginate(20);
         return $banners;
+    }
+
+    public function trendingProducts(Request $request)
+    {
+        $pros = Product::orderBy('like_count','desc')->orderBy('created_at')->paginate(20);
+        return $pros;
+    }
+
+    public function popularServices(Request $request)
+    {
+        $ser = Service::orderBy('like_count','desc')->orderBy('created_at')->paginate(20);
+        return $ser;
     }
 
     /**

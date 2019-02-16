@@ -12,45 +12,70 @@ use App\Token;
 
 class UserController extends Controller
 {
-    public function __construct()
+    public function __construct(Request $request)
     {
-        
+        if($request->has('token')&&$request->has('user_id')){
+            $this->user = Token::where('user_id',$request->get('user_id'))->where('token',$request->get('token'))->first()->user;
+            if($this->user!=null){
+                $this->authenticated = true;
+            }
+        }
     }
+
+    public $authenticated = false;
+    public $user = null;
+
     public function register(Request $request){
 
         //validation
         $this->validate($request,[
             'name' => 'required|max:255',
             'email' => 'required|email',
-            'password' => 'required',
-            'password_confirmation ' => 'required|password_confirmation'
+            'password' => 'required|min:6',
+            // 'password_confirmation ' => 'required|password_confirmation'
         ]);
 
         $user = new User(['name'=>$request->get('name'), 'email'=>$request->get('email'),'password'=>$request->get('password')]);
 
         $user->save();
 
-        $token = new Token();
+        $token = new Token(['user_id'=>$user->id,'token'=>bcrypt(microtime().'i'.random_int(0,100000)),'description'=>$this->tokenDesc()]);
 
-        $token->save(['user_id'=>$user->id,'token'=>bcrypt(time().'i'.random_int())]);
+        $token->save();
         $res = [];
 
-        if(Auth::attempt([$user->toArray()])){
-
-            $res = ['authorized'=>1,'token'=>$token->toArray()];
-        }else{
-
-            $res = ['authorized'=>0];
-        }
+        $res = ['authorized'=>1,'token'=>$token->toArray()];
 
         return $res;
     }
     
+    public function login(Request $request){
+
+        //validation
+        $this->validate($request,[
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        $user = User::where('email',$request->get('email'))->first();
+
+
+        $token = new Token(['user_id'=>$user->id,'token'=>bcrypt(microtime().'i'.random_int(0,100000)),'description'=>$this->tokenDesc()]);
+
+        $token->save();
+        $res = [];
+
+        $res = ['authorized'=>1,'token'=>$token->toArray()];
+
+        return $res;
+    }
+
+    public function tokenDesc(){
+        return '';
+    }
 
     public function check(){
 
-        $user = User::getByToken();
-        dd($user);
-        return 'good';
+        dd($this->user);
     }
 }

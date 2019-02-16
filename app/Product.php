@@ -13,5 +13,6 @@ class Product extends Model
     public function attributes(){
         return $this->belongsToMany('App\Attribute', 'attribute_product', 'product_id', 'attribute_id');
     }
+
     
 }

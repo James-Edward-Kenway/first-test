@@ -13,6 +13,8 @@ class Handler extends ExceptionHandler
      * @var array
      */
     protected $dontReport = [
+        // \App\Exceptions\InvalidPermissionException::class,
+        // \App\Exceptions\UnauthorizedException::class
         //
     ];
 
@@ -48,4 +50,5 @@ class Handler extends ExceptionHandler
     {
         return parent::render($request, $exception);
     }
+
 }

@@ -338,12 +338,12 @@ serviceladayam shular bor lekin *product_category_id* ni o'rnida *service_catego
 ## Registratsiya
 
 > registratsiya qilish 
->> http://{ip/hostname}/api/user/register?name=(ism familiya)&password=(parol:kami 6 ta belgi)&email=(email@mail.ru)&password_confirmation=(parolni takrorlash)&imei=(imei)
+>> http://{ip/hostname}/api/user/register?name=(ism familiya)&password=(parol:kami 6 ta belgi)&email=(email@mail.ru)&password_confirmation=(parolni takrorlash)&imei=(imei)&version=(4.4)&company=(Samsung A5)
 
 ## Login
 
 > login qilish
->> http://{ip/hostname}/api/user/login?email=(email@mail.ru)&password=(parol:kami 6 ta belgi)&imei=(imei)
+>> http://{ip/hostname}/api/user/login?email=(email@mail.ru)&password=(parol:kami 6 ta belgi)&imei=(imei)&version=(4.4)&company=(Samsung A5)
 >login registratsiyadan keyin token keladi. shu tokenni va user_id ni har bir so'rovda yuborish kerak. hozircha shu orqali registratsiyadan o'tganligi aniqlanadi. misol uchun: `http://{ip/hostname}/api/store/delete?store_id=(magazin idsi)&user_id=(userni idisi login va registratsiyadan keyin kelgan)&token=(token logindan keyin kelgan)`
 
 # Magazinlar

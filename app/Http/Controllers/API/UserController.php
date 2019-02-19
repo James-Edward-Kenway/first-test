@@ -44,7 +44,7 @@ class UserController extends Controller
 
         $user->save();
 
-        $token = new Token(['user_id'=>$user->id,'token'=>bcrypt(microtime().'i'.random_int(0,100000)),'imei'=>$request->get('imei'),'description'=>$this->tokenDesc()]);
+        $token = new Token(['user_id'=>$user->id,'token'=>bcrypt(microtime().'i'.random_int(0,100000)),'imei'=>$request->get('imei'),'description'=>$this->tokenDesc($request)]);
 
         $token->save();
         $res = [];
@@ -71,7 +71,7 @@ class UserController extends Controller
         $user = User::where('email',$request->get('email'))->first();
 
 
-        $token = new Token(['user_id'=>$user->id,'token'=>bcrypt(microtime().'i'.random_int(0,100000)),'imei'=>$request->get('imei'),'description'=>$this->tokenDesc()]);
+        $token = new Token(['user_id'=>$user->id,'token'=>bcrypt(microtime().'i'.random_int(0,100000)),'imei'=>$request->get('imei'),'description'=>$this->tokenDesc($request)]);
 
         $token->save();
         $res = [];
@@ -81,8 +81,8 @@ class UserController extends Controller
         return $res;
     }
 
-    public function tokenDesc(){
-        return '';
+    public function tokenDesc(Request $req){
+        return json_encode(['version'=>$req->get('version','Unknown'), 'manufactorer'=>$req->get('company','Unknown'), 'ip'=>$req->ip()]);
     }
 
     public function check(){

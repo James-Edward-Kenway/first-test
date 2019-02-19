@@ -8,7 +8,6 @@ use App\Http\Requests\Request;
 class Token extends Model
 {
     public $fillable = ['id','token','description','user_id','imei'];
-    
 
     public function user(){
         return $this->hasOne('App\User','id','user_id');

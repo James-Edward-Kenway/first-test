@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Request;
+use App\Token;
 
 class ProfileController extends UserController
 {
@@ -16,7 +17,11 @@ class ProfileController extends UserController
 
     public function token(Request $req){
         
-        $token = Token::where(['user_id'=>$this->user->id, 'token'=>$this->token])->first();
+        $token = Token::where('user_id',$this->user_id)->where('token', $this->token)->first();
+        dd($token);
+        if($token==null){
+            return ['authorized'=>false];
+        }
         $token->token = bcrypt(microtime().'i'.random_int(0,100000));
         $token->save();
         $res = [];

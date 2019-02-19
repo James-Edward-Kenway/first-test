@@ -13,9 +13,10 @@ use App\Token;
 class UserController extends Controller
 {
     public function __construct(Request $request)
-    {
+    {dd('asdfsad');
         if($request->has('token')&&$request->has('user_id')){
             $this->user = Token::where('user_id',$request->get('user_id'))->where('token',$request->get('token'))->first()->user;
+            dd($this->user);
             if($this->user!=null){
                 $this->authenticated = true;
                 $this->token = $request->get('token');

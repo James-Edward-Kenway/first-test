@@ -28,12 +28,16 @@ class UserController extends Controller
     public function register(Request $request){
 
         //validation
-        $this->validate($request,[
+        $validate = validator($request->all(), [
             'name' => 'required|max:255',
             'email' => 'required|email',
             'password' => 'required|min:6',
-            // 'password_confirmation ' => 'required|password_confirmation'
+            'password_confirmation' => 'required|same:password'
         ]);
+
+        if($validate->fails()){
+            return $validate->errors();
+        }
 
         $user = new User(['name'=>$request->get('name'), 'email'=>$request->get('email'),'password'=>$request->get('password')]);
 

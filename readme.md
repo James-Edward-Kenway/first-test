@@ -338,7 +338,7 @@ serviceladayam shular bor lekin *product_category_id* ni o'rnida *service_catego
 ## Registratsiya
 
 > registratsiya qilish 
->> http://{ip/hostname}/api/user/register?name=(ism familiya)&password=(parol:kami 6 ta belgi)&email=(email@mail.ru)
+>> http://{ip/hostname}/api/user/register?name=(ism familiya)&password=(parol:kami 6 ta belgi)&email=(email@mail.ru)&password_confirmation=(parolni takrorlash)
 
 ## Login
 

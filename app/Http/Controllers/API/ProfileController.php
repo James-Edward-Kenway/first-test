@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\API;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Request;
 
@@ -13,6 +12,18 @@ class ProfileController extends UserController
         if($this->authenticated){
             throw new UnauthorizedException();
         }
+    }
+
+    public function resetToken(){
+        
+        $token = new Token(['user_id'=>$this->user->id,'token'=>bcrypt(microtime().'i'.random_int(0,100000)),'description'=>$this->tokenDesc()]);
+
+        $token->save();
+        $res = [];
+
+        $res = ['authorized'=>1,'token'=>$token->toArray()];
+
+        return $res;
     }
 
     public function wishlistProductIds(Request $req){

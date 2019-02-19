@@ -344,7 +344,13 @@ serviceladayam shular bor lekin *product_category_id* ni o'rnida *service_catego
 
 > login qilish
 >> http://{ip/hostname}/api/user/login?email=(email@mail.ru)&password=(parol:kami 6 ta belgi)&imei=(imei)&version=(4.4)&company=(Samsung A5)
->login registratsiyadan keyin token keladi. shu tokenni va user_id ni har bir so'rovda yuborish kerak. hozircha shu orqali registratsiyadan o'tganligi aniqlanadi. misol uchun: `http://{ip/hostname}/api/store/delete?store_id=(magazin idsi)&user_id=(userni idisi login va registratsiyadan keyin kelgan)&token=(token logindan keyin kelgan)`
+> agar registratsiya yoki login muvafaqiyatli bo'lsa {'authorized'=>true}, agar qandaydir xatolik bo'lsa {'authorized'=>false} bo'ladi. va ketidan oshibka messagi keladi.
+> login registratsiyadan keyin token keladi. shu tokenni va user_id ni har bir so'rovda yuborish kerak. hozircha shu orqali registratsiyadan o'tganligi aniqlanadi. misol uchun: `http://{ip/hostname}/api/store/delete?store_id=(magazin idsi)&user_id=(userni idisi login va registratsiyadan keyin kelgan)&token=(token logindan keyin kelgan)`
+
+
+## Token reset
+> yangi token olish
+>> http://{ip/hostname}/api/user/token?user_id=(user_id)&token=(token)
 
 # Magazinlar
 > user registratsiya yoki login qilgan bo'lishi shart!

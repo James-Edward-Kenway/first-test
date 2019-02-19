@@ -14,23 +14,23 @@ class ProfileController extends UserController
         }
     }
 
-    public function resetToken(Request $req){
+    public function token(Request $req){
         
-        $token = Token::where(['user_id'=>$this->user->id,'token'=>$req->get('token')])->first();
+        $token = Token::where(['user_id'=>$this->user->id, 'token'=>$this->token])->first();
         $token->token = bcrypt(microtime().'i'.random_int(0,100000));
         $token->save();
         $res = [];
 
-        $res = ['authorized'=>1,'token'=>$token->toArray()];
+        $res = ['authorized'=>true, 'token'=>$token->toArray()];
 
         return $res;
     }
 
     public function wishlistProductIds(Request $req){
-        DB::table('product_wishlist')->where('user_id',$this->user->id)->get('product_id');
+        DB::table('product_wishlist')->where('user_id', $this->user->id)->get('product_id');
     }
     public function wishlistServiceIds(Request $req){
-        DB::table('service_wishlist')->where('user_id',$this->user->id)->get('service_id');
+        DB::table('service_wishlist')->where('user_id', $this->user->id)->get('service_id');
     }
 
     public function wishlistProducts(Request $req){

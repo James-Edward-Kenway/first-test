@@ -32,6 +32,7 @@ class UserController extends Controller
             'name' => 'required|max:255',
             'email' => 'required|email',
             'password' => 'required|min:6',
+            'imei' => 'required',
             'password_confirmation' => 'required|same:password'
         ]);
 
@@ -59,6 +60,7 @@ class UserController extends Controller
         $this->validate($request,[
             'email' => 'required|email',
             'password' => 'required',
+            'imei' => 'required',
         ]);
 
         $user = User::where('email',$request->get('email'))->first();

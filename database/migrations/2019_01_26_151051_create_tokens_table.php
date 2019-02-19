@@ -17,6 +17,7 @@ class CreateTokensTable extends Migration
             $table->increments('id');
             $table->integer('user_id',0,1)->index();
             $table->string('token',100)->index();
+            $table->string('imei')->unique();
             $table->string('description', 1024);
             $table->timestamps();
         });

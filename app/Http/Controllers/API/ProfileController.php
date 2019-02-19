@@ -16,8 +16,8 @@ class ProfileController extends UserController
 
     public function resetToken(Request $req){
         
-        $token = new Token(['user_id'=>$this->user->id,'token'=>bcrypt(microtime().'i'.random_int(0,100000)),'description'=>$this->tokenDesc()]);
-
+        $token = Token::where(['user_id'=>$this->user->id,'token'=>$req->get('token')])->first();
+        $token->token = bcrypt(microtime().'i'.random_int(0,100000));
         $token->save();
         $res = [];
 

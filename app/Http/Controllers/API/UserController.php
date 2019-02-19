@@ -44,7 +44,7 @@ class UserController extends Controller
 
         $user->save();
 
-        $token = new Token(['user_id'=>$user->id,'token'=>bcrypt(microtime().'i'.random_int(0,100000)),'description'=>$this->tokenDesc()]);
+        $token = new Token(['user_id'=>$user->id,'token'=>bcrypt(microtime().'i'.random_int(0,100000)),'imei'=>$request->get('imei'),'description'=>$this->tokenDesc()]);
 
         $token->save();
         $res = [];
@@ -57,16 +57,21 @@ class UserController extends Controller
     public function login(Request $request){
 
         //validation
-        $this->validate($request,[
+        $validate = validator($request->all(), [
             'email' => 'required|email',
             'password' => 'required',
             'imei' => 'required',
         ]);
 
+        
+        if($validate->fails()){
+            return $validate->errors();
+        }
+
         $user = User::where('email',$request->get('email'))->first();
 
 
-        $token = new Token(['user_id'=>$user->id,'token'=>bcrypt(microtime().'i'.random_int(0,100000)),'description'=>$this->tokenDesc()]);
+        $token = new Token(['user_id'=>$user->id,'token'=>bcrypt(microtime().'i'.random_int(0,100000)),'imei'=>$request->get('imei'),'description'=>$this->tokenDesc()]);
 
         $token->save();
         $res = [];

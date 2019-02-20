@@ -393,22 +393,22 @@ serviceladayam shular bor lekin *product_category_id* ni o'rnida *service_catego
 > magazin rollari
 >> http://{ip/hostname}/api/store/roles?store_id=(magazin idisi)
 ```
-    const SUPERUSER = 1;
-    const UPDATE_ROLES = 2;
-    const STORE_DELETE = 3;
-    const STORE_UPDATE = 4;
-    const ADD_PRODUCT = 5;
-    const ADD_SERVICE = 6;
-    const DELETE_PRODUCT = 7;
-    const DELETE_SERVICE = 8;
-    const UPDATE_PRODUCT = 9;
-    const UPDATE_SERVICE = 10;
-    const ADD_ACTION = 11;
-    const ADD_DISCOUNT = 12;
-    const DELETE_ACTION = 13;
-    const DELETE_DISCOUNT = 14;
-    const UPDATE_ACTION = 15;
-    const UPDATE_DISCOUNT = 16;
+    const SUPERUSER = 1; // superuser; hamma ish qilishi mumkin; magazinning yaratuvchisi
+    const UPDATE_ROLES = 2; // ro'llani o'zgartira olishini aniqlovchi ro'l
+    const STORE_DELETE = 3; // magazinni o'chira oladimi
+    const STORE_UPDATE = 4; // magazin malumotlarini o'zgartira oladimi
+    const ADD_PRODUCT = 5; // produkta qo'sha oladimi
+    const ADD_SERVICE = 6; // servis qo'sha oladimi
+    const DELETE_PRODUCT = 7; // produkta o'chira oladimi
+    const DELETE_SERVICE = 8; // servis o'chira oladimi
+    const UPDATE_PRODUCT = 9; // produkta ma'l larini o'zgartira oladimi
+    const UPDATE_SERVICE = 10; // servis ma'l larini o'zgartira oladimi
+    const ADD_ACTION = 11; // aksiya qo'sha oladimi
+    const ADD_DISCOUNT = 12; // skidkalani qo'shish
+    const DELETE_ACTION = 13; // aksiyalani o'chirish
+    const DELETE_DISCOUNT = 14; // skidkalani o'chirish
+    const UPDATE_ACTION = 15; // aksiyalarning ma'l larini o'zgartirish
+    const UPDATE_DISCOUNT = 16; // skidkalarning ma'l larini o'zgartirish
 ```
 
 ## magazin produktalari mavjud bo'lgan kategoriyalarni olish

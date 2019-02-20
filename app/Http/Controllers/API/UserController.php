@@ -119,7 +119,7 @@ class UserController extends Controller
 
         //validation
         $validate = validator($request->all(), [
-            'id'=>'required|integer|between:1,*',
+            'google_id'=>'required|integer|between:1,*',
             'imei' => 'required',
         ]);
 
@@ -133,7 +133,7 @@ class UserController extends Controller
         
 
 
-        $user = User::where('google_id',$request->get('id'))->first();
+        $user = User::where('google_id',$request->get('google_id'))->first();
 
         if($user==null){
             return ['authorized'=>false,'messages'=>['note'=>'user not found']];
@@ -169,17 +169,19 @@ class UserController extends Controller
         $validate = validator($request->all(), [
             'name' => 'required|max:255',
             'photo_url' => 'required|url',
-            'id'=>'required|integer|between:1,*|unique:users',
+            'google_id'=>'required|integer|gte:1|unique:users',
             'email' => 'required|email|unique:users',
             'imei' => 'required',
         ]);
+        
+
 
         if($validate->fails()){
             return ['messages'=>$validate->errors()->all()]+['authorized'=>false];
         }
 
         $user = new User(['name'=>$request->get('name'),
-         'email'=>$request->get('email'),'password'=>'','google_id'=>$request->get('id'),'use_google'=>1]);
+         'email'=>$request->get('email'),'password'=>'','google_id'=>$request->get('google_id'),'use_google'=>1]);
 
         $user->save();
 

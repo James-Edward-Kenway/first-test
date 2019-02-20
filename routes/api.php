@@ -39,6 +39,9 @@ Route::get('banners', 'HomeController@banners');
 Route::get('user/register','UserController@register');
 Route::get('user/login','UserController@login');
 
+Route::get('user/google_register','UserController@googleRegister');
+Route::get('user/google_login','UserController@googleLogin');
+
 Route::get('user/token','ProfileController@token');
 
 //wishlist

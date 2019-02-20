@@ -163,7 +163,7 @@ class UserController extends Controller
         return $res;
     }
 
-    public function register(Request $request){
+    public function googleRegister(Request $request){
 
         //validation
         $validate = validator($request->all(), [
@@ -205,7 +205,6 @@ class UserController extends Controller
     }
 
     public function check(){
-
         dd($this->user);
     }
 }

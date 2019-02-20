@@ -353,12 +353,12 @@ serviceladayam shular bor lekin *product_category_id* ni o'rnida *service_catego
 ## Registratsiya google bilan
 
 > registratsiya qilish google bilan
->> http://{ip/hostname}/api/user/register?name=(ism familiya)&id=(google user id)&photo_url=(googledan kelgan fotoning idisi bo'lishi kerak)&email=(email@mail.ru)&imei=(imei)&version=(4.4)&company=(Samsung A5)
+>> http://{ip/hostname}/api/user/google_register?name=(ism familiya)&id=(google user id)&photo_url=(googledan kelgan fotoning idisi bo'lishi kerak)&email=(email@mail.ru)&imei=(imei)&version=(4.4)&company=(Samsung A5)
 
 ## Login google bilan
 
 > login qilish
->> http://{ip/hostname}/api/user/login?id=(user idisi)&imei=(imei)&version=(4.4)&company=(Samsung A5)
+>> http://{ip/hostname}/api/user/google_login?id=(user idisi)&imei=(imei)&version=(4.4)&company=(Samsung A5)
 
 
 ## Token reset

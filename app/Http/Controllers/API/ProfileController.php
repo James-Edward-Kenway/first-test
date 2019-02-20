@@ -8,9 +8,10 @@ use App\Token;
 
 class ProfileController extends UserController
 {
-    public function __construct()
+    public function __construct(Request $req)
     {
-        if($this->authenticated){
+        parent::__construct($req);
+        if(!$this->authenticated){
             throw new UnauthorizedException();
         }
     }
@@ -18,10 +19,11 @@ class ProfileController extends UserController
     public function token(Request $req){
         
         $token = Token::where('user_id',$this->user_id)->where('token', $this->token)->first();
-        dd($token);
+        
         if($token==null){
             return ['authorized'=>false];
         }
+
         $token->token = bcrypt(microtime().'i'.random_int(0,100000));
         $token->save();
         $res = [];

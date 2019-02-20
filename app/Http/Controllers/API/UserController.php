@@ -13,9 +13,10 @@ use App\Token;
 class UserController extends Controller
 {
     public function __construct(Request $request)
-    {   
-        if($request->has('token')&&$request->has('user_id')){
-            $this->user = Token::where('user_id',$request->get('user_id'))->where('token',$request->get('token'))->first()->user;
+    {
+        
+        if($request->header('xx-token',false)&&$request->header('xx-user-id',false)){
+            $this->user = Token::where('user_id', $request->header('xx-user-id',false))->where('token',$request->header('xx-token',false))->first()->user;
             if($this->user!=null){
                 $this->authenticated = true;
                 $this->token = $request->get('token');
@@ -169,7 +170,7 @@ class UserController extends Controller
         $validate = validator($request->all(), [
             'name' => 'required|max:255',
             'photo_url' => 'required|url',
-            'google_id'=>'required|integer|gte:1|unique:users',
+            'google_id'=>'required|numeric|gte:1|unique:users',
             'email' => 'required|email|unique:users',
             'imei' => 'required',
         ]);

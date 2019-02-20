@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\API;
 
-use Illuminate\Http\Request;
 use App\Http\Requests\Request;
 use App\Store;
 use App\Exceptions\UnauthorizedException;
@@ -14,9 +13,10 @@ use App\Action;
 class StoreController extends UserController
 {
 
-    public function __construct()
+    public function __construct(Request $request)
     {
-        if($this->authenticated){
+        parent::__construct($request);
+        if(!$this->authenticated){
             
             throw new UnauthorizedException();
         }
@@ -48,10 +48,10 @@ class StoreController extends UserController
         ]);
 
         $store = new Store(['name'=>$request->get('name'), 'description'=>$request->get('description'),
-         'address'=>$request->get('address'), 'phone'=>$request->get('phone')]);
+         'address'=>$request->get('address'), 'phone'=>$request->get('phone'), 'status' => 3]);
 
         $store->save();
-        $roles = $store->roles()->create(['user_id'=>$this->user->id,'role'=>$this->SUPERUSER]);
+        $roles = $store->roles()->create(['user_id'=>$this->user->id,'role'=>StoreController::SUPERUSER]);
 
         return $store->toArray();
         
@@ -63,7 +63,7 @@ class StoreController extends UserController
             return response('store_id is not given!',400);
         }
 
-        if($this->user->canManipulate($request->get('store_id'), $this->STORE_DELETE)){
+        if($this->user->canManipulate($request->get('store_id'), StoreController::STORE_DELETE)){
             Store::where('id',$request->get('store_id'))->delete();
             return ['success'=>true];
         }else{
@@ -81,7 +81,7 @@ class StoreController extends UserController
             'phone' => 'required',
         ]);
 
-        if($this->user->canManipulate($request->get('store_id'), $this->STORE_UPDATE)){
+        if($this->user->canManipulate($request->get('store_id'), StoreController::STORE_UPDATE)){
 
             $store = Store::where('id',$request->get('store_id'))->first();
             $store->update(['name'=>$request->get('name'),'phone'=>$request->get('phone'),'description'=>$request->get('description'),'address'=>$request->get('address')]);
@@ -97,7 +97,7 @@ class StoreController extends UserController
             return response('store_id is not given!',400);
         }
         
-        if($this->user->canManipulate($request->get('store_id'), $this->ADD_PRODUCT)){
+        if($this->user->canManipulate($request->get('store_id'), StoreController::ADD_PRODUCT)){
 
             $this->validate($request,[
                 'name' => 'required|max:128',
@@ -129,7 +129,7 @@ class StoreController extends UserController
             return response('store_id is not given!',400);
         }
         
-        if($this->user->canManipulate($request->get('store_id'), $this->ADD_SERVICE)){
+        if($this->user->canManipulate($request->get('store_id'), StoreController::ADD_SERVICE)){
 
             $this->validate($request,[
                 'name' => 'required|max:128',
@@ -158,7 +158,7 @@ class StoreController extends UserController
             return response('store_id or service_id is not given!',400);
         }
         
-        if($this->user->canManipulate($request->get('store_id'), $this->DELETE_SERVICE)){
+        if($this->user->canManipulate($request->get('store_id'), StoreController::DELETE_SERVICE)){
 
             $service = Service::find($request->get('service_id',0));
 
@@ -179,7 +179,7 @@ class StoreController extends UserController
             return response('store_id or service_id is not given!',400);
         }
         
-        if($this->user->canManipulate($request->get('store_id'), $this->DELETE_PRODUCT)){
+        if($this->user->canManipulate($request->get('store_id'), StoreController::DELETE_PRODUCT)){
 
             $pro = Product::find($request->get('product_id',0));
 
@@ -200,7 +200,7 @@ class StoreController extends UserController
             return response('store_id or service_id is not given!',400);
         }
         
-        if($this->user->canManipulate($request->get('store_id'), $this->UPDATE_SERVICE)){
+        if($this->user->canManipulate($request->get('store_id'), StoreController::UPDATE_SERVICE)){
 
             $this->validate($request,[
                 'name' => 'required|max:128',
@@ -229,7 +229,7 @@ class StoreController extends UserController
             return response('store_id or product_id is not given!',400);
         }
         
-        if($this->user->canManipulate($request->get('store_id'), $this->UPDATE_PRODUCT)){
+        if($this->user->canManipulate($request->get('store_id'), StoreController::UPDATE_PRODUCT)){
 
             $this->validate($request,[
                 'name' => 'required|max:128',
@@ -258,7 +258,7 @@ class StoreController extends UserController
             return response('store_id is not given!',400);
         }
         
-        if($this->user->canManipulate($request->get('store_id'), $this->ADD_ACTION)){
+        if($this->user->canManipulate($request->get('store_id'), StoreController::ADD_ACTION)){
 
             $this->validate($request,[
                 'title' => 'required|max:128',
@@ -288,7 +288,7 @@ class StoreController extends UserController
             return response('store_id is not given!',400);
         }
         
-        if($this->user->canManipulate($request->get('store_id'), $this->ADD_DISCOUNT)){
+        if($this->user->canManipulate($request->get('store_id'), StoreController::ADD_DISCOUNT)){
 
             $this->validate($request,[
                 'title' => 'required|max:128',
@@ -319,7 +319,7 @@ class StoreController extends UserController
             return response('store_id or action_id is not given!',400);
         }
         
-        if($this->user->canManipulate($request->get('store_id'), $this->UPDATE_ACTION)){
+        if($this->user->canManipulate($request->get('store_id'), StoreController::UPDATE_ACTION)){
 
             $this->validate($request,[
                 'title' => 'required|max:128',
@@ -348,7 +348,7 @@ class StoreController extends UserController
             return response('store_id or discount_id is not given!',400);
         }
         
-        if($this->user->canManipulate($request->get('store_id'), $this->UPDATE_DISCOUNT)){
+        if($this->user->canManipulate($request->get('store_id'), StoreController::UPDATE_DISCOUNT)){
 
             $this->validate($request,[
                 'title' => 'required|max:128',
@@ -379,7 +379,7 @@ class StoreController extends UserController
             return response('store_id or discount_id is not given!',400);
         }
         
-        if($this->user->canManipulate($request->get('store_id'), $this->DELETE_DISCOUNT)){
+        if($this->user->canManipulate($request->get('store_id'), StoreController::DELETE_DISCOUNT)){
 
 
             $discount = Discount::find($request->get('discount_id'));
@@ -397,7 +397,7 @@ class StoreController extends UserController
             return response('store_id or action_id is not given!',400);
         }
         
-        if($this->user->canManipulate($request->get('store_id'), $this->DELETE_ACTION)){
+        if($this->user->canManipulate($request->get('store_id'), StoreController::DELETE_ACTION)){
 
 
             $action = Discount::find($request->get('action_id'));

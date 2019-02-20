@@ -15,7 +15,7 @@ class CreateStoresTable extends Migration
     {
         Schema::create('stores', function (Blueprint $table) {
             $table->increments('id');
-            $table->tinyInteger('status',0,1);
+            $table->tinyInteger('status',0,1)->default(3);
             $table->tinyInteger('level',0,1)->default(1);
             $table->string('name', 128);
             $table->string('phone');

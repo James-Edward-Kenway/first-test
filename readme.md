@@ -249,6 +249,9 @@ serviceladayam shular bor lekin *product_category_id* ni o'rnida *service_catego
 > `kelgan javob attribut kotegoriyalari. misol uchun, "Rangi" bu attribut kotegoriyasi va childrenda barcha attributla joylashgan. misol uchun Rangi:Oq bo'lishi mumkin. produktalani filter qilishda attributlar ning idsi jo'natiladi.`
 
 
+
+
+
 ```
 [
   {
@@ -346,6 +349,16 @@ serviceladayam shular bor lekin *product_category_id* ni o'rnida *service_catego
 >> http://{ip/hostname}/api/user/login?email=(email@mail.ru)&password=(parol:kami 6 ta belgi)&imei=(imei)&version=(4.4)&company=(Samsung A5)
 > agar registratsiya yoki login muvafaqiyatli bo'lsa {'authorized'=>true}, agar qandaydir xatolik bo'lsa {'authorized'=>false} bo'ladi. va ketidan oshibka messagi keladi.
 > login registratsiyadan keyin token keladi. shu tokenni va user_id ni har bir so'rovda yuborish kerak. hozircha shu orqali registratsiyadan o'tganligi aniqlanadi. misol uchun: `http://{ip/hostname}/api/store/delete?store_id=(magazin idsi)&user_id=(userni idisi login va registratsiyadan keyin kelgan)&token=(token logindan keyin kelgan)`
+
+## Registratsiya google bilan
+
+> registratsiya qilish google bilan
+>> http://{ip/hostname}/api/user/register?name=(ism familiya)&id=(google user id)&photo_url=(googledan kelgan fotoning idisi bo'lishi kerak)&email=(email@mail.ru)&imei=(imei)&version=(4.4)&company=(Samsung A5)
+
+## Login google bilan
+
+> login qilish
+>> http://{ip/hostname}/api/user/login?id=(user idisi)&imei=(imei)&version=(4.4)&company=(Samsung A5)
 
 
 ## Token reset

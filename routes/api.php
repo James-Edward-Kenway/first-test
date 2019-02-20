@@ -70,6 +70,12 @@ Route::get('store/add','StoreController@addStore');
 Route::get('store/delete','StoreController@deleteStore');
 Route::get('store/update','StoreController@updateStore');
 Route::get('store/show','PublicController@getStore');
+Route::get('store/roles','StoreController@getRoles');
+Route::get('store/product_categories','StoreController@productCategories');
+Route::get('store/service_categories','StoreController@serviceCategories');
+Route::get('store/mystores','StoreController@getStores');
+
+
 
 // product and service controll
 

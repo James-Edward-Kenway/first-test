@@ -9,6 +9,8 @@ use App\Exceptions\InvalidPermissionException;
 use App\Product;
 use App\Service;
 use App\Action;
+use App\ProductCategory;
+use App\ServiceCategory;
 
 class StoreController extends UserController
 {
@@ -56,6 +58,32 @@ class StoreController extends UserController
         return $store->toArray();
         
     }
+
+    public function getRoles(Request $req){
+        $roles = \DB::table('roles_of_stores')->where('user_id', $this->user->id)->where('store_id', $req->get('store_id',0))->get();
+        return $roles;
+    }
+
+    public function productCategories(Request $req){
+        $cats = ProductCategory::whereHas('products',function($q) use($req){
+            $q->where('store_id', $req->get('store_id',0));
+        })->get();
+        return $cats;
+    }
+    public function serviceCategories(Request $req){
+        $cats = ServiceCategory::whereHas('services',function($q) use($req){
+            $q->where('store_id', $req->get('store_id',0));
+        })->get();
+        return $cats;
+    }
+    public function getStores(Request $req){
+        $user = $this->user->id;
+        $stores = Store::whereHas('roles',function($q) use($user){
+            $q->where('user_id', $user);
+        })->get();
+        return $stores;
+    }
+
 
     public function deteleStore(Request $request){
         

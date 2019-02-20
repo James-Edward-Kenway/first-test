@@ -369,9 +369,13 @@ serviceladayam shular bor lekin *product_category_id* ni o'rnida *service_catego
 # Magazinlar
 > user registratsiya yoki login qilgan bo'lishi shart!
 
+## foydalanuvchining barcha magazinlari
+> magazinlar foydalanuvchiga qarashli
+>> http://{ip/hostname}/api/store/service_categories?store_id=(magazin idisi)
+
 ## Qo'shish
 > magazin qo'shish
->> http://{ip/hostname}/api/store/add?name=(nomi)&description=(tarifi)&address=(address)&phone=(tel nomeri)
+>> http://{ip/hostname}/api/store/mystores
 
 ## O'chirish
 > magazin O'chirish
@@ -384,6 +388,36 @@ serviceladayam shular bor lekin *product_category_id* ni o'rnida *service_catego
 ## Olish
 > magazin haqidagi informatsiyani olish (*registratsiya bo'lishi shartmas!*)
 >> http://{ip/hostname}/api/store/show?store_id=(magazin idsi)
+
+## magazin uchun userda mavjud bo'lgan rollani olish
+> magazin rollari
+>> http://{ip/hostname}/api/store/roles?store_id=(magazin idisi)
+```
+    const SUPERUSER = 1;
+    const UPDATE_ROLES = 2;
+    const STORE_DELETE = 3;
+    const STORE_UPDATE = 4;
+    const ADD_PRODUCT = 5;
+    const ADD_SERVICE = 6;
+    const DELETE_PRODUCT = 7;
+    const DELETE_SERVICE = 8;
+    const UPDATE_PRODUCT = 9;
+    const UPDATE_SERVICE = 10;
+    const ADD_ACTION = 11;
+    const ADD_DISCOUNT = 12;
+    const DELETE_ACTION = 13;
+    const DELETE_DISCOUNT = 14;
+    const UPDATE_ACTION = 15;
+    const UPDATE_DISCOUNT = 16;
+```
+
+## magazin produktalari mavjud bo'lgan kategoriyalarni olish
+> magazin product_categories
+>> http://{ip/hostname}/api/store/product_categories?store_id=(magazin idisi)
+
+## magazin servislari mavjud bo'lgan kategoriyalarni olish
+> magazin service_categories
+>> http://{ip/hostname}/api/store/service_categories?store_id=(magazin idisi)
 
 # wishlist (izabrannie)
 

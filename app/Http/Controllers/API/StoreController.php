@@ -47,13 +47,23 @@ class StoreController extends UserController
             'description' => 'required',
             'address' => 'required',
             'phone' => 'required',
+            'photo' => 'mimes:jpeg,png',
         ]);
+
 
         $store = new Store(['name'=>$request->get('name'), 'description'=>$request->get('description'),
          'address'=>$request->get('address'), 'phone'=>$request->get('phone'), 'status' => 3]);
 
         $store->save();
         $roles = $store->roles()->create(['user_id'=>$this->user->id,'role'=>StoreController::SUPERUSER]);
+
+        if($request->hasFile('photo')){
+
+            $photo = Str::random(20).".jpg";
+            $request->file('photo')->storeAs(public_path("/images/store/".$store->id."/"), $photo);
+            $store->images = "[\"/images/store/".$store->id."/".$photo."\"]";
+            $store->save();
+        }
 
         return ['success'=>true, $store->toArray()];
         

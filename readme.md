@@ -373,11 +373,11 @@ serviceladayam shular bor lekin *product_category_id* ni o'rnida *service_catego
 
 ## foydalanuvchining barcha magazinlari
 > magazinlar foydalanuvchiga qarashli
->> http://{ip/hostname}/api/store/service_categories?store_id=(magazin idisi)
+>> http://{ip/hostname}/api/store/mystores
 
 ## Qo'shish
-> magazin qo'shish
->> http://{ip/hostname}/api/store/mystores
+> magazin qo'shish (post)
+>> http://{ip/hostname}/api/store/add?name=(nomi)&description=(tarifi)&address=(address)&phone=(tel nomeri)&photo=alskjfdlk
 
 ## O'chirish
 > magazin O'chirish

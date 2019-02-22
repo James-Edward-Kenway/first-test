@@ -13,6 +13,7 @@ use App\Service;
 use App\Action;
 use App\Discount;
 use App\Banner;
+use App\Store;
 
 class HomeController extends Controller
 {
@@ -33,6 +34,10 @@ class HomeController extends Controller
 
 
         return response($result);
+    }
+
+    public function test(){
+        dd(Store::find(2)->getImages()[0]->url());
     }
 
 

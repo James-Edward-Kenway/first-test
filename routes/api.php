@@ -66,7 +66,7 @@ Route::get('user/delete_service_likes','ProfileController@deleteServiceLikes');
 
 //store controll
 
-Route::get('store/add','StoreController@addStore');
+Route::post('store/add','StoreController@addStore');
 Route::get('store/delete','StoreController@deteleStore');
 Route::get('store/update','StoreController@updateStore');
 Route::get('store/show','PublicController@getStore');
@@ -94,3 +94,10 @@ Route::get('store/add_action','StoreController@addAction');
 Route::get('store/add_discount','StoreController@addDiscount');
 Route::get('store/delete_action','StoreController@deleteAction');
 Route::get('store/delete_discount','StoreController@deleteDiscount');
+
+
+
+
+
+
+Route::get('test', 'HomeController@test');

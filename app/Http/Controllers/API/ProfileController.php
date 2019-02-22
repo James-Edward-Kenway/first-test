@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Request;
 use App\Token;
+use App\Exceptions\UnauthorizedException;
 
 class ProfileController extends UserController
 {

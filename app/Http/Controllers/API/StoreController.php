@@ -55,7 +55,7 @@ class StoreController extends UserController
         $store->save();
         $roles = $store->roles()->create(['user_id'=>$this->user->id,'role'=>StoreController::SUPERUSER]);
 
-        return $store->toArray();
+        return ['success'=>true, $store->toArray()];
         
     }
 
@@ -113,7 +113,7 @@ class StoreController extends UserController
 
             $store = Store::where('id',$request->get('store_id'))->first();
             $store->update(['name'=>$request->get('name'),'phone'=>$request->get('phone'),'description'=>$request->get('description'),'address'=>$request->get('address')]);
-            return ['success'=>true];
+            return ['success'=>true,$store->toArray()];
         }else{
             throw new InvalidPermissionException();
         }

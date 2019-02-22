@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Request;
+use App\Store;
 
 class PublicController extends Controller
 {
@@ -20,6 +21,8 @@ class PublicController extends Controller
         $id = $req->get('store_id');
 
         $store = Store::find($id);
-        return $store->toArray();
+        if($store==null) return ['success'=>false];
+
+        return ['success'=>true,'data'=>$store->toArray()];
     }
 }

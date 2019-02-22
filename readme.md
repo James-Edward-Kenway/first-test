@@ -161,7 +161,7 @@
 >> http://{ip/hostname}/api/products
 >> bunda bir nechta attributla mavjud
 >> bu attributlani hech biri ajburiy emas
->> ular *brand_id, product_category_id, attributes, order, order_type*
+>> ular *brand_id, product_category_id, attributes, order, order_type, store_id*
 
 > ### api url for loading Services
 >> http://{ip/hostname}/api/services
@@ -173,6 +173,8 @@ product_category_id = (son) kategoriya idsi **29**
 attributes[] = (array) tanlangan atributlani idlari **1**
 order = (price|created_at)
 order_type = (asc|desc)
+store_id = (asc|desc)
+
 
 > misol uchun
 >> http://{ip/hostname}/api/services?brand_id=1&name=iphone&service_category_id=1&attributes[]=1&attribute[]=2&attributes[]=3&order=price&order_type=asc

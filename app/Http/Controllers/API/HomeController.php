@@ -72,6 +72,8 @@ class HomeController extends Controller
 
         $name = @$request->get('name');
 
+        $store_id = @$request->get('store_id');
+
         $brand_id = @$request->get('brand_id');
         
         //this will also determine attribute groups
@@ -97,7 +99,11 @@ class HomeController extends Controller
         $products = Product::orderBy($order, $order_type);
 
         if(\is_numeric($brand_id)){
-            $products->where('brand_id',$brand_id);
+            $products->where('brand_id', $brand_id);
+        }
+
+        if(\is_numeric($store_id)){
+            $products->where('store_id', $store_id);
         }
 
         if(is_numeric($pro_cat_id)){
@@ -165,6 +171,8 @@ class HomeController extends Controller
         
         $name = @$request->get('name');
 
+        $store_id = @$request->get('store_id');
+
         $brand_id = @$request->get('brand_id');
         
         //this will also determine attribute groups
@@ -189,6 +197,9 @@ class HomeController extends Controller
 
         $services = Service::orderBy($order, $order_type);
 
+        if(\is_numeric($store_id)){
+            $services->where('store_id', $store_id);
+        }
         if(\is_numeric($brand_id)){
             $services->where('brand_id', $brand_id);
         }

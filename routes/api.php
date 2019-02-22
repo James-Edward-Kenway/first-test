@@ -67,7 +67,7 @@ Route::get('user/delete_service_likes','ProfileController@deleteServiceLikes');
 //store controll
 
 Route::get('store/add','StoreController@addStore');
-Route::get('store/delete','StoreController@deleteStore');
+Route::get('store/delete','StoreController@deteleStore');
 Route::get('store/update','StoreController@updateStore');
 Route::get('store/show','PublicController@getStore');
 Route::get('store/roles','StoreController@getRoles');

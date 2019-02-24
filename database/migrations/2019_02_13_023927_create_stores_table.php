@@ -21,7 +21,7 @@ class CreateStoresTable extends Migration
             $table->string('phone');
             $table->text('description');
             $table->text('address');
-            $table->text('images');
+            $table->text('images')->default('[]');
             $table->timestamps();
         });
     }

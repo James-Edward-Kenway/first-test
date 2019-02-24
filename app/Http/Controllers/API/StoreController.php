@@ -43,7 +43,7 @@ class StoreController extends UserController
 
     public function addStore(Request $request){
         
-        $this->validate($request,[
+        $validate = validator($request->all(),[
             'name' => 'required|max:128',
             'description' => 'required',
             'address' => 'required',
@@ -51,6 +51,10 @@ class StoreController extends UserController
             'photo' => 'mimes:jpeg,png',
         ]);
 
+
+        if($validate->fails()){
+            return ['messages'=>$validate->errors()->all()]+['success'=>false];
+        }
 
         $store = new Store(['name'=>$request->input('name'), 'description'=>$request->input('description'),
          'address'=>$request->input('address'), 'phone'=>$request->input('phone'), 'status' => 3]);
@@ -63,7 +67,7 @@ class StoreController extends UserController
             $path = "/images/store/".$store->id."/";
             $photo = md5('jpg'.microtime().rand(0,1000)).".jpg";
             $pub = public_path($path);
-            if(file_exists($pub)){
+            if(!file_exists($pub)){
                 mkdir($pub);
             }
             $request->file('photo')->storeAs($path, $photo, 'public_html');
@@ -96,7 +100,10 @@ class StoreController extends UserController
         }
 
         if($this->user->canManipulate($request->get('store_id'), StoreController::STORE_DELETE)){
-            Store::where('id',$request->get('store_id'))->delete();
+            $store = Store::where('id',$request->get('store_id'))->first();
+            if($store!=null){
+                $store->delete();
+            }
             return ['success'=>true];
         }else{
             throw new InvalidPermissionException();
@@ -105,7 +112,7 @@ class StoreController extends UserController
 
     public function updateStore(Request $request){
 
-        $this->validate($request,[
+        $validate = validator($request->all(),[
             'store_id' => 'required',
             'name' => 'required|max:128',
             'description' => 'required',
@@ -113,6 +120,10 @@ class StoreController extends UserController
             'phone' => 'required',
             'photo' => 'mimes:jpeg,png',
         ]);
+
+        if($validate->fails()){
+            return ['messages'=>$validate->errors()->all()]+['success'=>false];
+        }
 
         if($this->user->canManipulate($request->get('store_id'), StoreController::STORE_UPDATE)){
 
@@ -123,11 +134,15 @@ class StoreController extends UserController
             
             if($request->hasFile('photo')){
 
-                unlink(public_path("/images/store/".$store->id."/"), $store->getImages());
-
-                $photo = Str::random(20).".jpg";
-                $request->file('photo')->storeAs(public_path("/images/store/".$store->id."/"), $photo);
-                $store->images = "[\"/images/store/".$store->id."/".$photo."\"]";
+                $path = "/images/store/".$store->id."/";
+                $photo = md5('jpg'.microtime().rand(0,1000)).".jpg";
+                $pub = public_path($path);
+                if(!file_exists($pub)){
+                    mkdir($pub);
+                }
+                $request->file('photo')->storeAs($path, $photo, 'public_html');
+                $store->removeAllImages();
+                $store->addImage(Image::path($path.$photo));
                 $store->save();
             }
             return ['success'=>true,$store->toArray()];
@@ -142,27 +157,51 @@ class StoreController extends UserController
             return response('store_id is not given!',400);
         }
         
-        if($this->user->canManipulate($request->get('store_id'), StoreController::ADD_PRODUCT)){
+        if($this->user->canManipulate($request->input('store_id'), StoreController::ADD_PRODUCT)){
 
-            $this->validate($request,[
+            $validate = validator($request->all(),[
                 'name' => 'required|max:128',
                 'description' => 'required',
                 'brand_id' => 'required',
                 'store_id' => 'required',
-                'price'=> 'required'
+                'price'=> 'required',
+                'photo.*' => 'mimes:jpeg,png',
             ]);
+ 
+            if($validate->fails()){
+                return ['messages'=>$validate->errors()->all()]+['success'=>false];
+            }
 
             $product = new Product([
-                'title' => $request->get('name'),
-                'description' => $request->get('description'),
-                'brand_id' => $request->get('brand_id'),
-                'store_id' => $request->get('store_id'),
-                'price'=> $request->get('price'),
+                'title' => $request->input('name'),
+                'description' => $request->input('description'),
+                'brand_id' => $request->input('brand_id'),
+                'store_id' => $request->input('store_id'),
+                'price'=> $request->input('price'),
                 'user_id'=> $this->user->id,
-                'image'=> ''
             ]);
-
+            
             $product->save();
+
+            if($request->hasFile('photo')){
+
+                $path = "/images/store/".$product->store_id."/product/".$product->id.'/';
+                $pub = public_path($path);
+                try{
+                    if(!file_exists($pub)){
+                        mkdir($pub);
+                    }
+                }catch(\Exception $e){}
+                
+                foreach($request->file('photo') as $file){
+
+                    $photo = md5('jpg'.microtime().rand(0,1000)).".jpg";
+                    $file->storeAs($path, $photo, 'public_html');
+                    $product->addImage(Image::path($path.$photo));
+                }
+
+                $product->save();
+            }
 
             return ['success'=>true, $product->toArray()];
         }else{
@@ -178,12 +217,17 @@ class StoreController extends UserController
         
         if($this->user->canManipulate($request->get('store_id'), StoreController::ADD_SERVICE)){
 
-            $this->validate($request,[
+            $validate = validator($request->all(),[
                 'name' => 'required|max:128',
                 'description' => 'required',
                 'store_id' => 'required',
-                'price'=> 'required'
+                'price'=> 'required',
+                'photo.*' => 'mimes:jpeg,png',
             ]);
+
+            if($validate->fails()){
+                return ['messages'=>$validate->errors()->all()]+['success'=>false];
+            }
 
             $service = new Service([
                 'name' => $request->get('name'),
@@ -251,12 +295,17 @@ class StoreController extends UserController
         
         if($this->user->canManipulate($request->get('store_id'), StoreController::UPDATE_SERVICE)){
 
-            $this->validate($request,[
+            $validate = validator($request->all(),[
                 'name' => 'required|max:128',
                 'description' => 'required',
                 'store_id' => 'required',
+                'photo.*' => 'mimes:jpeg,png',
                 'price'=> 'required'
             ]);
+
+            if($validate->fails()){
+                return ['messages'=>$validate->errors()->all()]+['success'=>false];
+            }
 
             $service = Service::find($request->get('service_id'));
             $service->save([
@@ -278,25 +327,49 @@ class StoreController extends UserController
             return response('store_id or product_id is not given!',400);
         }
         
-        if($this->user->canManipulate($request->get('store_id'), StoreController::UPDATE_PRODUCT)){
+        if($this->user->canManipulate($request->input('store_id'), StoreController::UPDATE_PRODUCT)){
 
-            $this->validate($request,[
+            $validate = validator($request->all(),[
                 'name' => 'required|max:128',
                 'description' => 'required',
-                'store_id' => 'required',
-                'price'=> 'required'
+                'brand_id' => 'required',
+                'price'=> 'required',
+                'photo.*' => 'mimes:jpeg,png',
             ]);
 
-            $pro = Product::find($request->get('product_id'));
-            $pro->save([
-                'name' => $request->get('name'),
-                'description' => $request->get('description'),
-                'store_id' => $request->get('store_id'),
-                'price'=> $request->get('price')
+            if($validate->fails()){
+                return ['messages'=>$validate->errors()->all()]+['success'=>false];
+            }
+
+            $product = Product::find($request->input('product_id'));
+
+            if($request->hasFile('photo')){
+
+                $path = "/images/store/".$product->store_id."/product/".$product->id.'/';
+                $pub = public_path($path);
+                try{
+                    if(!file_exists($pub)){
+                        mkdir($pub);
+                    }
+                }catch(\Exception $e){}
+                
+                foreach($request->file('photo') as $file){
+
+                    $photo = md5('jpg'.microtime().rand(0,1000)).".jpg";
+                    $file->storeAs($path, $photo, 'public_html');
+                    $product->removeAllImages();
+                    $product->addImage(Image::path($path.$photo));
+                }
+            }
+            $product->save([
+                'title' => $request->input('name'),
+                'description' => $request->input('description'),
+                'brand_id' => $request->input('brand_id'),
+                'price'=> $request->input('price'),
+                'user_id'=> $this->user->id,
             ]);
 
-
-            return ['success'=>true, $pro->toArray()];
+            return ['success'=>true, $product->toArray()];
         }else{
             throw new InvalidPermissionException();
         }
@@ -309,12 +382,16 @@ class StoreController extends UserController
         
         if($this->user->canManipulate($request->get('store_id'), StoreController::ADD_ACTION)){
 
-            $this->validate($request,[
+            $validate = validator($request->all(),[
                 'title' => 'required|max:128',
                 'description' => 'required',
                 'store_id' => 'required',
                 'address'=> 'required'
             ]);
+
+            if($validate->fails()){
+                return ['messages'=>$validate->errors()->all()]+['success'=>false];
+            }
 
             $action = new Action([
                 'title' => $request->get('title'),
@@ -339,13 +416,17 @@ class StoreController extends UserController
         
         if($this->user->canManipulate($request->get('store_id'), StoreController::ADD_DISCOUNT)){
 
-            $this->validate($request,[
+            $validate = validator($request->all(),[
                 'title' => 'required|max:128',
                 'discount' => 'required',
                 'description' => 'required',
                 'store_id' => 'required',
                 'address'=> 'required'
             ]);
+
+            if($validate->fails()){
+                return ['messages'=>$validate->errors()->all()]+['success'=>false];
+            }
 
             $discount = new Discount([
                 'title' => $request->get('title'),
@@ -370,12 +451,16 @@ class StoreController extends UserController
         
         if($this->user->canManipulate($request->get('store_id'), StoreController::UPDATE_ACTION)){
 
-            $this->validate($request,[
+            $validate = validator($request->all(),[
                 'title' => 'required|max:128',
                 'description' => 'required',
                 'store_id' => 'required',
                 'address'=> 'required'
             ]);
+
+            if($validate->fails()){
+                return ['messages'=>$validate->errors()->all()]+['success'=>false];
+            }
 
             $action = Action::find($request->get('action_id'));
             $action->save([
@@ -399,13 +484,17 @@ class StoreController extends UserController
         
         if($this->user->canManipulate($request->get('store_id'), StoreController::UPDATE_DISCOUNT)){
 
-            $this->validate($request,[
+            $validate = validator($request->all(),[
                 'title' => 'required|max:128',
                 'description' => 'required',
                 'discount' => 'required',
                 'store_id' => 'required',
                 'address'=> 'required'
             ]);
+
+            if($validate->fails()){
+                return ['messages'=>$validate->errors()->all()]+['success'=>false];
+            }
 
             $action = Action::find($request->get('action_id'));
             $action->save([

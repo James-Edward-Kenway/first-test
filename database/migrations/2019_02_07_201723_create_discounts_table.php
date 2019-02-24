@@ -22,7 +22,7 @@ class CreateDiscountsTable extends Migration
             $table->text('description');
             $table->text('address');
             $table->integer('discount');
-            $table->text('images');
+            $table->text('images')->default('[]');
             $table->timestamps();
         });
     }

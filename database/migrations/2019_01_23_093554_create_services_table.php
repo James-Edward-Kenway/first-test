@@ -23,7 +23,7 @@ class CreateServicesTable extends Migration
             $table->tinyInteger('status',0,1)->default(3);
             $table->text('title');
             $table->text('description');
-            $table->text('image');
+            $table->text('images')->default('[]');
             $table->decimal('price',16,2);
             $table->timestamps();
         });

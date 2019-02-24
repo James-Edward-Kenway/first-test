@@ -79,11 +79,11 @@ Route::get('store/mystores','StoreController@getStores');
 
 // product and service controll
 
-Route::get('store/add_product','StoreController@addProduct');
+Route::post('store/add_product','StoreController@addProduct');
 Route::get('store/add_service','StoreController@addService');
 Route::get('store/delete_product','StoreController@deleteProduct');
 Route::get('store/delete_service','StoreController@deleteService');
-Route::get('store/update_product','StoreController@updateProduct');
+Route::post('store/update_product','StoreController@updateProduct');
 Route::get('store/update_service','StoreController@updateService');
 
 //action and discount controll

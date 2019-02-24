@@ -21,7 +21,7 @@ class CreateActionsTable extends Migration
             $table->string('title', 128);
             $table->text('description');
             $table->text('address');
-            $table->text('images');
+            $table->text('images')->default('[]');
             $table->timestamps();
         });
     }

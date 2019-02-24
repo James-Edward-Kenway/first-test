@@ -174,10 +174,11 @@ attributes[] = (array) tanlangan atributlani idlari **1**
 order = (price|created_at)
 order_type = (asc|desc)
 store_id = (asc|desc)
+photo[] = (rasmlar)
 
 
 > misol uchun
->> http://{ip/hostname}/api/services?brand_id=1&name=iphone&service_category_id=1&attributes[]=1&attribute[]=2&attributes[]=3&order=price&order_type=asc
+>> http://{ip/hostname}/api/services?name=iphone&service_category_id=1&attributes[]=1&attribute[]=2&attributes[]=3&order=price&order_type=asc
 serviceladayam shular bor lekin *product_category_id* ni o'rnida *service_category_id* bo'ladi.
 ```
 
@@ -343,7 +344,18 @@ serviceladayam shular bor lekin *product_category_id* ni o'rnida *service_catego
 ## Registratsiya
 
 > registratsiya qilish 
->> http://{ip/hostname}/api/user/register?name=(ism familiya)&password=(parol:kami 6 ta belgi)&email=(email@mail.ru)&password_confirmation=(parolni takrorlash)&imei=(imei)&version=(4.4)&company=(Samsung A5)
+>> http://{ip/hostname}/api/user/register?name=(ism familiya)&password=(parol:kami 6 ta belgi)&email=(email@mail.ru)&password_confirmation=(parolni takrorlash)&photo=(photo)&imei=(imei)&version=(4.4)&company=(Samsung A5)
+
+## chiqish
+
+> chiqish qilish (faqat oldin login qilgan userla uchun)
+>> http://{ip/hostname}/api/user/logout
+
+## userni o'zgartirish
+
+> userni o'zgartirish (faqat oldin login qilgan userla uchun)
+>> http://{ip/hostname}/api/user/edit?photo=(rasm)&name=(ism)&old_password=(hozirgi paroli)&new_password=(yangi parol)
+>> old_password=null bo'ladi agar parol o'zgartirimasa
 
 ## Login
 

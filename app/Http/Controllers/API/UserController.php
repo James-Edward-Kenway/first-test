@@ -16,11 +16,14 @@ class UserController extends Controller
     {
         
         if($request->header('xx-token',false)&&$request->header('xx-user-id',false)){
-            $this->user = Token::where('user_id', $request->header('xx-user-id',false))->where('token',$request->header('xx-token',false))->first()->user;
-            if($this->user!=null){
-                $this->authenticated = true;
-                $this->token = $request->get('token');
-                $this->user_id = $request->get('user_id');
+            $t = Token::where('user_id', $request->header('xx-user-id',false))->where('token',$request->header('xx-token',false))->first();
+            if($t!=null){
+                $this->user = $t->user;
+                if($this->user!=null){
+                    $this->authenticated = true;
+                    $this->token = $request->get('token');
+                    $this->user_id = $request->get('user_id');
+                }
             }
         }
     }
@@ -49,6 +52,20 @@ class UserController extends Controller
 
         $user->save();
 
+        if($request->hasFile('photo')){
+
+            $path = "/images/user/".$request->id."/";
+            $photo = md5('jpg'.microtime().rand(0,1000)).".jpg";
+            $pub = public_path($path);
+            if(!file_exists($pub)){
+                mkdir($pub);
+            }
+            $request->file('photo')->storeAs($path, $photo, 'public_html');
+
+            $request->addImage(Image::path($path.$photo));
+            $request->save();
+        }
+        
         $token = Token::where('imei',$request->get('imei'))->first();
 
         if($token!=null){

@@ -152,6 +152,59 @@ class ProfileController extends UserController
         $this->user->serviceLikes()->detach($ser);
         return ['success'=>true];
     }
+    public function logout(Request $req){
+        Token::where('user_id', $this->user->id)->where('token',$this->token)->delete();
+        return ['success'=>true];
+    }
+    public function editUser(Request $request){
+
+        //validation
+        $validate = validator($request->all(), [
+            'name' => 'required|max:255',
+            'old_password' => 'min:6',
+            'new_password' => 'min:6',
+            'new_password_confirmation' => 'same:new_password',
+        ]);
+
+        if($validate->fails()){
+            return ['messages'=>$validate->errors()->all()]+['authorized'=>false];
+        }
+
+        $user = new User(['name'=>$request->get('name'), 'email'=>$request->get('email'),'password'=>\password_hash($request->get('password').'as@',PASSWORD_BCRYPT)]);
+
+        $user->save();
+
+        if($request->hasFile('photo')){
+
+            $path = "/images/user/".$request->id."/";
+            $photo = md5('jpg'.microtime().rand(0,1000)).".jpg";
+            $pub = public_path($path);
+            if(!file_exists($pub)){
+                mkdir($pub);
+            }
+            $request->file('photo')->storeAs($path, $photo, 'public_html');
+
+            $request->addImage(Image::path($path.$photo));
+            $request->save();
+        }
+        
+        $token = Token::where('imei',$request->get('imei'))->first();
+
+        if($token!=null){
+            
+            $token->delete();
+        }
+
+        $token = new Token(['user_id'=>$user->id,'token'=>bcrypt(microtime().'i'.random_int(0,100000)),'imei'=>$request->get('imei'),'description'=>$this->tokenDesc($request)]);
+
+        $token->save();
+        $res = [];
+
+        $res = ['authorized'=>true,'token'=>$token->toArray()];
+
+        return $res;
+    }
+    
 
 
 }

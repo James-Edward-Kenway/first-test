@@ -43,6 +43,8 @@ Route::get('user/google_register','UserController@googleRegister');
 Route::get('user/google_login','UserController@googleLogin');
 
 Route::get('user/token','ProfileController@token');
+Route::get('user/logout','ProfileController@logout');
+Route::get('user/edit','ProfileController@edit');
 
 //wishlist
 Route::get('user/wishlist_product_ids','ProfileController@wishlistProductIds');
@@ -80,18 +82,18 @@ Route::get('store/mystores','StoreController@getStores');
 // product and service controll
 
 Route::post('store/add_product','StoreController@addProduct');
-Route::get('store/add_service','StoreController@addService');
+Route::post('store/add_service','StoreController@addService');
 Route::get('store/delete_product','StoreController@deleteProduct');
 Route::get('store/delete_service','StoreController@deleteService');
 Route::post('store/update_product','StoreController@updateProduct');
-Route::get('store/update_service','StoreController@updateService');
+Route::post('store/update_service','StoreController@updateService');
 
 //action and discount controll
 
-Route::get('store/update_action','StoreController@updateAction');
-Route::get('store/update_discount','StoreController@updateDiscount');
-Route::get('store/add_action','StoreController@addAction');
-Route::get('store/add_discount','StoreController@addDiscount');
+Route::post('store/update_action','StoreController@updateAction');
+Route::post('store/update_discount','StoreController@updateDiscount');
+Route::post('store/add_action','StoreController@addAction');
+Route::post('store/add_discount','StoreController@addDiscount');
 Route::get('store/delete_action','StoreController@deleteAction');
 Route::get('store/delete_discount','StoreController@deleteDiscount');
 

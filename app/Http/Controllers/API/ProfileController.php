@@ -161,48 +161,41 @@ class ProfileController extends UserController
         //validation
         $validate = validator($request->all(), [
             'name' => 'required|max:255',
+            'photo' => 'mimes:jpeg,png',
             'old_password' => 'min:6',
             'new_password' => 'min:6',
             'new_password_confirmation' => 'same:new_password',
         ]);
 
         if($validate->fails()){
-            return ['messages'=>$validate->errors()->all()]+['authorized'=>false];
+            return ['messages'=>$validate->errors()->all(),'success'=>false];
         }
 
-        $user = new User(['name'=>$request->get('name'), 'email'=>$request->get('email'),'password'=>\password_hash($request->get('password').'as@',PASSWORD_BCRYPT)]);
-
-        $user->save();
 
         if($request->hasFile('photo')){
 
-            $path = "/images/user/".$request->id."/";
+            $path = "/images/user/".$this->user->id."/";
             $photo = md5('jpg'.microtime().rand(0,1000)).".jpg";
             $pub = public_path($path);
+
             if(!file_exists($pub)){
                 mkdir($pub);
             }
             $request->file('photo')->storeAs($path, $photo, 'public_html');
 
-            $request->addImage(Image::path($path.$photo));
-            $request->save();
+            $this->user->addImage(Image::path($path.$photo));
         }
         
-        $token = Token::where('imei',$request->get('imei'))->first();
-
-        if($token!=null){
-            
-            $token->delete();
+        if($request->has('old_password')){
+            if(password_verify($request->input('old_password'),$this->user->password)){
+                $this->user->password = \password_hash($request->input('password').'as@',PASSWORD_BCRYPT);
+            }else{
+                return ['messages'=>['old_password'=>'old password not correct!'],'success'=>false];
+            }
         }
+        $this->user->update(['name'=>$request->input('name')]);
 
-        $token = new Token(['user_id'=>$user->id,'token'=>bcrypt(microtime().'i'.random_int(0,100000)),'imei'=>$request->get('imei'),'description'=>$this->tokenDesc($request)]);
-
-        $token->save();
-        $res = [];
-
-        $res = ['authorized'=>true,'token'=>$token->toArray()];
-
-        return $res;
+        return ['success'=>true,$this->user->toArray()];
     }
     
 

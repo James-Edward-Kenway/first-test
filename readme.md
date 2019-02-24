@@ -343,7 +343,7 @@ serviceladayam shular bor lekin *product_category_id* ni o'rnida *service_catego
 # Registratsiya va login
 ## Registratsiya
 
-> registratsiya qilish 
+> registratsiya qilish [POST]
 >> http://{ip/hostname}/api/user/register?name=(ism familiya)&password=(parol:kami 6 ta belgi)&email=(email@mail.ru)&password_confirmation=(parolni takrorlash)&photo=(photo)&imei=(imei)&version=(4.4)&company=(Samsung A5)
 
 ## chiqish
@@ -353,7 +353,7 @@ serviceladayam shular bor lekin *product_category_id* ni o'rnida *service_catego
 
 ## userni o'zgartirish
 
-> userni o'zgartirish (faqat oldin login qilgan userla uchun)
+> userni o'zgartirish (faqat oldin login qilgan userla uchun) [POST]
 >> http://{ip/hostname}/api/user/edit?photo=(rasm)&name=(ism)&old_password=(hozirgi paroli)&new_password=(yangi parol)
 >> old_password=null bo'ladi agar parol o'zgartirimasa
 
@@ -388,7 +388,7 @@ serviceladayam shular bor lekin *product_category_id* ni o'rnida *service_catego
 >> http://{ip/hostname}/api/store/mystores
 
 ## Qo'shish
-> magazin qo'shish (post)
+> magazin qo'shish [POST]
 >> http://{ip/hostname}/api/store/add?name=(nomi)&description=(tarifi)&address=(address)&phone=(tel nomeri)&photo=alskjfdlk
 
 ## O'chirish
@@ -396,7 +396,7 @@ serviceladayam shular bor lekin *product_category_id* ni o'rnida *service_catego
 >> http://{ip/hostname}/api/store/delete?store_id=(magazin idsi)
 
 ## O'zgartirish
-> magazin O'zgartirish
+> magazin O'zgartirish [POST]
 >> http://{ip/hostname}/api/store/update?store_id=(magazin idsi)&name=(nomi)&description=(tarifi)&address=(address)&phone=(tel nomeri)
 
 ## Olish
@@ -492,10 +492,10 @@ serviceladayam shular bor lekin *product_category_id* ni o'rnida *service_catego
 # products
 > productalani o'zgartirish uchun user registratsiyadan o'tgan bo'lishi kerak!
 
-> productalani qo'shish (hozircha shu!)
+> productalani qo'shish (hozircha shu!) [POST]
 >> http://{ip/hostname}/api/store/add_product?name=(nomi)&description=(tarifi)&store_id=(magazin id)&price=(product price)&brand_id=(tanlangan brend_id)
 
-> productalani o'zgartiring (hozircha shu!)
+> productalani o'zgartiring (hozircha shu!) [POST]
 >> http://{ip/hostname}/api/store/update_product?product_id=(o'zgartirilishi kerak bo'lgan product idisi)&name=(nomi)&description=(tarifi)&store_id=(magazin id)&price=(product price)&brand_id=(tanlangan brend_id)
 
 > productalani o'chirish (hozircha shu!)
@@ -505,10 +505,10 @@ serviceladayam shular bor lekin *product_category_id* ni o'rnida *service_catego
 # services
 > servislani o'zgartirish uchun user registratsiyadan o'tgan bo'lishi kerak!
 
-> servislani qo'shish (hozircha shu!)
+> servislani qo'shish (hozircha shu!) [POST]
 >> http://{ip/hostname}/api/store/add_service?name=(nomi)&description=(tarifi)&store_id=(magazin id)&price=(service price)
 
-> servislani o'zgartishi (hozircha shu!)
+> servislani o'zgartishi (hozircha shu!) [POST]
 >> http://{ip/hostname}/api/store/update_service?service_id=(o'zgarilishi kerak bo'lgan servis idisi)&name=(nomi)&description=(tarifi)&store_id=(magazin id)&price=(service price)
 
 > servislani o'chirish (hozircha shu!)
@@ -518,10 +518,10 @@ serviceladayam shular bor lekin *product_category_id* ni o'rnida *service_catego
 # actions (aksiyalar)
 > aksiyalani o'zgartirish uchun user registratsiyadan o'tgan bo'lishi kerak!
 
-> aksiyalani qo'shish (hozircha shu!)
+> aksiyalani qo'shish (hozircha shu!) [POST]
 >> http://{ip/hostname}/api/store/add_action?title=(sarlovhasi)&description=(tarifi)&store_id=(magazin id)&address=(address)
 
-> aksiyalani o'zgartirish (hozircha shu!)
+> aksiyalani o'zgartirish (hozircha shu!) [POST]
 >> http://{ip/hostname}/api/store/update_action?action_id=(aksiyani idisi)&title=(sarlovhasi)&description=(tarifi)&store_id=(magazin id)&address=(address)
 
 > aksiyalani o'chirish (hozircha shu!)
@@ -530,10 +530,10 @@ serviceladayam shular bor lekin *product_category_id* ni o'rnida *service_catego
 # discount (skidkala)
 > skidkalani o'zgartirish uchun user registratsiyadan o'tgan bo'lishi kerak!
 
-> skidkalani qo'shish (hozircha shu!)
+> skidkalani qo'shish (hozircha shu!) [POST]
 >> http://{ip/hostname}/api/store/add_discount?title=(sarlovhasi)&description=(tarifi)&store_id=(magazin id)&discount=(service price)&address=(address)
 
-> skidkalani o'zgartirish (hozircha shu!)
+> skidkalani o'zgartirish (hozircha shu!) [POST]
 >> http://{ip/hostname}/api/store/update_discount?discount_id(skidka idisi)&title=(sarlovhasi)&description=(tarifi)&store_id=(magazin id)&discount=(service price)&address=(address)
 
 > skidkalani o'chirish (hozircha shu!)

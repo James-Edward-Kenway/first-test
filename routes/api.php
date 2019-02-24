@@ -36,7 +36,7 @@ Route::get('banners', 'HomeController@banners');
 
 // user controll
 
-Route::get('user/register','UserController@register');
+Route::post('user/register','UserController@register');
 Route::get('user/login','UserController@login');
 
 Route::get('user/google_register','UserController@googleRegister');
@@ -44,7 +44,7 @@ Route::get('user/google_login','UserController@googleLogin');
 
 Route::get('user/token','ProfileController@token');
 Route::get('user/logout','ProfileController@logout');
-Route::get('user/edit','ProfileController@edit');
+Route::post('user/edit','ProfileController@editUser');
 
 //wishlist
 Route::get('user/wishlist_product_ids','ProfileController@wishlistProductIds');

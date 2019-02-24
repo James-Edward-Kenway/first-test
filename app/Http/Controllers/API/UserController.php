@@ -21,8 +21,8 @@ class UserController extends Controller
                 $this->user = $t->user;
                 if($this->user!=null){
                     $this->authenticated = true;
-                    $this->token = $request->get('token');
-                    $this->user_id = $request->get('user_id');
+                    $this->token = $request->input('token');
+                    $this->user_id = $request->input('user_id');
                 }
             }
         }
@@ -48,13 +48,13 @@ class UserController extends Controller
             return ['messages'=>$validate->errors()->all()]+['authorized'=>false];
         }
 
-        $user = new User(['name'=>$request->get('name'), 'email'=>$request->get('email'),'password'=>\password_hash($request->get('password').'as@',PASSWORD_BCRYPT)]);
+        $user = new User(['name'=>$request->input('name'), 'email'=>$request->input('email'),'password'=>\password_hash($request->input('password').'as@',PASSWORD_BCRYPT)]);
 
         $user->save();
 
         if($request->hasFile('photo')){
 
-            $path = "/images/user/".$request->id."/";
+            $path = "/images/user/".$user->id."/";
             $photo = md5('jpg'.microtime().rand(0,1000)).".jpg";
             $pub = public_path($path);
             if(!file_exists($pub)){
@@ -62,18 +62,18 @@ class UserController extends Controller
             }
             $request->file('photo')->storeAs($path, $photo, 'public_html');
 
-            $request->addImage(Image::path($path.$photo));
-            $request->save();
+            $user->addImage(Image::path($path.$photo));
+            $user->save();
         }
-        
-        $token = Token::where('imei',$request->get('imei'))->first();
+
+        $token = Token::where('imei',$request->input('imei'))->first();
 
         if($token!=null){
             
             $token->delete();
         }
 
-        $token = new Token(['user_id'=>$user->id,'token'=>bcrypt(microtime().'i'.random_int(0,100000)),'imei'=>$request->get('imei'),'description'=>$this->tokenDesc($request)]);
+        $token = new Token(['user_id'=>$user->id,'token'=>bcrypt(microtime().'i'.random_int(0,100000)),'imei'=>$request->input('imei'),'description'=>$this->tokenDesc($request)]);
 
         $token->save();
         $res = [];
@@ -99,17 +99,17 @@ class UserController extends Controller
         
         
 
-        $user = User::where('email',$request->get('email'))->where('use_google',0)->first();
+        $user = User::where('email',$request->input('email'))->where('use_google',0)->first();
 
         if($user==null){
             return ['authorized'=>false,'messages'=>['note'=>'user not found']];
         }
 
-        if(!password_verify($request->get('password').'as@',$user->password)){
+        if(!password_verify($request->input('password').'as@',$user->password)){
             return ['authorized'=>false,'password'=>'incorrect!'];
         }
 
-        $token = Token::where('imei',$request->get('imei'))->first();
+        $token = Token::where('imei',$request->input('imei'))->first();
 
         if($token!=null){
             
@@ -122,7 +122,7 @@ class UserController extends Controller
             return $res;
         }
 
-        $token = new Token(['user_id'=>$user->id,'token'=>bcrypt(microtime().'i'.random_int(0,100000)),'imei'=>$request->get('imei',12345),'description'=>$this->tokenDesc($request)]);
+        $token = new Token(['user_id'=>$user->id,'token'=>bcrypt(microtime().'i'.random_int(0,100000)),'imei'=>$request->input('imei',12345),'description'=>$this->tokenDesc($request)]);
 
         $token->save();
         $res = [];
@@ -151,14 +151,14 @@ class UserController extends Controller
         
 
 
-        $user = User::where('google_id',$request->get('google_id'))->first();
+        $user = User::where('google_id',$request->input('google_id'))->first();
 
         if($user==null){
             return ['authorized'=>false,'messages'=>['note'=>'user not found']];
         }
 
 
-        $token = Token::where('imei',$request->get('imei'))->first();
+        $token = Token::where('imei',$request->input('imei'))->first();
 
         if($token!=null){
             
@@ -171,7 +171,7 @@ class UserController extends Controller
             return $res;
         }
 
-        $token = new Token(['user_id'=>$user->id,'token'=>bcrypt(microtime().'i'.random_int(0,100000)),'imei'=>$request->get('imei',12345),'description'=>$this->tokenDesc($request)]);
+        $token = new Token(['user_id'=>$user->id,'token'=>bcrypt(microtime().'i'.random_int(0,100000)),'imei'=>$request->input('imei',12345),'description'=>$this->tokenDesc($request)]);
 
         $token->save();
         $res = [];
@@ -198,19 +198,19 @@ class UserController extends Controller
             return ['messages'=>$validate->errors()->all()]+['authorized'=>false];
         }
 
-        $user = new User(['name'=>$request->get('name'),
-         'email'=>$request->get('email'),'password'=>'','google_id'=>$request->get('google_id'),'use_google'=>1]);
+        $user = new User(['name'=>$request->input('name'),
+         'email'=>$request->input('email'),'password'=>'','google_id'=>$request->input('google_id'),'use_google'=>1]);
 
         $user->save();
 
-        $token = Token::where('imei',$request->get('imei'))->first();
+        $token = Token::where('imei',$request->input('imei'))->first();
 
         if($token!=null){
             
             $token->delete();
         }
 
-        $token = new Token(['user_id'=>$user->id,'token'=>bcrypt(microtime().'i'.random_int(0,100000)),'imei'=>$request->get('imei'),'description'=>$this->tokenDesc($request)]);
+        $token = new Token(['user_id'=>$user->id,'token'=>bcrypt(microtime().'i'.random_int(0,100000)),'imei'=>$request->input('imei'),'description'=>$this->tokenDesc($request)]);
 
         $token->save();
         $res = [];

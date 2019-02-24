@@ -11,6 +11,7 @@ use App\Service;
 use App\Action;
 use App\ProductCategory;
 use App\ServiceCategory;
+use App\Image;
 
 class StoreController extends UserController
 {
@@ -51,20 +52,25 @@ class StoreController extends UserController
         ]);
 
 
-        $store = new Store(['name'=>$request->get('name'), 'description'=>$request->get('description'),
-         'address'=>$request->get('address'), 'phone'=>$request->get('phone'), 'status' => 3]);
+        $store = new Store(['name'=>$request->input('name'), 'description'=>$request->input('description'),
+         'address'=>$request->input('address'), 'phone'=>$request->input('phone'), 'status' => 3]);
 
         $store->save();
         $roles = $store->roles()->create(['user_id'=>$this->user->id,'role'=>StoreController::SUPERUSER]);
 
         if($request->hasFile('photo')){
 
-            $photo = Str::random(20).".jpg";
-            $request->file('photo')->storeAs(public_path("/images/store/".$store->id."/"), $photo);
-            $store->images = "[\"/images/store/".$store->id."/".$photo."\"]";
+            $path = "/images/store/".$store->id."/";
+            $photo = md5('jpg'.microtime().rand(0,1000)).".jpg";
+            $pub = public_path($path);
+            if(file_exists($pub)){
+                mkdir($pub);
+            }
+            $request->file('photo')->storeAs($path, $photo, 'public_html');
+
+            $store->addImage(Image::path($path.$photo));
             $store->save();
         }
-
         return ['success'=>true, $store->toArray()];
         
     }
@@ -74,18 +80,6 @@ class StoreController extends UserController
         return $roles;
     }
 
-    public function productCategories(Request $req){
-        $cats = ProductCategory::whereHas('products',function($q) use($req){
-            $q->where('store_id', $req->get('store_id',0));
-        })->get();
-        return $cats;
-    }
-    public function serviceCategories(Request $req){
-        $cats = ServiceCategory::whereHas('services',function($q) use($req){
-            $q->where('store_id', $req->get('store_id',0));
-        })->get();
-        return $cats;
-    }
     public function getStores(Request $req){
         $user = $this->user->id;
         $stores = Store::whereHas('roles',function($q) use($user){
@@ -117,12 +111,25 @@ class StoreController extends UserController
             'description' => 'required',
             'address' => 'required',
             'phone' => 'required',
+            'photo' => 'mimes:jpeg,png',
         ]);
 
         if($this->user->canManipulate($request->get('store_id'), StoreController::STORE_UPDATE)){
 
             $store = Store::where('id',$request->get('store_id'))->first();
+            
+
             $store->update(['name'=>$request->get('name'),'phone'=>$request->get('phone'),'description'=>$request->get('description'),'address'=>$request->get('address')]);
+            
+            if($request->hasFile('photo')){
+
+                unlink(public_path("/images/store/".$store->id."/"), $store->getImages());
+
+                $photo = Str::random(20).".jpg";
+                $request->file('photo')->storeAs(public_path("/images/store/".$store->id."/"), $photo);
+                $store->images = "[\"/images/store/".$store->id."/".$photo."\"]";
+                $store->save();
+            }
             return ['success'=>true,$store->toArray()];
         }else{
             throw new InvalidPermissionException();
@@ -146,16 +153,18 @@ class StoreController extends UserController
             ]);
 
             $product = new Product([
-                'name' => $request->get('name'),
+                'title' => $request->get('name'),
                 'description' => $request->get('description'),
                 'brand_id' => $request->get('brand_id'),
                 'store_id' => $request->get('store_id'),
-                'price'=> $request->get('price')
+                'price'=> $request->get('price'),
+                'user_id'=> $this->user->id,
+                'image'=> ''
             ]);
 
             $product->save();
 
-            return $product->toArray();
+            return ['success'=>true, $product->toArray()];
         }else{
             throw new InvalidPermissionException();
         }
@@ -180,12 +189,14 @@ class StoreController extends UserController
                 'name' => $request->get('name'),
                 'description' => $request->get('description'),
                 'store_id' => $request->get('store_id'),
-                'price'=> $request->get('price')
+                'price'=> $request->get('price'),
+                'user_id'=> $this->user->id,
+                'image'=> ''
             ]);
 
             $service->save();
 
-            return $service->toArray();
+            return ['success'=>true, $service->toArray()];
         }else{
             throw new InvalidPermissionException();
         }
@@ -256,7 +267,7 @@ class StoreController extends UserController
             ]);
 
 
-            return $service->toArray();
+            return ['success'=>true, $service->toArray()];
         }else{
             throw new InvalidPermissionException();
         }
@@ -285,7 +296,7 @@ class StoreController extends UserController
             ]);
 
 
-            return $pro->toArray();
+            return ['success'=>true, $pro->toArray()];
         }else{
             throw new InvalidPermissionException();
         }
@@ -314,7 +325,7 @@ class StoreController extends UserController
 
             $action->save();
 
-            return $action->toArray();
+            return ['success'=>true, $action->toArray()];
         }else{
             throw new InvalidPermissionException();
         }
@@ -346,7 +357,7 @@ class StoreController extends UserController
 
             $discount->save();
 
-            return $discount->toArray();
+            return ['success'=>true, $discount->toArray()];
         }else{
             throw new InvalidPermissionException();
         }
@@ -375,7 +386,7 @@ class StoreController extends UserController
             ]);
 
 
-            return $action->toArray();
+            return ['success'=>true, $action->toArray()];
         }else{
             throw new InvalidPermissionException();
         }
@@ -406,7 +417,7 @@ class StoreController extends UserController
             ]);
 
 
-            return $action->toArray();
+            return ['success'=>true, $action->toArray()];
         }else{
             throw new InvalidPermissionException();
         }

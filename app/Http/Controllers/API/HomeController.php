@@ -271,6 +271,20 @@ class HomeController extends Controller
     }
 
     
+    public function productCategories(Request $req){
+        $cats = ProductCategory::whereHas('products',function($q) use($req){
+            $q->where('store_id', $req->get('store_id',0));
+        })->get();
+        return $cats;
+    }
+    public function serviceCategories(Request $req){
+        $cats = ServiceCategory::whereHas('services',function($q) use($req){
+            $q->where('store_id', $req->get('store_id',0));
+        })->get();
+        return $cats;
+    }
+
+    
     public function productCategory(){
         $cats = ProductCategory::all();
         return $cats;
@@ -278,14 +292,20 @@ class HomeController extends Controller
 
     public function actions(Request $request)
     {
-        $actions = Action::orderBy('created_at')->paginate(20);
-        return $actions;
+        $actions = Action::orderBy('created_at');
+        if($request->has('store_id')){
+            $actions = $actions->where('store_id', $request->get('store_id'));
+        }
+        return $actions->paginate(20);;
     }
 
     public function discounts(Request $request)
     {
-        $discounts = Discount::orderBy('created_at')->paginate(20);
-        return $discounts;
+        $discounts = Discount::orderBy('created_at');
+        if($request->has('store_id')){
+            $discounts = $discounts->where('store_id', $request->get('store_id'));
+        }
+        return $discounts->paginate(20);
     }
 
     public function banners(Request $request)

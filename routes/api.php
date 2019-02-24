@@ -68,11 +68,11 @@ Route::get('user/delete_service_likes','ProfileController@deleteServiceLikes');
 
 Route::post('store/add','StoreController@addStore');
 Route::get('store/delete','StoreController@deteleStore');
-Route::get('store/update','StoreController@updateStore');
+Route::post('store/update','StoreController@updateStore');
 Route::get('store/show','PublicController@getStore');
 Route::get('store/roles','StoreController@getRoles');
-Route::get('store/product_categories','StoreController@productCategories');
-Route::get('store/service_categories','StoreController@serviceCategories');
+Route::get('store/product_categories','HomeController@productCategories');
+Route::get('store/service_categories','HomeController@serviceCategories');
 Route::get('store/mystores','StoreController@getStores');
 
 

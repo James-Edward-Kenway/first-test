@@ -527,6 +527,10 @@ serviceladayam shular bor lekin *product_category_id* ni o'rnida *service_catego
 > skidkalani o'chirish (hozircha shu!)
 >> http://{ip/hostname}/api/store/delete_discount?discount_id(skidka idisi)&store_id=(magazin id)
 
+# images 
+> imagela json array formatda keladi. ulani parse qilish kerak. va undan keyin asosiy urlga qo'shish kerak
+`misol: /images/store/31/64f1cc2df3bfc9f09c8ad714137aeb85.jpg, kelsa uni http://{ip/hostname}/images/store/31/64f1cc2df3bfc9f09c8ad714137aeb85.jpg, qilish kerak va so'roni ham shunga yuborish kerak.`
+
 # Exceptions (Istesno holatlar)
 
 `http response kodlari: 401 - registratsiya yoki login qilinishi kerak bo'lgan bo'limlarga. registratsiya yoki login qilmagan user so'rov yuborsa holat kelib chiqishi mumkin!`

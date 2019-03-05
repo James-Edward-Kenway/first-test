@@ -165,6 +165,7 @@ class StoreController extends UserController
                 'description' => 'required',
                 'brand_id' => 'required',
                 'store_id' => 'required',
+                'category_id' => 'required',
                 'price'=> 'required',
                 'photo.*' => 'mimes:jpeg,png',
             ]);
@@ -177,6 +178,7 @@ class StoreController extends UserController
                 'title' => $request->input('name'),
                 'description' => $request->input('description'),
                 'brand_id' => $request->input('brand_id'),
+                'category_id' => $request->input('product_category_id'),
                 'store_id' => $request->input('store_id'),
                 'price'=> $request->input('price'),
                 'user_id'=> $this->user->id,
@@ -223,6 +225,7 @@ class StoreController extends UserController
                 'description' => 'required',
                 'store_id' => 'required',
                 'price'=> 'required',
+                'category_id' => 'required',
                 'photo.*' => 'mimes:jpeg,png',
             ]);
 
@@ -234,6 +237,7 @@ class StoreController extends UserController
                 'title' => $request->input('name'),
                 'description' => $request->input('description'),
                 'store_id' => $request->input('store_id'),
+                'service_category_id' => $request->input('service_category_id'),
                 'price'=> $request->input('price'),
                 'user_id'=> $this->user->id,
                 'image'=> ''

@@ -9,7 +9,7 @@ use App\Http\Requests\Request;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable, UseImage;
 
     /**
      * The attributes that are mass assignable.

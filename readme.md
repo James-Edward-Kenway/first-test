@@ -493,10 +493,10 @@ serviceladayam shular bor lekin *product_category_id* ni o'rnida *service_catego
 > productalani o'zgartirish uchun user registratsiyadan o'tgan bo'lishi kerak!
 
 > productalani qo'shish (hozircha shu!) [POST]
->> http://{ip/hostname}/api/store/add_product?name=(nomi)&description=(tarifi)&store_id=(magazin id)&price=(product price)&brand_id=(tanlangan brend_id)
+>> http://{ip/hostname}/api/store/add_product?name=(nomi)&category_id=(kategory_id)&description=(tarifi)&store_id=(magazin id)&price=(product price)&brand_id=(tanlangan brend_id)
 
 > productalani o'zgartiring (hozircha shu!) [POST]
->> http://{ip/hostname}/api/store/update_product?product_id=(o'zgartirilishi kerak bo'lgan product idisi)&name=(nomi)&description=(tarifi)&store_id=(magazin id)&price=(product price)&brand_id=(tanlangan brend_id)
+>> http://{ip/hostname}/api/store/update_product?product_id=(o'zgartirilishi kerak bo'lgan product idisi)&category_id=(kategory_id)&name=(nomi)&description=(tarifi)&store_id=(magazin id)&price=(product price)&brand_id=(tanlangan brend_id)
 
 > productalani o'chirish (hozircha shu!)
 >> http://{ip/hostname}/api/store/delete_product?product_id=(o'zgartirilishi kerak bo'lgan product idisi)&store_id=(magazin id)
@@ -506,10 +506,10 @@ serviceladayam shular bor lekin *product_category_id* ni o'rnida *service_catego
 > servislani o'zgartirish uchun user registratsiyadan o'tgan bo'lishi kerak!
 
 > servislani qo'shish (hozircha shu!) [POST]
->> http://{ip/hostname}/api/store/add_service?name=(nomi)&description=(tarifi)&store_id=(magazin id)&price=(service price)
+>> http://{ip/hostname}/api/store/add_service?name=(nomi)&category_id=(service kategory idisi)&description=(tarifi)&store_id=(magazin id)&price=(service price)
 
 > servislani o'zgartishi (hozircha shu!) [POST]
->> http://{ip/hostname}/api/store/update_service?service_id=(o'zgarilishi kerak bo'lgan servis idisi)&name=(nomi)&description=(tarifi)&store_id=(magazin id)&price=(service price)
+>> http://{ip/hostname}/api/store/update_service?service_id=(o'zgarilishi kerak bo'lgan servis idisi)&name=(nomi)&description=(tarifi)&store_id=(magazin id)&category_id=(service kategory idisi)&price=(service price)
 
 > servislani o'chirish (hozircha shu!)
 >> http://{ip/hostname}/api/store/delete_service?service_id=(o'chirilishi kerak bo'lgan servis idisi)&store_id=(magazin id)

@@ -433,13 +433,15 @@ serviceladayam shular bor lekin *product_category_id* ni o'rnida *service_catego
 > magazin service_categories
 >> http://{ip/hostname}/api/store/service_categories?store_id=(magazin idisi)
 
+# follow (subscription)
+
+> follow (magazinga follow bo'lish!)
+>> http://{ip/hostname}/api/user/subscribe?store_id=(magazin idisi)
+
+> follow (magazinga follow ni o'chirish!)
+>> http://{ip/hostname}/api/user/unsubscribe?store_id=(magazin idisi)
+
 # wishlist (izabrannie)
-
-> wishlist (product_id lani beradi! faqat id lani beradi!)
->> http://{ip/hostname}/api/user/wishlist_product_ids
-
-> wishlist (service_id lani beradi! faqat id lani beradi!)
->> http://{ip/hostname}/api/user/wishlist_service_ids
 
 > wishlist (productlani olish!)
 >> http://{ip/hostname}/api/user/wishlist_products
@@ -460,13 +462,6 @@ serviceladayam shular bor lekin *product_category_id* ni o'rnida *service_catego
 >> http://{ip/hostname}/api/user/delete_wishlist_product?product_id=(o'chirilishi kerak bo'lgan product idisi)
 
 # Likes (layklar)
-
-> likes (product_id lani beradi! faqat id lani beradi!)
->> http://{ip/hostname}/api/user/product_likes_ids
-
-> likes (service_id lani beradi! faqat id lani beradi!)
->> http://{ip/hostname}/api/user/service_likes_ids
-
 
 > likes (product lani beradi!)
 >> http://{ip/hostname}/api/user/product_likes
@@ -525,7 +520,7 @@ serviceladayam shular bor lekin *product_category_id* ni o'rnida *service_catego
 >> http://{ip/hostname}/api/store/update_action?action_id=(aksiyani idisi)&title=(sarlovhasi)&description=(tarifi)&store_id=(magazin id)&address=(address)
 
 > aksiyalani o'chirish (hozircha shu!)
->> http://{ip/hostname}/api/store/delete_discount?action_id(aksiya idisi)&store_id=(magazin id)
+>> http://{ip/hostname}/api/store/delete_action?action_id=(aksiya idisi)&store_id=(magazin id)
 
 # discount (skidkala)
 > skidkalani o'zgartirish uchun user registratsiyadan o'tgan bo'lishi kerak!
@@ -534,10 +529,10 @@ serviceladayam shular bor lekin *product_category_id* ni o'rnida *service_catego
 >> http://{ip/hostname}/api/store/add_discount?title=(sarlovhasi)&description=(tarifi)&store_id=(magazin id)&discount=(service price)&address=(address)
 
 > skidkalani o'zgartirish (hozircha shu!) [POST]
->> http://{ip/hostname}/api/store/update_discount?discount_id(skidka idisi)&title=(sarlovhasi)&description=(tarifi)&store_id=(magazin id)&discount=(service price)&address=(address)
+>> http://{ip/hostname}/api/store/update_discount?discount_id=(skidka idisi)&title=(sarlovhasi)&description=(tarifi)&store_id=(magazin id)&discount=(service price)&address=(address)
 
 > skidkalani o'chirish (hozircha shu!)
->> http://{ip/hostname}/api/store/delete_discount?discount_id(skidka idisi)&store_id=(magazin id)
+>> http://{ip/hostname}/api/store/delete_discount?discount_id=(skidka idisi)&store_id=(magazin id)
 
 # images 
 > imagela json array formatda keladi. ulani parse qilish kerak. va undan keyin asosiy urlga qo'shish kerak

@@ -78,7 +78,7 @@ class UserController extends Controller
         $token->save();
         $res = [];
 
-        $res = ['authorized'=>true,'token'=>$token->toArray()];
+        $res = ['authorized'=>true,'token'=>$token->toArray(), 'user'=>$user];
 
         return $res;
     }
@@ -127,7 +127,7 @@ class UserController extends Controller
         $token->save();
         $res = [];
 
-        $res = ['authorized'=>true,'token'=>$token->toArray()];
+        $res = ['authorized'=>true,'token'=>$token->toArray(), 'user'=>$user];
 
         return $res;
     }

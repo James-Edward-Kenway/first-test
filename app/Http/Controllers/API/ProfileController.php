@@ -6,6 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Request;
 use App\Token;
 use App\Exceptions\UnauthorizedException;
+use App\Image;
+use App\Product;
+use App\Service;
+use App\Store;
 
 class ProfileController extends UserController
 {
@@ -34,12 +38,6 @@ class ProfileController extends UserController
         return $res;
     }
 
-    public function wishlistProductIds(Request $req){
-        DB::table('product_wishlist')->where('user_id', $this->user->id)->get('product_id');
-    }
-    public function wishlistServiceIds(Request $req){
-        DB::table('service_wishlist')->where('user_id', $this->user->id)->get('service_id');
-    }
 
     public function wishlistProducts(Request $req){
         $products = $this->user->wishlistProducts()->paginate(50);
@@ -48,6 +46,23 @@ class ProfileController extends UserController
     public function wishlistServices(Request $req){
         $services = $this->user->wishlistServices()->paginate(50);
         return $services;
+    }
+
+    public function subscribe(Request $req){
+        if(!$req->has('store_id')){
+            return ['success'=>false];
+        }
+
+        $this->user->subscriptions()->attach(Store::find($req->get('store_id')));
+        return ['success'=>true];
+    }
+    public function unsubscribe(Request $req){
+        if(!$req->has('store_id')){
+            return ['success'=>false];
+        }
+
+        $this->user->subscriptions()->detach(Store::find($req->get('store_id')));
+        return ['success'=>true];
     }
 
     public function addToWishlistProduct(Request $req){
@@ -85,14 +100,6 @@ class ProfileController extends UserController
         return ['success'=>true];
     }
 
-    public function productLikesIds(Request $req){
-        $products = $this->user->productLikes()->get('product_id');
-        return $products;
-    }
-    public function serviceLikesIds(Request $req){
-        $services = $this->user->serviceLikes()->get('service_id');
-        return $services;
-    }
     
     public function productLikes(Request $req){
         $products = $this->user->productLikes()->paginate(50);
@@ -181,6 +188,7 @@ class ProfileController extends UserController
             if(!file_exists($pub)){
                 mkdir($pub);
             }
+            
             $request->file('photo')->storeAs($path, $photo, 'public_html');
 
             $this->user->addImage(Image::path($path.$photo));

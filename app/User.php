@@ -66,4 +66,8 @@ class User extends Authenticatable
     public function serviceLikes(){
         return $this->belongsToMany('App\Service', 'service_likes','user_id', 'service_id');
     }
+
+    public function subscriptions(){
+        return $this->belongsToMany('App\Store', 'store_subscription','user_id', 'store_id');
+    }
 }

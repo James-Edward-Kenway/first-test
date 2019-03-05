@@ -47,8 +47,6 @@ Route::get('user/logout','ProfileController@logout');
 Route::post('user/edit','ProfileController@editUser');
 
 //wishlist
-Route::get('user/wishlist_product_ids','ProfileController@wishlistProductIds');
-Route::get('user/wishlist_service_ids','ProfileController@wishlistServiceIds');
 Route::get('user/wishlist_services','ProfileController@wishlistServices');
 Route::get('user/wishlist_products','ProfileController@wishlistProducts');
 Route::get('user/add_wishlist_product','ProfileController@addToWishlistProduct');
@@ -56,14 +54,16 @@ Route::get('user/add_wishlist_service','ProfileController@addToWishlistService')
 Route::get('user/delete_wishlist_product','ProfileController@deleteWishlistProduct');
 Route::get('user/delete_wishlist_service','ProfileController@deleteWishlistService');
 //likes
-Route::get('user/product_likes_ids','ProfileController@productLikesIds');
-Route::get('user/service_likes_ids','ProfileController@serviceLikesIds');
 Route::get('user/product_likes','ProfileController@productLikes');
 Route::get('user/service_likes','ProfileController@serviceLikes');
 Route::get('user/add_product_likes','ProfileController@addToProductLikes');
 Route::get('user/add_service_likes','ProfileController@addToServiceLikes');
 Route::get('user/delete_product_likes','ProfileController@deleteProductLikes');
 Route::get('user/delete_service_likes','ProfileController@deleteServiceLikes');
+
+// subcriptions
+Route::get('user/subscribe','ProfileController@subscribe');
+Route::get('user/unsubscribe','ProfileController@unsubscribe');
 
 
 //store controll

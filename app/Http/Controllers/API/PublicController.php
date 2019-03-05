@@ -6,11 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Request;
 use App\Store;
 
-class PublicController extends Controller
+class PublicController extends UserController
 {
-    public function __construct()
+    public function __construct(Request $req)
     {
-        
+        parent::__construct($req);
     }
     
     public function getStore(Request $req){
@@ -22,7 +22,19 @@ class PublicController extends Controller
 
         $store = Store::find($id);
         if($store==null) return ['success'=>false];
+        $subed = null;
 
-        return ['success'=>true,'data'=>$store->toArray()];
+        if($this->authenticated){
+            $subed = $this->user->subscriptions()->where('store_id', $id)->first();
+        }
+
+        $data = ['product_count'=>\DB::table('products')->where('store_id', $id)->count(),
+        'service_count'=>\DB::table('services')->where('store_id', $id)->count(),
+        'subscirber_count'=>\DB::table('store_subscription')->where('store_id', $id)->count(),
+        'action_count'=>\DB::table('actions')->where('store_id', $id)->count(),
+        'discount_count'=>\DB::table('discounts')->where('store_id', $id)->count(),];
+
+        return ['success'=>true,'data'=>$store->toArray() + ['meta_data'=>$data, 'subscribed' => !is_null($subed)]];
     }
+
 }

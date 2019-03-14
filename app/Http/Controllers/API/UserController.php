@@ -12,27 +12,6 @@ use App\Token;
 
 class UserController extends Controller
 {
-    public function __construct(Request $request)
-    {
-        
-        if($request->header('xx-token',false)&&$request->header('xx-user-id',false)){
-            $t = Token::where('user_id', $request->header('xx-user-id',false))->where('token',$request->header('xx-token',false))->first();
-            if($t!=null){
-                $this->user = $t->user;
-                if($this->user!=null){
-                    $this->authenticated = true;
-                    $this->token = $request->input('token');
-                    $this->user_id = $request->input('user_id');
-                }
-            }
-        }
-    }
-
-    public $authenticated = false;
-    public $user = null;
-    public $user_id = null;
-    public $token = null;
-
     public function register(Request $request){
 
         //validation
@@ -224,7 +203,4 @@ class UserController extends Controller
         return json_encode(['version'=>$req->get('version','Unknown'), 'manufactorer'=>$req->get('company','Unknown'), 'ip'=>$req->ip()]);
     }
 
-    public function check(){
-        dd($this->user);
-    }
 }

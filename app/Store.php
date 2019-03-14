@@ -9,6 +9,9 @@ class Store extends Model
     use UseImage;
     public $fillable = ['id','name','description','address','phone','images'];
 
+    protected $appends = [
+        'subscribed',
+    ];
     public function roles(){
         return $this->hasMany('App\RolesOfStores','store_id','id');
     }
@@ -42,6 +45,12 @@ class Store extends Model
         }catch(\Exception $e){}
         
         return parent::delete();
+    }
+    public function getSubscribedAttribute(){
+        if(\Auth::check()){
+            return !is_null(\DB::table('store_subscription')->where('store_id',$this->id)->where('user_id', \Auth::user()->id)->first());
+        }
+        return false;
     }
     
 }

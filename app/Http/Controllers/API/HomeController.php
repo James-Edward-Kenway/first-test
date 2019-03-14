@@ -36,9 +36,6 @@ class HomeController extends Controller
         return response($result);
     }
 
-    public function test(){
-        dd(Store::find(2)->getImages()[0]->url());
-    }
 
 
     //this is working with only one depth children
@@ -49,10 +46,20 @@ class HomeController extends Controller
         $result = [];
         
         if($service != null){
-            $result = $service->children()->with('children')->get()->toArray();
+            $result = $this->getchild($service);
         }
         
         return response($result);
+    }
+
+    function getchild($cat){
+
+        if($cat->children != null){
+            foreach($cat->children as $k => $child){
+                $cat->children[$k] = $this->getchild($child);
+            }
+        }
+        return $cat;
     }
 
 
@@ -64,7 +71,7 @@ class HomeController extends Controller
         $result = [];
         
         if($product != null){
-            $result = $product->children()->with('children')->get()->toArray();
+            $result = $this->getchild($product);
         }
         
         return response($result);
@@ -74,7 +81,7 @@ class HomeController extends Controller
     
     public function products(Request $request){
 
-
+        
         $name = @$request->get('name');
 
         $store_id = @$request->get('store_id');
@@ -148,7 +155,6 @@ class HomeController extends Controller
             })->whereIn('attribute_categories_product_categories.attribute_category_id', $attributes);
         }
 
-
         $products = $products->paginate(20)->toArray();
 
 
@@ -165,10 +171,22 @@ class HomeController extends Controller
             $products['prev_page_url'] .= '&'.http_build_query($attrs);
         }
 
-        return response($products);
+        if(false){
+            $data = $products['data'];
+
+            foreach($data as $k => $v){
+                if(\DB::table('product_likes')->where('product_id', $v['id'])->where('product_id', $v['id'])){
+
+                }
+            }
+
+            $products['data'] = $data;
+        }
+        return $products;
 
 
     }
+
 
 
     public function services(Request $request){
@@ -296,7 +314,7 @@ class HomeController extends Controller
         if($request->has('store_id')){
             $actions = $actions->where('store_id', $request->get('store_id'));
         }
-        return $actions->paginate(20);;
+        return $actions->paginate(20);
     }
 
     public function discounts(Request $request)
@@ -334,7 +352,7 @@ class HomeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
     }
 
     /**

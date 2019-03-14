@@ -11,19 +11,12 @@ use App\Product;
 use App\Service;
 use App\Store;
 
-class ProfileController extends UserController
+class ProfileController extends Controller
 {
-    public function __construct(Request $req)
-    {
-        parent::__construct($req);
-        if(!$this->authenticated){
-            throw new UnauthorizedException();
-        }
-    }
 
     public function token(Request $req){
         
-        $token = Token::where('user_id',$this->user_id)->where('token', $this->token)->first();
+        $token = \Auth::user()->currentToken;
         
         if($token==null){
             return ['authorized'=>false];
@@ -40,11 +33,11 @@ class ProfileController extends UserController
 
 
     public function wishlistProducts(Request $req){
-        $products = $this->user->wishlistProducts()->paginate(50);
+        $products = \Auth::user()->wishlistProducts()->paginate(50);
         return $products;
     }
     public function wishlistServices(Request $req){
-        $services = $this->user->wishlistServices()->paginate(50);
+        $services = \Auth::user()->wishlistServices()->paginate(50);
         return $services;
     }
 
@@ -53,7 +46,7 @@ class ProfileController extends UserController
             return ['success'=>false];
         }
 
-        $this->user->subscriptions()->attach(Store::find($req->get('store_id')));
+        \Auth::user()->subscriptions()->attach(Store::find($req->get('store_id')));
         return ['success'=>true];
     }
     public function unsubscribe(Request $req){
@@ -61,7 +54,7 @@ class ProfileController extends UserController
             return ['success'=>false];
         }
 
-        $this->user->subscriptions()->detach(Store::find($req->get('store_id')));
+        \Auth::user()->subscriptions()->detach(Store::find($req->get('store_id')));
         return ['success'=>true];
     }
 
@@ -70,7 +63,7 @@ class ProfileController extends UserController
             return ['success'=>false];
         }
 
-        $this->user->wishlistProducts()->attach(Product::find($req->get('product_id')));
+        \Auth::user()->wishlistProducts()->attach(Product::find($req->get('product_id')));
         return ['success'=>true];
     }
 
@@ -80,7 +73,7 @@ class ProfileController extends UserController
             return ['success'=>false];
         }
 
-        $this->user->wishlistServices()->attach(Service::find($req->get('service_id')));
+        \Auth::user()->wishlistServices()->attach(Service::find($req->get('service_id')));
         return ['success'=>true];
     }
     public function deleteWishlistProduct(Request $req){
@@ -88,7 +81,7 @@ class ProfileController extends UserController
             return ['success'=>false];
         }
 
-        $this->user->wishlistProducts()->detach(Product::find($req->get('product_id')));
+        \Auth::user()->wishlistProducts()->detach(Product::find($req->get('product_id')));
         return ['success'=>true];
     }
     public function deleteWishlistService(Request $req){
@@ -96,17 +89,17 @@ class ProfileController extends UserController
             return ['success'=>false];
         }
 
-        $this->user->wishlistServices()->detach(Service::find($req->get('service_id')));
+        \Auth::user()->wishlistServices()->detach(Service::find($req->get('service_id')));
         return ['success'=>true];
     }
 
     
     public function productLikes(Request $req){
-        $products = $this->user->productLikes()->paginate(50);
+        $products = \Auth::user()->productLikes()->paginate(50);
         return $products;
     }
     public function serviceLikes(Request $req){
-        $services = $this->user->serviceLikes()->paginate(50);
+        $services = \Auth::user()->serviceLikes()->paginate(50);
         return $services;
     }
 
@@ -119,7 +112,7 @@ class ProfileController extends UserController
         $ser->like_count++;
         $ser->save();
 
-        $this->user->serviceLikes()->attach($ser);
+        \Auth::user()->serviceLikes()->attach($ser);
         return ['success'=>true];
     }
 
@@ -131,7 +124,7 @@ class ProfileController extends UserController
         $pro->like_count++;
         $pro->save();
 
-        $this->user->productLikes()->attach($pro);
+        \Auth::user()->productLikes()->attach($pro);
         return ['success'=>true];
     }
 
@@ -143,7 +136,7 @@ class ProfileController extends UserController
         $pro->like_count--;
         $pro->save();
 
-        $this->user->productLikes()->detach($pro);
+        \Auth::user()->productLikes()->detach($pro);
         return ['success'=>true];
     }
     
@@ -156,11 +149,11 @@ class ProfileController extends UserController
         $ser->like_count--;
         $ser->save();
 
-        $this->user->serviceLikes()->detach($ser);
+        \Auth::user()->serviceLikes()->detach($ser);
         return ['success'=>true];
     }
     public function logout(Request $req){
-        Token::where('user_id', $this->user->id)->where('token',$this->token)->delete();
+        \Auth::user()->currentToken->delete();
         return ['success'=>true];
     }
     public function editUser(Request $request){
@@ -181,7 +174,7 @@ class ProfileController extends UserController
 
         if($request->hasFile('photo')){
 
-            $path = "/images/user/".$this->user->id."/";
+            $path = "/images/user/".\Auth::user()->id."/";
             $photo = md5('jpg'.microtime().rand(0,1000)).".jpg";
             $pub = public_path($path);
 
@@ -191,19 +184,19 @@ class ProfileController extends UserController
             
             $request->file('photo')->storeAs($path, $photo, 'public_html');
 
-            $this->user->addImage(Image::path($path.$photo));
+            \Auth::user()->addImage(Image::path($path.$photo));
         }
         
         if($request->has('old_password')){
-            if(password_verify($request->input('old_password'),$this->user->password)){
-                $this->user->password = \password_hash($request->input('password').'as@',PASSWORD_BCRYPT);
+            if(password_verify($request->input('old_password'),\Auth::user()->password)){
+                \Auth::user()->password = \password_hash($request->input('password').'as@',PASSWORD_BCRYPT);
             }else{
                 return ['messages'=>['old_password'=>'old password not correct!'],'success'=>false];
             }
         }
-        $this->user->update(['name'=>$request->input('name')]);
+        \Auth::user()->update(['name'=>$request->input('name')]);
 
-        return ['success'=>true,$this->user->toArray()];
+        return ['success'=>true,\Auth::user()->toArray()];
     }
     
 

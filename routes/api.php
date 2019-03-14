@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 // public controll
 
 Route::get('home','HomeController@index');
+
 Route::get('product_attributes/{id}','HomeController@productAttributes');
 Route::get('sub_product_category/{id}','HomeController@subProductCategory');
 Route::get('product_category','HomeController@productCategory');
@@ -42,63 +43,72 @@ Route::get('user/login','UserController@login');
 Route::get('user/google_register','UserController@googleRegister');
 Route::get('user/google_login','UserController@googleLogin');
 
-Route::get('user/token','ProfileController@token');
-Route::get('user/logout','ProfileController@logout');
-Route::post('user/edit','ProfileController@editUser');
 
-//wishlist
-Route::get('user/wishlist_services','ProfileController@wishlistServices');
-Route::get('user/wishlist_products','ProfileController@wishlistProducts');
-Route::get('user/add_wishlist_product','ProfileController@addToWishlistProduct');
-Route::get('user/add_wishlist_service','ProfileController@addToWishlistService');
-Route::get('user/delete_wishlist_product','ProfileController@deleteWishlistProduct');
-Route::get('user/delete_wishlist_service','ProfileController@deleteWishlistService');
-//likes
-Route::get('user/product_likes','ProfileController@productLikes');
-Route::get('user/service_likes','ProfileController@serviceLikes');
-Route::get('user/add_product_likes','ProfileController@addToProductLikes');
-Route::get('user/add_service_likes','ProfileController@addToServiceLikes');
-Route::get('user/delete_product_likes','ProfileController@deleteProductLikes');
-Route::get('user/delete_service_likes','ProfileController@deleteServiceLikes');
-
-// subcriptions
-Route::get('user/subscribe','ProfileController@subscribe');
-Route::get('user/unsubscribe','ProfileController@unsubscribe');
-
-
-//store controll
-
-Route::post('store/add','StoreController@addStore');
-Route::get('store/delete','StoreController@deteleStore');
-Route::post('store/update','StoreController@updateStore');
-Route::get('store/show','PublicController@getStore');
-Route::get('store/roles','StoreController@getRoles');
-Route::get('store/product_categories','HomeController@productCategories');
-Route::get('store/service_categories','HomeController@serviceCategories');
-Route::get('store/mystores','StoreController@getStores');
+Route::group(['middleware' => 'middle'], function () {
+    
+    // user controll
+    Route::get('user/token','ProfileController@token');
+    Route::get('user/logout','ProfileController@logout');
+    Route::post('user/edit','ProfileController@editUser');
 
 
 
-// product and service controll
+    // subcriptions
+    Route::get('user/subscribe','ProfileController@subscribe');
+    Route::get('user/unsubscribe','ProfileController@unsubscribe');
 
-Route::post('store/add_product','StoreController@addProduct');
-Route::post('store/add_service','StoreController@addService');
-Route::get('store/delete_product','StoreController@deleteProduct');
-Route::get('store/delete_service','StoreController@deleteService');
-Route::post('store/update_product','StoreController@updateProduct');
-Route::post('store/update_service','StoreController@updateService');
 
-//action and discount controll
+    //store controll
 
-Route::post('store/update_action','StoreController@updateAction');
-Route::post('store/update_discount','StoreController@updateDiscount');
-Route::post('store/add_action','StoreController@addAction');
-Route::post('store/add_discount','StoreController@addDiscount');
-Route::get('store/delete_action','StoreController@deleteAction');
-Route::get('store/delete_discount','StoreController@deleteDiscount');
+    Route::post('store/add','StoreController@addStore');
+    Route::get('store/delete','StoreController@deteleStore');
+    Route::post('store/update','StoreController@updateStore');
+    Route::get('store/show','PublicController@getStore');
+    Route::get('store/roles','StoreController@getRoles');
+    Route::get('store/product_categories','HomeController@productCategories');
+    Route::get('store/service_categories','HomeController@serviceCategories');
+    Route::get('store/mystores','StoreController@getStores');
 
 
 
+    // product and service controll
+
+    Route::post('store/add_product','StoreController@addProduct');
+    Route::post('store/add_service','StoreController@addService');
+    Route::get('store/delete_product','StoreController@deleteProduct');
+    Route::get('store/delete_service','StoreController@deleteService');
+    Route::post('store/update_product','StoreController@updateProduct');
+    Route::post('store/update_service','StoreController@updateService');
+
+    //action and discount controll
+
+    Route::post('store/update_action','StoreController@updateAction');
+    Route::post('store/update_discount','StoreController@updateDiscount');
+    Route::post('store/add_action','StoreController@addAction');
+    Route::post('store/add_discount','StoreController@addDiscount');
+    Route::get('store/delete_action','StoreController@deleteAction');
+    Route::get('store/delete_discount','StoreController@deleteDiscount');
+    
+    //wishlist
+    Route::get('user/wishlist_services','ProfileController@wishlistServices');
+    Route::get('user/wishlist_products','ProfileController@wishlistProducts');
+    Route::get('user/add_wishlist_product','ProfileController@addToWishlistProduct');
+    Route::get('user/add_wishlist_service','ProfileController@addToWishlistService');
+    Route::get('user/delete_wishlist_product','ProfileController@deleteWishlistProduct');
+    Route::get('user/delete_wishlist_service','ProfileController@deleteWishlistService');
+    //likes
+    Route::get('user/product_likes','ProfileController@productLikes');
+    Route::get('user/service_likes','ProfileController@serviceLikes');
+    Route::get('user/add_product_likes','ProfileController@addToProductLikes');
+    Route::get('user/add_service_likes','ProfileController@addToServiceLikes');
+    Route::get('user/delete_product_likes','ProfileController@deleteProductLikes');
+    Route::get('user/delete_service_likes','ProfileController@deleteServiceLikes');
+
+    Route::get('banners', 'HomeController@banners');
+
+
+
+});
 
 
 

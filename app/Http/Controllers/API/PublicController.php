@@ -6,12 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Request;
 use App\Store;
 
-class PublicController extends UserController
+class PublicController extends Controller
 {
-    public function __construct(Request $req)
-    {
-        parent::__construct($req);
-    }
     
     public function getStore(Request $req){
 
@@ -23,10 +19,6 @@ class PublicController extends UserController
         $store = Store::find($id);
         if($store==null) return ['success'=>false];
         $subed = null;
-
-        if($this->authenticated){
-            $subed = $this->user->subscriptions()->where('store_id', $id)->first();
-        }
 
         $data = ['product_count'=>\DB::table('products')->where('store_id', $id)->count(),
         'service_count'=>\DB::table('services')->where('store_id', $id)->count(),

@@ -15,3 +15,4 @@ $paycomConfig = require_once CONFIG_FILE;
 
 $application = new Application($paycomConfig);
 $application->run();
+

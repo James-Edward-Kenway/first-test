@@ -2,6 +2,7 @@
 
 namespace Paycom;
 
+
 class PaycomException extends \Exception
 {
     const ERROR_INTERNAL_SYSTEM         = -32400;

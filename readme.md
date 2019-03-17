@@ -405,7 +405,7 @@ serviceladayam shular bor lekin *product_category_id* ni o'rnida *service_catego
 
 ## magazin uchun userda mavjud bo'lgan rollani olish
 > magazin rollari
->> http://{ip/hostname}/api/store/roles?store_id=(magazin idisi)
+>> http://{ip/hostname}/api/store/roles?store_id=(magazin idisi)&user_id=(ko'rilishi kerak bo'lgan user id)
 ```
     const SUPERUSER = 1; // superuser; hamma ish qilishi mumkin; magazinning yaratuvchisi
     const UPDATE_ROLES = 2; // ro'llani o'zgartira olishini aniqlovchi ro'l
@@ -533,6 +533,8 @@ serviceladayam shular bor lekin *product_category_id* ni o'rnida *service_catego
 
 > skidkalani o'chirish (hozircha shu!)
 >> http://{ip/hostname}/api/store/delete_discount?discount_id=(skidka idisi)&store_id=(magazin id)
+
+
 
 # images 
 > imagela json array formatda keladi. ulani parse qilish kerak. va undan keyin asosiy urlga qo'shish kerak

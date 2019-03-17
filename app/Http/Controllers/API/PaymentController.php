@@ -8,21 +8,20 @@ use App\Http\Controllers\Controller;
 class PaymentController extends Controller
 {
     public $payme;
-    public function PaymeInit(){
-        include_once(base_path('/app/Http/Controller/API/Paycom/Paycom/Format.php'));
-        include_once(base_path('/app/Http/Controller/API/Paycom/Paycom/Database.php'));
-        include_once(base_path('/app/Http/Controller/API/Paycom/Paycom/Request.php'));
-        include_once(base_path('/app/Http/Controller/API/Paycom/Paycom/Order.php'));
-        include_once(base_path('/app/Http/Controller/API/Paycom/Paycom/Response.php'));
-        include_once(base_path('/app/Http/Controller/API/Paycom/Paycom/Transaction.php'));
-        include_once(base_path('/app/Http/Controller/API/Paycom/Paycom/Merchant.php'));
-        include_once(base_path('/app/Http/Controller/API/Paycom/Paycom/PaycomException.php'));
-        include_once(base_path('/app/Http/Controller/API/Paycom/Paycom/Application.php'));
-        $vari = base_path('/app/Http/Controller/API/Paycom/paycom.config.php');
-        $paycomConfig = require_once CONFIG_FILE;
-        
-        $this->payme = new \Paycom\Application($paycomConfig, $vari);
+    public function paymeInit(){
+        require_once(('Paycom/Paycom/Format.php'));
+        require_once(('Paycom/Paycom/Database.php'));
+        require_once(('Paycom/Paycom/Request.php'));
+        require_once(('Paycom/Paycom/Order.php'));
+        require_once(('Paycom/Paycom/Response.php'));
+        require_once(('Paycom/Paycom/Transaction.php'));
+        require_once(('Paycom/Paycom/Merchant.php'));
+        require_once(('Paycom/Paycom/PaycomException.php'));
+        require_once(('Paycom/Paycom/Application.php'));
+        $vari = ('Paycom/paycom.config.php');
+        $paycomConfig = require_once $vari;
+
+        $this->payme = new \Paycom\Application($paycomConfig);
         $this->payme->run();
-        dd($this->payme);
     }
 }

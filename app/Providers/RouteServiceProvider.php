@@ -25,6 +25,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         //
 
+
         parent::boot();
     }
 
@@ -65,6 +66,12 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapApiRoutes()
     {
+        Route::prefix('api')
+             ->namespace($this->namespace.'\API')
+             ->group(function(){
+                 Route::any('payment_payme', "PaymentController@paymeInit");
+             });
+
         Route::prefix('api')
              ->middleware('api')
              ->namespace($this->namespace.'\API')

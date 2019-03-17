@@ -10,6 +10,7 @@ class Database
 
     public function __construct(array $config = null)
     {
+        
         $this->config = $config;
     }
 

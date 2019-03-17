@@ -74,7 +74,7 @@ class StoreController extends Controller
     }
 
     public function getRoles(Request $req){
-        $roles = \DB::table('roles_of_stores')->where('user_id', \Auth::user()->id)->where('store_id', $req->get('store_id',0))->get();
+        $roles = \DB::table('roles_of_stores')->where('user_id',$req->get('user_id',0))->where('store_id', $req->get('store_id',0))->get();
         return $roles;
     }
 
@@ -667,6 +667,20 @@ class StoreController extends Controller
             $action = Discount::find($request->input('action_id'));
 
             $action->delete();
+
+            return ['success'=>true];
+        }else{
+            throw new InvalidPermissionException();
+        }
+    }
+
+    public function listOfUsers(Request $request){
+        
+        
+        if(\Auth::user()->canManipulate($request->input('store_id'), StoreController::UPDATE_ROLES)){
+
+
+            $users = "";
 
             return ['success'=>true];
         }else{

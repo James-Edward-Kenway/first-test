@@ -4,6 +4,7 @@ namespace Paycom;
 
 class Response
 {
+    
     /**
      * Response constructor.
      * @param Request $request request object.

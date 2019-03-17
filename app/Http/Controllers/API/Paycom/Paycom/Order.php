@@ -32,7 +32,8 @@ class Order extends Database
     /** Order is cancelled. */
     const STATE_CANCELLED = 3;
 
-    public $request_id;
+    public $request_id = 0;
+
     public $params;
 
     // todo: Adjust Order specific fields for your needs
@@ -67,7 +68,7 @@ class Order extends Database
      */
     public $phone;
 
-    public function __construct($request_id)
+    public function __construct(int $request_id)
     {
         $this->request_id = $request_id;
     }
@@ -155,6 +156,7 @@ class Order extends Database
      * @param mixed $params parameters.
      * @return Order|Order[] found order or array of orders.
      */
+     
     public function find($params)
     {
         // todo: Implement searching order(s) by given parameters, populate current instance with data

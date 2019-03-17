@@ -4,6 +4,7 @@ namespace Paycom;
 
 class Request
 {
+    
     /** @var array decoded request payload */
     public $payload;
 

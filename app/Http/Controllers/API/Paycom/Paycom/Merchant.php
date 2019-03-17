@@ -2,6 +2,7 @@
 
 namespace Paycom;
 
+
 class Merchant
 {
     public $config;

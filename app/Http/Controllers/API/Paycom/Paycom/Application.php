@@ -2,12 +2,15 @@
 
 namespace Paycom;
 
+
 class Application
 {
     public $config;
     public $request;
     public $response;
     public $merchant;
+
+
 
     /**
      * Application constructor.

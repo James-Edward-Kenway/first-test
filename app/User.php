@@ -39,9 +39,12 @@ class User extends Authenticatable
     }
     
     public function roles(){
-        return $this->hasMany('App\RolesOfStores','store_id','id');
+        return $this->hasMany('App\RolesOfStores','user_id','id');
     }
 
+    public function paymentLogs(){
+        return $this->hasMany('App\PaymentLog','user_id','id');
+    }
     public function canManipulate($id,$role){
         $store = RolesOfStores::where('user_id',$this->id)->where('store_id',$id)->whereIn('role',[1,$role])->first();
         if($store!=null){

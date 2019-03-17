@@ -2,6 +2,7 @@
 
 namespace Paycom;
 
+
 /**
  * Class Transaction
  *

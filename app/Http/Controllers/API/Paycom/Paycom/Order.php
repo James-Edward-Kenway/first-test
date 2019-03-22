@@ -2,6 +2,10 @@
 
 namespace Paycom;
 
+use App\PaymentLog;
+use App\User;
+
+
 /**
  * Class Order
  *
@@ -68,7 +72,7 @@ class Order extends Database
      */
     public $phone;
 
-    public function __construct(int $request_id)
+    public function __construct(int $request_id = null)
     {
         $this->request_id = $request_id;
     }
@@ -92,8 +96,8 @@ class Order extends Database
         }
 
         // todo: Validate account, if failed throw error
-        // assume, we should have order_id
-        if (!isset($params['account']['order_id']) || !$params['account']['order_id']) {
+        // assume, we should have client_id
+        if (!isset($params['account']['client_id']) || !$params['account']['client_id']) {
             throw new PaycomException(
                 $this->request_id,
                 PaycomException::message(
@@ -102,16 +106,16 @@ class Order extends Database
                     'Incorrect order code.'
                 ),
                 PaycomException::ERROR_INVALID_ACCOUNT,
-                'order_id'
+                'client_id'
             );
         }
 
         // todo: Check is order available
 
         // assume, after find() $this will be populated with Order data
-        $order = $this->find($params['account']);
+        $order = $this->find($params['account']+['amount'=> $params['amount']]);
 
-        // Check, is order found by specified order_id
+        // Check, is order found by specified client_id
         if (!$order || !$order->id) {
             throw new PaycomException(
                 $this->request_id,
@@ -121,14 +125,13 @@ class Order extends Database
                     'Incorrect order code.'
                 ),
                 PaycomException::ERROR_INVALID_ACCOUNT,
-                'order_id'
+                'client_id'
             );
         }
-
         // validate amount
         // convert $this->amount to coins
         // $params['amount'] already in coins
-        if ((100 * $this->amount) != (1 * $params['amount'])) {
+        if ((100 * 1000) > (1 * $params['amount'])) {
             throw new PaycomException(
                 $this->request_id,
                 'Incorrect amount.',
@@ -137,13 +140,14 @@ class Order extends Database
         }
 
         // for example, order state before payment should be 'waiting pay'
-        if ($this->state != self::STATE_WAITING_PAY) {
-            throw new PaycomException(
-                $this->request_id,
-                'Order state is invalid.',
-                PaycomException::ERROR_COULD_NOT_PERFORM
-            );
-        }
+        
+        // if ($this->state != self::STATE_WAITING_PAY) {
+        //     throw new PaycomException(
+        //         $this->request_id,
+        //         'Order state is invalid.',
+        //         PaycomException::ERROR_COULD_NOT_PERFORM
+        //     );
+        // }
 
         // keep params for further use
         $this->params = $params;
@@ -162,11 +166,12 @@ class Order extends Database
         // todo: Implement searching order(s) by given parameters, populate current instance with data
 
         // Example implementation to load order by id
-        if (isset($params['order_id'])) {
 
-            $sql        = "select * from orders where id=:orderId";
+        if (isset($params['client_id'])) {
+
+            $sql        = "select * from users where id=:clientId";
             $sth        = self::db()->prepare($sql);
-            $is_success = $sth->execute([':orderId' => $params['order_id']]);
+            $is_success = $sth->execute([':clientId' => $params['client_id']]);
 
             if ($is_success) {
 
@@ -175,12 +180,7 @@ class Order extends Database
                 if ($row) {
 
                     $this->id          = 1 * $row['id'];
-                    $this->amount      = 1 * $row['amount'];
-                    $this->product_ids = json_decode($row['product_ids'], true);
-                    $this->state       = 1 * $row['state'];
-                    $this->user_id     = 1 * $row['user_id'];
-                    $this->phone       = $row['phone'];
-
+                    $this->amount      = $params['amount'] / 100;
                     return $this;
 
                 }
@@ -204,6 +204,7 @@ class Order extends Database
         // Example implementation
         $this->state = 1 * $state;
         $this->save();
+
     }
 
     /**
@@ -234,26 +235,36 @@ class Order extends Database
             // todo: Set customer ID
             // $this->user_id = 1 * SomeSessionManager::get('user_id');
 
-            $sql        = "insert into orders set product_ids = :pProdIds, amount = :pAmount, state = :pState, user_id = :pUserId, phone = :pPhone";
-            $sth        = $db->prepare($sql);
-            $is_success = $sth->execute([
-                ':pProdIds' => json_encode($this->product_ids),
-                ':pAmount'  => $this->amount,
-                ':pState'   => $this->state,
-                ':pUserId'  => $this->user_id,
-                ':pPhone'   => $this->phone,
-            ]);
+            // $sql        = "insert into orders set product_ids = :pProdIds, amount = :pAmount, state = :pState, user_id = :pUserId, phone = :pPhone";
+            // $sth        = $db->prepare($sql);
+            // $is_success = $sth->execute([
+            //     ':pProdIds' => json_encode($this->product_ids),
+            //     ':pAmount'  => $this->amount,
+            //     ':pState'   => $this->state,
+            //     ':pUserId'  => $this->user_id,
+            //     ':pPhone'   => $this->phone,
+            // ]);
 
-            if ($is_success) {
-                $this->id = $db->lastInsertId();
-            }
+            // $this->id = \Auth::user()->id;
+            $is_success = true;
         } else {
 
-            $sql        = "update orders set state = :pState where id = :pId";
-            $sth        = $db->prepare($sql);
-            $is_success = $sth->execute([':pState' => $this->state, ':pId' => $this->id]);
 
         }
+
+        if($this->state==1*Order::STATE_PAY_ACCEPTED){
+
+            $u = User::find($this->id);
+            $u->balance += $this->amount;
+            $u->save();
+            $p = new PaymentLog();
+            $p->user_id = $this->id;
+            $p->type = 1;
+            $p->summa = $this->amount;
+            $p->save();
+
+        }
+        $is_success = true;
 
         if (!$is_success) {
             throw new PaycomException($this->request_id, 'Could not save order.', PaycomException::ERROR_INTERNAL_SYSTEM);

@@ -34,6 +34,7 @@ Route::get('actions', 'HomeController@actions');
 Route::get('discounts', 'HomeController@discounts');
 Route::get('banners', 'HomeController@banners');
 
+Route::get('store/show','PublicController@getStore');
 
 // user controll
 
@@ -51,8 +52,22 @@ Route::group(['middleware' => 'middle'], function () {
     Route::get('user/logout','ProfileController@logout');
     Route::post('user/edit','ProfileController@editUser');
 
+    Route::get('user/getpaymentlogs','ProfileController@getPaymentLogs');
+    
+    Route::get('user/buyusertarif','ProfileController@buyUserTarif');
+    Route::get('user/getusertarifs','ProfileController@getUserTarifs');
+    Route::get('user/getusertariflogs','ProfileController@getUserTarifLogs');
+    Route::get('user/getlimits','ProfileController@getLimits');
 
 
+    Route::get('store/listofusers','ProfileController@listOfUsers');
+    Route::get('store/changeroles','ProfileController@changeRoles');
+    Route::get('store/adduserrole','ProfileController@addUserRole');
+
+
+    Route::get('store/buytarif','ProfileController@buyTarif');
+    Route::get('store/gettarifs','ProfileController@getTarifs');
+    Route::get('store/getstoretariflogs','ProfileController@getStoreTarifLogs');
     // subcriptions
     Route::get('user/subscribe','ProfileController@subscribe');
     Route::get('user/unsubscribe','ProfileController@unsubscribe');
@@ -63,7 +78,6 @@ Route::group(['middleware' => 'middle'], function () {
     Route::post('store/add','StoreController@addStore');
     Route::get('store/delete','StoreController@deteleStore');
     Route::post('store/update','StoreController@updateStore');
-    Route::get('store/show','PublicController@getStore');
     Route::get('store/roles','StoreController@getRoles');
     Route::get('store/product_categories','HomeController@productCategories');
     Route::get('store/service_categories','HomeController@serviceCategories');

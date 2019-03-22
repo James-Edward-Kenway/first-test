@@ -17,7 +17,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password','balance',
     ];
     public $currentToken;
     /**
@@ -42,6 +42,24 @@ class User extends Authenticatable
         return $this->hasMany('App\RolesOfStores','user_id','id');
     }
 
+
+    public function limitCheck($limit){
+        $res = false;
+        $limit = $this->limits()->where('type',$limit)->where('till','>',date('Y-m-d H:i:s'))->first();
+        if($limit!=null&&$limit->count!=0){
+            if($limit->count>0){
+                $limit->count--;
+                $limit->save();
+            }
+            $res = true;
+        }
+        return $res;
+    }
+    
+    public function limits(){
+        return $this->hasMany('App\UserLimit','user_id','id');
+    }
+    
     public function paymentLogs(){
         return $this->hasMany('App\PaymentLog','user_id','id');
     }

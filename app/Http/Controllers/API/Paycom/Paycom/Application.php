@@ -72,20 +72,20 @@ class Application
     private function CheckPerformTransaction()
     {
         $order = new Order($this->request->id);
-        $order->find($this->request->params['account']);
+        $order->find($this->request->params['account']+['amount'=> $this->request->params['amount']]);
 
         // validate parameters
         $order->validate($this->request->params);
 
         // todo: Check is there another active or completed transaction for this order
-        $transaction = new Transaction();
-        $found       = $transaction->find($this->request->params);
-        if ($found && ($found->state == Transaction::STATE_CREATED || $found->state == Transaction::STATE_COMPLETED)) {
-            $this->response->error(
-                PaycomException::ERROR_COULD_NOT_PERFORM,
-                'There is other active/completed transaction for this order.'
-            );
-        }
+        // $transaction = new Transaction();
+        // $found       = $transaction->find($this->request->params);
+        // if ($found && ($found->state == Transaction::STATE_CREATED || $found->state == Transaction::STATE_COMPLETED)) {
+        //     $this->response->error(
+        //         PaycomException::ERROR_COULD_NOT_PERFORM,
+        //         'There is other active/completed transaction for this order.'
+        //     );
+        // }
 
         // if control is here, then we pass all validations and checks
         // send response, that order is ready to be paid.
@@ -118,23 +118,23 @@ class Application
     private function CreateTransaction()
     {
         $order = new Order($this->request->id);
-        $order->find($this->request->params['account']);
+        $order->find($this->request->params['account']+['amount'=> $this->request->params['amount']]);
 
         // validate parameters
         $order->validate($this->request->params);
 
         // todo: Check, is there any other transaction for this order/service
-        $transaction = new Transaction();
-        $found       = $transaction->find(['account' => $this->request->params['account']]);
-        if ($found) {
-            if (($found->state == Transaction::STATE_CREATED || $found->state == Transaction::STATE_COMPLETED)
-                && $found->paycom_transaction_id !== $this->request->params['id']) {
-                $this->response->error(
-                    PaycomException::ERROR_INVALID_ACCOUNT,
-                    'There is other active/completed transaction for this order.'
-                );
-            }
-        }
+        // $transaction = new Transaction();
+        // $found       = $transaction->find(['account' => $this->request->params['account'],'request_id' => $this->request->params['request_id']]);
+        // if ($found) {
+        //     if (($found->state == Transaction::STATE_CREATED || $found->state == Transaction::STATE_COMPLETED)
+        //         && $found->paycom_transaction_id !== $this->request->params['id']) {
+        //         $this->response->error(
+        //             PaycomException::ERROR_INVALID_ACCOUNT,
+        //             'There is other active/completed transaction for this order.'
+        //         );
+        //     }
+        // }
 
         // todo: Find transaction by id
         $transaction = new Transaction();
@@ -184,7 +184,7 @@ class Application
             $transaction->create_time           = Format::timestamp2datetime($create_time);
             $transaction->state                 = Transaction::STATE_CREATED;
             $transaction->amount                = $this->request->amount;
-            $transaction->order_id              = $this->request->account('order_id');
+            $transaction->client_id              = $this->request->account('client_id');
             $transaction->save(); // after save $transaction->id will be populated with the newly created transaction's id.
 
             // send response
@@ -218,7 +218,7 @@ class Application
                     );
                 } else { // perform active transaction
                     // todo: Mark order/service as completed
-                    $params = ['order_id' => $found->order_id];
+                    $params = ['client_id' => $found->client_id, 'amount'=> $found->amount];
                     $order  = new Order($this->request->id);
                     $order->find($params);
                     $order->changeState(Order::STATE_PAY_ACCEPTED);

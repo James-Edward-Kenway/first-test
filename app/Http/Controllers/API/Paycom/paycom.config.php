@@ -13,8 +13,8 @@ return [
     // Your database settings
     'db'          => [
         'host'     => 'localhost',
-        'database' => 'joinuz_db2019',
-        'username' => 'joinuz_db2019',
-        'password' => '2083cpsess1601693338',
+        'database' => 'asiagood',
+        'username' => 'root',
+        'password' => '',
     ],
 ];

@@ -53,4 +53,21 @@ class Store extends Model
         return false;
     }
     
+    public function limitCheck($limit){
+        $res = false;
+        $limit = $this->limits()->where('type',$limit)->where('till','>',date('Y-m-d H:i:s'))->first();
+        if($limit!=null&&$limit->count!=0){
+            if($limit->count>0){
+                $limit->count--;
+                $limit->save();
+            }
+            $res = true;
+        }
+        return $res;
+    }
+    
+    public function limits(){
+        return $this->hasMany('App\Limit','store_id','id');
+    }
+    
 }

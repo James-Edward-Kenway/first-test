@@ -425,6 +425,63 @@ serviceladayam shular bor lekin *product_category_id* ni o'rnida *service_catego
     const UPDATE_DISCOUNT = 16; // skidkalarning ma'l larini o'zgartirish
 ```
 
+## magazinning egalari listini olish
+> magazin egalari (shu so'rovni yuborgan foydalanuvchida UPDATE_ROLES bo'lishi kerak!)
+>> http://http://{ip/hostname}/api/store/listofusers?store_id=(magazin_idisi)
+
+## magazinning egasining rollarini o'zgartirish
+> magazin egalari (ptichka qo'yilgan ro'llar yuborilishi kerak!)
+>> http://http://{ip/hostname}/api/store/changeroles?store_id=(magazin_idisi)&user_id=(rollani o'zgartirish kerak bo'lgan user)&roles\[]=1&roles[]=2(yuqoridagi rollar)
+
+## magazinning egachilikka qo'shish
+> magazin egalari (ptichka qo'yilgan ro'llar yuborilishi kerak!)
+>> http://http://{ip/hostname}/api/store/changeroles?store_id=(magazin_idisi)&user_email=(rollani o'zgartirish kerak bo'lgan user emaili)&roles\[]=1&roles[]=2(yuqoridagi rol idilari)
+
+## user to'lovlari
+> user to'lovlari listini olish barchasi (bu ham paginationdan foydalanadi)
+>> http://http://{ip/hostname}/api/user/getpaymentlogs
+
+## user tarif sotib olishlar tarixi
+> user tarif sotib olishlar olish barchasi (bu ham paginationdan foydalanadi)
+>> http://http://{ip/hostname}/api/user/getusertariflogs
+
+## user limitlari
+> user limitlari yani user tarif sotib olganidan keyin qilishi mumkin bo'lgan ishlar
+> agar count -1 bo'lsa bu degani cheksiz degani
+>> http://http://{ip/hostname}/api/user/getlimits
+
+```
+  Limitlar kodlari
+    const ADD_PRODUCT = 5; // produkta qo'shganda
+    const ADD_SERVICE = 6; // servis qo'shganda
+    const ADD_ACTION = 11; // aksiya qo'shganda
+    const ADD_DISCOUNT = 12; // skitka qo'shganda
+    const MANAGE_STORE = 30; // magazinlariga kirish huquqi
+
+    
+```
+
+## magazin tarif sotib olishlar tarixi
+> magazin tarif sotib olishlar listini olish barchasi (bu ham paginationdan foydalanadi)
+>> http://http://{ip/hostname}/api/user/getusertariflogs
+
+## user uchun barcha tariflani oladi
+> user uchun barcha tariflar (magazinmas!)
+>> http://http://{ip/hostname}/api/user/getusertarifs
+
+## user tarif sotib olishi
+> user uchun tarif harid qilish (olishdan oldin balance tekshirish kerak aks holda success:false bo'ladi!)
+>> http://http://{ip/hostname}/api/user/buyusertarif?tarif_id=(tarif idisi)
+
+## magazinla uchun barcha tariflarni oladi
+> magazinla uchun barcha tariflar (usermas!)
+>> http://http://{ip/hostname}/api/store/gettarifs
+
+## magazin tarif sotib olishi
+> magazin uchun tarif harid qilish (olishdan oldin balance tekshirish kerak aks holda success:false bo'ladi!)
+>> http://http://{ip/hostname}/api/store/buytarif?tarif_id=(tarif idisi)&store_id=(magazin idisi)
+
+
 ## magazin produktalari mavjud bo'lgan kategoriyalarni olish
 > magazin product_categories
 >> http://{ip/hostname}/api/store/product_categories?store_id=(magazin idisi)
@@ -544,3 +601,4 @@ serviceladayam shular bor lekin *product_category_id* ni o'rnida *service_catego
 
 `http response kodlari: 401 - registratsiya yoki login qilinishi kerak bo'lgan bo'limlarga. registratsiya yoki login qilmagan user so'rov yuborsa holat kelib chiqishi mumkin!`
 `http response kodlari: 405 - to'g'ri permission bo'lmaganda kelib chiqadi, yani magazin egasi bo'lmagan odam magazin malumotlarini o'zgartishga intilsa sodir bo'ladi!`
+`http response kodlari: 406 - tariflar harid qilinmagan holda user tarif doirasidagi narsani qilmoqchi bo'lsa sodir bo'ladi!`

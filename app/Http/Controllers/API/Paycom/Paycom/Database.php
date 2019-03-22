@@ -41,7 +41,7 @@ class Database
     public static function db()
     {
         if (!self::$db) {
-            $config   = require_once CONFIG_FILE;
+            $config   = require base_path('app/Http/Controllers/API/Paycom/paycom.config.php');
             $instance = new self($config);
             self::$db = $instance->new_connection();
         }

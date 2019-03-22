@@ -10,6 +10,11 @@ use App\Image;
 use App\Product;
 use App\Service;
 use App\Store;
+use App\Exceptions\InvalidPermissionException;
+use App\Tarif;
+use App\User;
+use App\RolesOfStores;
+use App\TarifLogs;
 
 class ProfileController extends Controller
 {
@@ -55,6 +60,69 @@ class ProfileController extends Controller
         }
 
         \Auth::user()->subscriptions()->detach(Store::find($req->get('store_id')));
+        return ['success'=>true];
+    }
+    public function getUserTarifs(Request $req){
+        
+        return ['success'=>true,'data'=>\App\Tarif::where('is_user',1)->get()];
+    }
+    public function buyUserTarif(Request $req){
+        if(!$req->has('tarif_id')){
+            return ['success'=>false,'info'=>'tarif id yo\'q'];
+        }
+
+        $tarif = Tarif::where('id',$req->get('tarif_id'))->first();
+
+        if(\Auth::user()->balance<=$tarif->price){
+            return ['success'=>false,'info'=>'userda mablag\' yo\'q'];
+        }
+
+        $u = \Auth::user();
+        $tarif->apply(true,\Auth::user()->id);
+
+        
+        $u->balance-=$tarif->price;
+        $u->save();
+
+        $lg = new TarifLogs();
+        $lg->owner_id = $u->id;
+        $lg->tarif_id = $tarif->id;
+        $lg->is_user = true;
+        $lg->save();
+
+
+        return ['success'=>true];
+    }
+
+    // for stores
+    public function getTarifs(Request $req){
+        
+        return ['success'=>true,'data'=>\App\Tarif::where('is_user',0)->get()];
+    }
+
+    public function buyTarif(Request $req){
+        if(!$req->has('tarif_id')||!$req->has('store_id')){
+            return ['success'=>false,'info'=>'tarif id yoki store_id yo\'q'];
+        }
+
+        $tarif = Tarif::where('id',$req->get('tarif_id'))->first();
+
+        if(\Auth::user()->balance<=$tarif->price){
+            return ['success'=>false,'info'=>'userda mablag\' yo\'q'];
+        }
+
+        $u = \Auth::user();
+        $tarif->apply(false,$req->get('store_id'));
+        
+        $u->balance-=$tarif->price;
+        $u->save();
+
+        $lg = new TarifLogs();
+        $lg->owner_id = $req->get('store_id');
+        $lg->tarif_id = $tarif->id;
+        $lg->is_user = false;
+        $lg->save();
+        
         return ['success'=>true];
     }
 
@@ -200,5 +268,98 @@ class ProfileController extends Controller
     }
     
 
+
+    public function listOfUsers(Request $request){
+        
+        
+        if(\Auth::user()->canManipulate($request->input('store_id'), StoreController::UPDATE_ROLES)){
+
+
+            $users = User::whereHas('roles',function($q)use($request){
+                $q->where('store_id', $request->get('store_id'));
+            })->get();
+
+            return ['success'=>true,'users'=>$users->toArray()];
+        }else{
+            throw new InvalidPermissionException();
+        }
+    }
+
+    public function changeRoles(Request $request){
+        
+        
+        if(\Auth::user()->canManipulate($request->input('store_id'), StoreController::UPDATE_ROLES)){
+
+
+            $user = User::where('id', $request->get('user_id'))->first();
+
+            RolesOfStores::where('store_id',$request->input('store_id'))->where('user_id',$request->input('user_id'))->delete();
+
+            foreach($request->input('roles') as $role){
+                $ro = new RolesOfStores();
+                $ro->user_id  = $user->id;
+                $ro->store_id = $request->input('store_id');
+                $ro->role     = 1 * $role;
+                $ro->save();
+            }
+
+            
+            $users = User::whereHas('roles',function($q)use($request){
+                $q->where('store_id', $request->get('store_id'));
+            })->get();
+
+            return ['success'=>true,'users'=>$users->toArray()];
+        }else{
+            throw new InvalidPermissionException();
+        }
+    }
+
+    public function addUserRole(Request $request){
+        
+        
+        if(\Auth::user()->canManipulate($request->input('store_id'), StoreController::UPDATE_ROLES)){
+            
+            $user = User::where('email',$request->get('user_email'))->first();
+
+            RolesOfStores::where('store_id',$request->input('store_id'))->where('user_id',$user->id)->delete();
+
+            foreach($request->input('roles') as $role){
+                $ro = new RolesOfStores();
+                $ro->user_id  = $user->id;
+                $ro->store_id = $request->input('store_id');
+                $ro->role     = 1 * $role;
+                $ro->save();
+            }
+
+            $users = User::whereHas('roles',function($q)use($request){
+                $q->where('store_id', $request->get('store_id'));
+            })->get();
+
+            return ['success'=>true,'users'=>$users->toArray()];
+        }else{
+            throw new InvalidPermissionException();
+        }
+    }
+
+    public function getPaymentLogs(Request $request){
+        
+        $logs = \Auth::user()->paymentLogs()->paginate(50);
+        return $logs->toArray();
+    }
+    public function getUserTarifLogs(Request $request){
+        
+        $logs = TarifLogs::where('is_user',1)->where('owner_id',\Auth::user()->id)->with('tarif')->paginate(50);
+        return $logs->toArray();
+    }
+    public function getStoreTarifLogs(Request $request){
+        
+        $logs = TarifLogs::where('is_user',0)->where('owner_id',$request->input('store_id',0))->paginate(50);
+        return $logs->toArray();
+    }
+    public function getLimits(Request $request){
+        
+        $logs = \Auth::user()->limits;
+        return $logs->toArray();
+    }
 
 }

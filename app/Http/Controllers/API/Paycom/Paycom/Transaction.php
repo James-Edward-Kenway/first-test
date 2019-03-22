@@ -20,7 +20,7 @@ namespace Paycom;
  *   `state` TINYINT(2) NOT NULL,
  *   `reason` TINYINT(2) NULL DEFAULT NULL,
  *   `receivers` VARCHAR(500) NULL DEFAULT NULL COMMENT 'JSON array of receivers' COLLATE 'utf8_unicode_ci',
- *   `order_id` INT(11) NOT NULL,
+ *   `client_id` INT(11) NOT NULL,
  *
  *   PRIMARY KEY (`id`)
  * )
@@ -84,7 +84,7 @@ class Transaction extends Database
     // - to identify client, for example, account id or phone number
 
     /** @var string Code to identify the order or service for pay. */
-    public $order_id;
+    public $client_id;
 
     /**
      * Saves current transaction instance in a data store.
@@ -112,7 +112,7 @@ class Transaction extends Database
                                     amount = :pAmount,
                                     state = :pState,
                                     receivers = :pReceivers,
-                                    order_id = :pOrderId";
+                                    client_id = :pClientId";
 
             $sth = $db->prepare($sql);
 
@@ -124,7 +124,7 @@ class Transaction extends Database
                 ':pAmount'        => 1 * $this->amount,
                 ':pState'         => $this->state,
                 ':pReceivers'     => $this->receivers ? json_encode($this->receivers, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) : null,
-                ':pOrderId'       => 1 * $this->order_id,
+                ':pClientId'       => 1 * $this->client_id,
             ]);
 
             if ($is_success) {
@@ -218,18 +218,18 @@ class Transaction extends Database
     public function find($params)
     {
         $db = self::db();
-
+        
         // todo: Implement searching transaction by id, populate current instance with data and return it
         if (isset($params['id'])) {
             $sql        = "SELECT * FROM transactions WHERE paycom_transaction_id = :pPaycomTxId";
             $sth        = $db->prepare($sql);
             $is_success = $sth->execute([':pPaycomTxId' => $params['id']]);
-        } elseif (isset($params['account'], $params['account']['order_id'])) {
+        } else if (isset($params['account'], $params['account']['client_id'])) {
             // todo: Implement searching transactions by given parameters and return the list of transactions
             // search by order id active or completed transaction
-            $sql        = "SELECT * FROM transactions WHERE state IN (1, 2) AND order_id = :pOrderId";
+            $sql        = "SELECT * FROM transactions WHERE state IN (1, 2) AND client_id = :pClientId";
             $sth        = $db->prepare($sql);
-            $is_success = $sth->execute([':pOrderId' => $params['account']['order_id']]);
+            $is_success = $sth->execute([':pClientId' => $params['account']['client_id']]);
         } else {
             throw new PaycomException(
                 $params['request_id'],
@@ -256,7 +256,7 @@ class Transaction extends Database
                 $this->reason                = $row['reason'] ? 1 * $row['reason'] : null;
                 $this->amount                = 1 * $row['amount'];
                 $this->receivers             = $row['receivers'] ? json_decode($row['receivers'], true) : null;
-                $this->order_id              = 1 * $row['order_id'];
+                $this->client_id              = 1 * $row['client_id'];
 
                 return $this;
             }
@@ -310,7 +310,7 @@ class Transaction extends Database
                 'time'         => 1 * $row['paycom_time'], // paycom transaction timestamp as is
                 'amount'       => 1 * $row['amount'],
                 'account'      => [
-                    'order_id' => 1 * $row['order_id'], // account parameters to identify client/order/service
+                    'client_id' => 1 * $row['client_id'], // account parameters to identify client/order/service
                     // ... additional parameters may be listed here, which are belongs to the account
                 ],
                 'create_time'  => Format::datetime2timestamp($row['create_time']),

@@ -9,7 +9,7 @@ class Request
     public $payload;
 
     /** @var int id of the request */
-    public $id;
+    public $id = 0;
 
     /** @var string method name, such as <em>CreateTransaction</em> */
     public $method;

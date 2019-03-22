@@ -14,6 +14,8 @@ use App\ServiceCategory;
 use App\Image;
 use App\Discount;
 use App\Http\Controllers\Controller;
+use Illuminate\Foundation\Auth\User;
+use App\Exceptions\LimitException;
 
 class StoreController extends Controller
 {
@@ -34,6 +36,9 @@ class StoreController extends Controller
     const DELETE_DISCOUNT = 14;
     const UPDATE_ACTION = 15;
     const UPDATE_DISCOUNT = 16;
+    const MANAGE_STORE = 30;
+
+    
 
     public function addStore(Request $request){
         
@@ -46,6 +51,9 @@ class StoreController extends Controller
         ]);
 
 
+        if(!\Auth::user()->limitCheck(StoreController::MANAGE_STORE)){
+            return ['success'=>true,'info' => 'tarif sotib olinishi kerak'];
+        }
         if($validate->fails()){
             return ['messages'=>$validate->errors()->all()]+['success'=>false];
         }
@@ -70,7 +78,6 @@ class StoreController extends Controller
             $store->save();
         }
         return ['success'=>true, $store->toArray()];
-        
     }
 
     public function getRoles(Request $req){
@@ -94,6 +101,9 @@ class StoreController extends Controller
         }
 
         if(\Auth::user()->canManipulate($request->input('store_id'), StoreController::STORE_DELETE)){
+            if(!\Auth::user()->limitCheck(StoreController::MANAGE_STORE)){
+                return ['success'=>true,'info' => 'tarif sotib olinishi kerak'];
+            }
             $store = Store::where('id',$request->input('store_id'))->first();
             if($store!=null){
                 $store->delete();
@@ -117,6 +127,9 @@ class StoreController extends Controller
 
         if($validate->fails()){
             return ['messages'=>$validate->errors()->all()]+['success'=>false];
+        }
+        if(!\Auth::user()->limitCheck(StoreController::MANAGE_STORE)){
+            return ['success'=>true,'info' => 'tarif sotib olinishi kerak'];
         }
 
         if(\Auth::user()->canManipulate($request->input('store_id'), StoreController::STORE_UPDATE)){
@@ -150,7 +163,6 @@ class StoreController extends Controller
         if(!$request->has('store_id')){
             return response('store_id is not given!',400);
         }
-        
         if(\Auth::user()->canManipulate($request->input('store_id'), StoreController::ADD_PRODUCT)){
 
             $validate = validator($request->all(),[
@@ -177,6 +189,10 @@ class StoreController extends Controller
                 'user_id'=> \Auth::user()->id,
             ]);
             
+            $store = Store::find($request->get('store_id'));
+            if(!$store->limitCheck(StoreController::ADD_PRODUCT)){
+                throw new LimitException();
+            }
             $product->save();
 
             if($request->hasFile('photo')){
@@ -236,6 +252,10 @@ class StoreController extends Controller
                 'image'=> ''
             ]);
 
+            $store = Store::find($request->get('store_id'));
+            if(!$store->limitCheck(StoreController::ADD_SERVICE)){
+                throw new LimitException();
+            }
             $service->save();
             
             if($request->hasFile('photo')){
@@ -445,6 +465,10 @@ class StoreController extends Controller
                 'address'=> $request->input('address')
             ]);
 
+            $store = Store::find($request->get('store_id'));
+            if(!$store->limitCheck(StoreController::ADD_ACTION)){
+                throw new LimitException();
+            }
             $action->save();
 
             
@@ -502,6 +526,10 @@ class StoreController extends Controller
                 'address'=> $request->input('address')
             ]);
 
+            $store = Store::find($request->get('store_id'));
+            if(!$store->limitCheck(StoreController::ADD_DISCOUNT)){
+                throw new LimitException();
+            }
             $discount->save();
 
             if($request->hasFile('photo')){
@@ -632,7 +660,7 @@ class StoreController extends Controller
             ]);
 
 
-            return ['success'=>true, $action->toArray()];
+            return ['success'=>true, $discount->toArray()];
         }else{
             throw new InvalidPermissionException();
         }
@@ -664,23 +692,9 @@ class StoreController extends Controller
         if(\Auth::user()->canManipulate($request->input('store_id'), StoreController::DELETE_ACTION)){
 
 
-            $action = Discount::find($request->input('action_id'));
+            $action = Action::find($request->input('action_id'));
 
             $action->delete();
-
-            return ['success'=>true];
-        }else{
-            throw new InvalidPermissionException();
-        }
-    }
-
-    public function listOfUsers(Request $request){
-        
-        
-        if(\Auth::user()->canManipulate($request->input('store_id'), StoreController::UPDATE_ROLES)){
-
-
-            $users = "";
 
             return ['success'=>true];
         }else{

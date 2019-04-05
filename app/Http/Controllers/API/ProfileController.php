@@ -31,7 +31,7 @@ class ProfileController extends Controller
         $token->save();
         $res = [];
 
-        $res = ['authorized'=>true, 'token'=>$token->toArray()];
+        $res = ['authorized'=>true, 'token'=>$token->toArray(), 'user'=>\Auth::user()->toArray()];
 
         return $res;
     }
@@ -73,6 +73,9 @@ class ProfileController extends Controller
 
         $tarif = Tarif::where('id',$req->get('tarif_id'))->first();
 
+        if(!$tarif->is_user){
+            return ['success'=>false,'info'=>'tarif user uchun mo\'ljallanmagan!'];
+        }
         if(\Auth::user()->balance<=$tarif->price){
             return ['success'=>false,'info'=>'userda mablag\' yo\'q'];
         }
@@ -107,6 +110,9 @@ class ProfileController extends Controller
 
         $tarif = Tarif::where('id',$req->get('tarif_id'))->first();
 
+        if($tarif->is_user){
+            return ['success'=>false,'info'=>'tarif user uchun mo\'ljallangan!'];
+        }
         if(\Auth::user()->balance<=$tarif->price){
             return ['success'=>false,'info'=>'userda mablag\' yo\'q'];
         }
@@ -353,13 +359,22 @@ class ProfileController extends Controller
     }
     public function getStoreTarifLogs(Request $request){
         
-        $logs = TarifLogs::where('is_user',0)->where('owner_id',$request->input('store_id',0))->paginate(50);
+        $logs = TarifLogs::where('is_user',0)->where('owner_id',$request->input('store_id',0))->with('tarif')->paginate(50);
         return $logs->toArray();
     }
     public function getLimits(Request $request){
         
         $logs = \Auth::user()->limits;
         return $logs->toArray();
+    }
+    public function paymeLink(Request $request){
+        
+        $sum = $request->get('sum',0);
+        if($sum<1000){
+            return ['success'=>false,'info'=>'minimal summa 1000 so"m'];
+        }
+        return ['success'=>true,'link'=>'https://merchant.paycom.uz/aaaaaaaaaaa'];
+
     }
 
 }

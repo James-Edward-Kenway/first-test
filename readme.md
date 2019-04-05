@@ -441,6 +441,10 @@ serviceladayam shular bor lekin *product_category_id* ni o'rnida *service_catego
 > user to'lovlari listini olish barchasi (bu ham paginationdan foydalanadi)
 >> http://http://{ip/hostname}/api/user/getpaymentlogs
 
+## payme link olish
+> to'lov qilishda payme uchun link olish (sum da minimal summa 1000 so'm)
+>> http://http://{ip/hostname}/api/user/paymelink?sum=(summa)
+
 ## user tarif sotib olishlar tarixi
 > user tarif sotib olishlar olish barchasi (bu ham paginationdan foydalanadi)
 >> http://http://{ip/hostname}/api/user/getusertariflogs

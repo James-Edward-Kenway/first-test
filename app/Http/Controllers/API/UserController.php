@@ -27,7 +27,7 @@ class UserController extends Controller
             return ['messages'=>$validate->errors()->all()]+['authorized'=>false];
         }
 
-        $user = new User(['name'=>$request->input('name'), 'email'=>$request->input('email'),'password'=>\password_hash($request->input('password').'as@',PASSWORD_BCRYPT)]);
+        $user = new User(['name'=>$request->input('name'),'balance'=>0,'images'=>'[]',  'email'=>$request->input('email'),'password'=>\password_hash($request->input('password').'as@',PASSWORD_BCRYPT)]);
 
         $user->save();
 
@@ -149,6 +149,7 @@ class UserController extends Controller
             $res = ['authorized'=>true, 'token'=>$token->toArray()];
             
             return $res;
+            
         }
 
         $token = new Token(['user_id'=>$user->id,'token'=>bcrypt(microtime().'i'.random_int(0,100000)),'imei'=>$request->input('imei',12345),'description'=>$this->tokenDesc($request)]);

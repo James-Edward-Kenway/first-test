@@ -41,9 +41,14 @@ Route::get('store/show','PublicController@getStore');
 Route::post('user/register','UserController@register');
 Route::get('user/login','UserController@login');
 
+Route::get('store/product_categories','HomeController@productCategories');
+Route::get('store/service_categories','HomeController@serviceCategories');
+
 Route::get('user/google_register','UserController@googleRegister');
 Route::get('user/google_login','UserController@googleLogin');
 
+Route::get('store/gettarifs','ProfileController@getTarifs');
+Route::get('user/getusertarifs','ProfileController@getUserTarifs');
 
 Route::group(['middleware' => 'middle'], function () {
     
@@ -52,13 +57,16 @@ Route::group(['middleware' => 'middle'], function () {
     Route::get('user/logout','ProfileController@logout');
     Route::post('user/edit','ProfileController@editUser');
 
+    Route::get('user/getpaymentpaymelink','ProfileController@getpaymentpaymelink');
+
     Route::get('user/getpaymentlogs','ProfileController@getPaymentLogs');
     
     Route::get('user/buyusertarif','ProfileController@buyUserTarif');
-    Route::get('user/getusertarifs','ProfileController@getUserTarifs');
     Route::get('user/getusertariflogs','ProfileController@getUserTarifLogs');
     Route::get('user/getlimits','ProfileController@getLimits');
 
+
+    Route::get('user/paymelink','ProfileController@paymeLink');
 
     Route::get('store/listofusers','ProfileController@listOfUsers');
     Route::get('store/changeroles','ProfileController@changeRoles');
@@ -66,7 +74,6 @@ Route::group(['middleware' => 'middle'], function () {
 
 
     Route::get('store/buytarif','ProfileController@buyTarif');
-    Route::get('store/gettarifs','ProfileController@getTarifs');
     Route::get('store/getstoretariflogs','ProfileController@getStoreTarifLogs');
     // subcriptions
     Route::get('user/subscribe','ProfileController@subscribe');
@@ -79,8 +86,6 @@ Route::group(['middleware' => 'middle'], function () {
     Route::get('store/delete','StoreController@deteleStore');
     Route::post('store/update','StoreController@updateStore');
     Route::get('store/roles','StoreController@getRoles');
-    Route::get('store/product_categories','HomeController@productCategories');
-    Route::get('store/service_categories','HomeController@serviceCategories');
     Route::get('store/mystores','StoreController@getStores');
 
 
@@ -118,7 +123,6 @@ Route::group(['middleware' => 'middle'], function () {
     Route::get('user/delete_product_likes','ProfileController@deleteProductLikes');
     Route::get('user/delete_service_likes','ProfileController@deleteServiceLikes');
 
-    Route::get('banners', 'HomeController@banners');
 
 
 

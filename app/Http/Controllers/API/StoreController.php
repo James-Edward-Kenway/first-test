@@ -52,14 +52,14 @@ class StoreController extends Controller
 
 
         if(!\Auth::user()->limitCheck(StoreController::MANAGE_STORE)){
-            return ['success'=>true,'info' => 'tarif sotib olinishi kerak'];
+            throw new LimitException();
         }
         if($validate->fails()){
             return ['messages'=>$validate->errors()->all()]+['success'=>false];
         }
 
         $store = new Store(['name'=>$request->input('name'), 'description'=>$request->input('description'),
-         'address'=>$request->input('address'), 'phone'=>$request->input('phone'), 'status' => 3]);
+         'address'=>$request->input('address'), 'phone'=>$request->input('phone'), 'status' => 3, 'images' => '[]']);
 
         $store->save();
         $roles = $store->roles()->create(['user_id'=>\Auth::user()->id,'role'=>StoreController::SUPERUSER]);
@@ -100,9 +100,10 @@ class StoreController extends Controller
             return response('store_id is not given!',400);
         }
 
+
         if(\Auth::user()->canManipulate($request->input('store_id'), StoreController::STORE_DELETE)){
             if(!\Auth::user()->limitCheck(StoreController::MANAGE_STORE)){
-                return ['success'=>true,'info' => 'tarif sotib olinishi kerak'];
+                throw new LimitException();
             }
             $store = Store::where('id',$request->input('store_id'))->first();
             if($store!=null){
@@ -117,7 +118,7 @@ class StoreController extends Controller
 
     public function updateStore(Request $request){
 
-        $validate = validator($request->all(),[
+        $validate = validator($request->all(), [
             'store_id' => 'required',
             'name' => 'required|max:128',
             'description' => 'required',
@@ -130,7 +131,7 @@ class StoreController extends Controller
             return ['messages'=>$validate->errors()->all()]+['success'=>false];
         }
         if(!\Auth::user()->limitCheck(StoreController::MANAGE_STORE)){
-            return ['success'=>true,'info' => 'tarif sotib olinishi kerak'];
+            throw new LimitException();
         }
 
         if(\Auth::user()->canManipulate($request->input('store_id'), StoreController::STORE_UPDATE)){
@@ -188,6 +189,7 @@ class StoreController extends Controller
                 'store_id' => $request->input('store_id'),
                 'price'=> $request->input('price'),
                 'user_id'=> \Auth::user()->id,
+                'images' => '[]',
             ]);
             
             $store = Store::find($request->get('store_id'));
@@ -250,7 +252,7 @@ class StoreController extends Controller
                 'service_category_id' => $request->input('category_id'),
                 'price'=> $request->input('price'),
                 'user_id'=> \Auth::user()->id,
-                'image'=> ''
+                'images'=> '[]'
             ]);
 
             $store = Store::find($request->get('store_id'));
@@ -307,8 +309,8 @@ class StoreController extends Controller
     }
     public function deleteProduct(Request $request){
         
-        if(!$request->has('store_id')||!$request->has('service_id')){
-            return response('store_id or service_id is not given!',400);
+        if(!$request->has('store_id')||!$request->has('product_id')){
+            return response('store_id or product_id is not given!',400);
         }
         
         if(\Auth::user()->canManipulate($request->input('store_id'), StoreController::DELETE_PRODUCT)){
@@ -463,7 +465,7 @@ class StoreController extends Controller
                 'title' => $request->input('title'),
                 'description' => $request->input('description'),
                 'store_id' => $request->input('store_id'),
-                'address'=> $request->input('address')
+                'address'=> $request->input('address'), 'images' => '[]'
             ]);
 
             $store = Store::find($request->get('store_id'));
@@ -524,7 +526,7 @@ class StoreController extends Controller
                 'discount' => $request->input('discount'),
                 'description' => $request->input('description'),
                 'store_id' => $request->input('store_id'),
-                'address'=> $request->input('address')
+                'address'=> $request->input('address'), 'images' => '[]'
             ]);
 
             $store = Store::find($request->get('store_id'));

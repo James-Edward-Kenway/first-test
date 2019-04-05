@@ -34,7 +34,7 @@ class Tarif extends Model
                 $lim->store_id = $id;
                 $lim->type = $lem[0];
                 $lim->count = $lem[1];
-                $lim->till = $this->duration;
+                $lim->till = date('Y-m-d H:i:s',time()+$this->duration);
                 $lim->save();
             }
 

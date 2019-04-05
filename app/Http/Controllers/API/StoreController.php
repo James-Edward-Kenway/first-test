@@ -107,8 +107,9 @@ class StoreController extends Controller
             $store = Store::where('id',$request->input('store_id'))->first();
             if($store!=null){
                 $store->delete();
+                return ['success'=>true];
             }
-            return ['success'=>true];
+            return ['success'=>false,'info'=>'store_id hato yoki bunaqa magazin yo\'q. store_id:'.$request->input('store_id')];
         }else{
             throw new InvalidPermissionException();
         }

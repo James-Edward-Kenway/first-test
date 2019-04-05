@@ -704,5 +704,25 @@ class StoreController extends Controller
             throw new InvalidPermissionException();
         }
     }
+    public function getFavProducts(Request $request){
+        
+        $arr = \Auth::user()->subscriptions;
+        $fvs = [];
+        foreach($arr as $it){
+            $fvs += [$it->id];
+        }
+        $pros = Product::orderBy('created_at','desc')->whereIn('store_id',$fvs)->get();
+        return $pros->toArray();
+    }
+    public function getFavServices(Request $request){
+        
+        $arr = \Auth::user()->subscriptions;
+        $fvs = [];
+        foreach($arr as $it){
+            $fvs += [$it->id];
+        }
+        $ser = Service::orderBy('created_at','desc')->whereIn('store_id',$fvs)->get();
+        return $ser->toArray();
+    }
 
 }

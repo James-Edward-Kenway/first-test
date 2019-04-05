@@ -87,7 +87,10 @@ Route::group(['middleware' => 'middle'], function () {
     Route::post('store/update','StoreController@updateStore');
     Route::get('store/roles','StoreController@getRoles');
     Route::get('store/mystores','StoreController@getStores');
+    Route::get('store/getfavproducts','StoreController@getFavProducts');
+    Route::get('store/getfavservices','StoreController@getFavServices');
 
+    
 
 
     // product and service controll

@@ -494,6 +494,14 @@ serviceladayam shular bor lekin *product_category_id* ni o'rnida *service_catego
 > magazin service_categories
 >> http://{ip/hostname}/api/store/service_categories?store_id=(magazin idisi)
 
+## follow qilgan magazinlar produktalarini olish
+> follow products
+>> http://{ip/hostname}/api/store/getfavproducts
+
+## follow qilgan magazinlar servislarini olish
+> follow services
+>> http://{ip/hostname}/api/store/getfavservices
+
 # follow (subscription)
 
 > follow (magazinga follow bo'lish!)

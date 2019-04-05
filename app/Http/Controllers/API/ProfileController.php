@@ -245,10 +245,11 @@ class ProfileController extends Controller
             return ['messages'=>$validate->errors()->all(),'success'=>false];
         }
 
+        $user = \Auth::user();
 
         if($request->hasFile('photo')){
 
-            $path = "/images/user/".\Auth::user()->id."/";
+            $path = "/images/user/".$user->id."/";
             $photo = md5('jpg'.microtime().rand(0,1000)).".jpg";
             $pub = public_path($path);
 
@@ -258,19 +259,20 @@ class ProfileController extends Controller
             
             $request->file('photo')->storeAs($path, $photo, 'public_html');
 
-            \Auth::user()->addImage(Image::path($path.$photo));
+            $user->addImage(Image::path($path.$photo));
         }
         
         if($request->has('old_password')){
-            if(password_verify($request->input('old_password'),\Auth::user()->password)){
-                \Auth::user()->password = \password_hash($request->input('password').'as@',PASSWORD_BCRYPT);
+            if(password_verify($request->input('old_password').'as@',$user->password)){
+                $user->password = \password_hash($request->input('password').'as@',PASSWORD_BCRYPT);
             }else{
                 return ['messages'=>['old_password'=>'old password not correct!'],'success'=>false];
             }
         }
-        \Auth::user()->update(['name'=>$request->input('name')]);
+        $user->name = $request->input('name');
+        $user->save();
 
-        return ['success'=>true,\Auth::user()->toArray()];
+        return ['success'=>true,$user->toArray()];
     }
     
 

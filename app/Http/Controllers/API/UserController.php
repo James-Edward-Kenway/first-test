@@ -19,7 +19,7 @@ class UserController extends Controller
             'name' => 'required|max:255',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:6',
-            'login' => 'min:5',
+            'login' => 'required|min:5',
             'imei' => 'required',
             'password_confirmation' => 'required|same:password'
         ]);

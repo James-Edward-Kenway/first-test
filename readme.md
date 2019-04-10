@@ -344,7 +344,7 @@ serviceladayam shular bor lekin *product_category_id* ni o'rnida *service_catego
 ## Registratsiya
 
 > registratsiya qilish [POST]
->> http://{ip/hostname}/api/user/register?name=(ism familiya)&password=(parol:kami 6 ta belgi)&email=(email@mail.ru)&password_confirmation=(parolni takrorlash)&photo=(photo)&imei=(imei)&version=(4.4)&company=(Samsung A5)
+>> http://{ip/hostname}/api/user/register?name=(ism familiya)&password=(parol:kami 6 ta belgi)&email=(email@mail.ru)&password_confirmation=(parolni takrorlash)&photo=(photo)&imei=(imei)&version=(4.4)&company=(Samsung A5)&login=(login)
 
 ## chiqish
 

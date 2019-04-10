@@ -19,6 +19,7 @@ class UserController extends Controller
             'name' => 'required|max:255',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:6',
+            'login' => 'min:5',
             'imei' => 'required',
             'password_confirmation' => 'required|same:password'
         ]);
@@ -27,7 +28,7 @@ class UserController extends Controller
             return ['messages'=>$validate->errors()->all()]+['authorized'=>false];
         }
 
-        $user = new User(['name'=>$request->input('name'),'balance'=>0,'images'=>'[]',  'email'=>$request->input('email'),'password'=>\password_hash($request->input('password').'as@',PASSWORD_BCRYPT)]);
+        $user = new User(['name'=>$request->input('name'),'balance'=>0,'images'=>'[]',  'email'=>$request->input('email'), 'login'=>$request->input('login'),'password'=>\password_hash($request->input('password').'as@',PASSWORD_BCRYPT)]);
 
         $user->save();
 
@@ -78,7 +79,7 @@ class UserController extends Controller
         
         
 
-        $user = User::where('email',$request->input('email'))->where('use_google',0)->first();
+        $user = User::where('email',$request->input('email'))->orWhere('login',$request->input('email'))->where('use_google',0)->first();
 
         if($user==null){
             return ['authorized'=>false,'messages'=>['note'=>'user not found']];

@@ -709,9 +709,9 @@ class StoreController extends Controller
         $arr = \Auth::user()->subscriptions;
         $fvs = [];
         foreach($arr as $it){
-            $fvs += [$it->id];
+            $fvs[] = $it->id;
         }
-        $pros = Product::orderBy('created_at','desc')->whereIn('store_id',$fvs)->get();
+        $pros = Product::orderBy('created_at','desc')->whereIn('store_id',$fvs)->paginate(50);
         return $pros->toArray();
     }
     public function getFavServices(Request $request){
@@ -719,9 +719,9 @@ class StoreController extends Controller
         $arr = \Auth::user()->subscriptions;
         $fvs = [];
         foreach($arr as $it){
-            $fvs += [$it->id];
+            $fvs[] = $it->id;
         }
-        $ser = Service::orderBy('created_at','desc')->whereIn('store_id',$fvs)->get();
+        $ser = Service::orderBy('created_at','desc')->whereIn('store_id',$fvs)->paginate(50);
         return $ser->toArray();
     }
 

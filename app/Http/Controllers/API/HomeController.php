@@ -105,7 +105,7 @@ class HomeController extends Controller
         }
 
         if($order_type!="asc"&&$order_type!="desc"){
-            $order_type = "asc";
+            $order_type = "desc";
         }
 
         $products = Product::orderBy($order, $order_type);
@@ -215,7 +215,7 @@ class HomeController extends Controller
         }
 
         if($order_type!="asc"&&$order_type!="desc"){
-            $order_type = "asc";
+            $order_type = "desc";
         }
 
         $services = Service::orderBy($order, $order_type);
@@ -284,7 +284,7 @@ class HomeController extends Controller
 
 
     public function serviceCategory(){
-        $cats = ServiceCategory::all();
+        $cats = ServiceCategory::orderBy('id','desc')->get();
         return $cats;
     }
 
@@ -292,25 +292,25 @@ class HomeController extends Controller
     public function productCategories(Request $req){
         $cats = ProductCategory::whereHas('products',function($q) use($req){
             $q->where('store_id', $req->get('store_id',0));
-        })->get();
+        })->orderBy('id','desc')->get();
         return $cats;
     }
     public function serviceCategories(Request $req){
         $cats = ServiceCategory::whereHas('services',function($q) use($req){
             $q->where('store_id', $req->get('store_id',0));
-        })->get();
+        })->orderBy('id','desc')->get();
         return $cats;
     }
 
     
     public function productCategory(){
-        $cats = ProductCategory::all();
+        $cats = ProductCategory::orderBy('id','desc')->get();
         return $cats;
     }
 
     public function actions(Request $request)
     {
-        $actions = Action::orderBy('created_at');
+        $actions = Action::orderBy('id','desc');
         if($request->has('store_id')){
             $actions = $actions->where('store_id', $request->get('store_id'));
         }
@@ -319,7 +319,7 @@ class HomeController extends Controller
 
     public function discounts(Request $request)
     {
-        $discounts = Discount::orderBy('created_at');
+        $discounts = Discount::orderBy('id','desc');
         if($request->has('store_id')){
             $discounts = $discounts->where('store_id', $request->get('store_id'));
         }
@@ -328,19 +328,19 @@ class HomeController extends Controller
 
     public function banners(Request $request)
     {
-        $banners = Banner::orderBy('created_at')->paginate(20);
+        $banners = Banner::orderBy('created_at','desc')->paginate(20);
         return $banners;
     }
 
     public function trendingProducts(Request $request)
     {
-        $pros = Product::orderBy('like_count','desc')->orderBy('created_at')->paginate(20);
+        $pros = Product::orderBy('like_count','desc')->orderBy('id','desc')->paginate(20);
         return $pros;
     }
 
     public function popularServices(Request $request)
     {
-        $ser = Service::orderBy('like_count','desc')->orderBy('created_at')->paginate(20);
+        $ser = Service::orderBy('like_count','desc')->orderBy('id','desc')->paginate(20);
         return $ser;
     }
 

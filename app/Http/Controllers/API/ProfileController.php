@@ -264,7 +264,7 @@ class ProfileController extends Controller
         
         if($request->has('old_password')){
             if(password_verify($request->input('old_password').'as@',$user->password)){
-                $user->password = \password_hash($request->input('password').'as@',PASSWORD_BCRYPT);
+                $user->password = \password_hash($request->input('new_password').'as@',PASSWORD_BCRYPT);
             }else{
                 return ['messages'=>['old_password'=>'old password not correct!'],'success'=>false];
             }

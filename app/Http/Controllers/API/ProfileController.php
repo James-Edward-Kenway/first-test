@@ -237,12 +237,13 @@ class ProfileController extends Controller
             'name' => 'required|max:255',
             'photo' => 'mimes:jpeg,png',
             'old_password' => 'min:6',
+            'login' => 'min:6',
             'new_password' => 'min:6',
             'new_password_confirmation' => 'same:new_password',
         ]);
 
         if($validate->fails()){
-            return ['messages'=>$validate->errors()->all(),'success'=>false];
+            return ['messages'=>(array)$validate->errors()->all(),'success'=>false];
         }
 
         $user = \Auth::user();
@@ -257,16 +258,26 @@ class ProfileController extends Controller
                 mkdir($pub);
             }
             
+            
             $request->file('photo')->storeAs($path, $photo, 'public_html');
 
             $user->addImage(Image::path($path.$photo));
         }
         
+        
+        if($request->has('login')){
+            $u = User::where('login',$request->input('login'))->first();
+            if($u==null){
+                $user->login = $request->input('login');
+            }else{
+                return ['messages'=>['already used login!'],'success'=>false];
+            }
+        }
         if($request->has('old_password')){
             if(password_verify($request->input('old_password').'as@',$user->password)){
                 $user->password = \password_hash($request->input('new_password').'as@',PASSWORD_BCRYPT);
             }else{
-                return ['messages'=>['old_password'=>'old password not correct!'],'success'=>false];
+                return ['messages'=>['old password not correct!'],'success'=>false];
             }
         }
         $user->name = $request->input('name');

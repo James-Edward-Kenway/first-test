@@ -82,7 +82,7 @@ class HomeController extends Controller
     public function products(Request $request){
 
         
-        $name = @$request->get('name');
+        $title = @$request->get('name');
 
         $store_id = @$request->get('store_id');
 
@@ -145,8 +145,8 @@ class HomeController extends Controller
             }
         }
 
-        if($name!=null){
-            $products->where('name',$name);
+        if($title!=null){
+            $products->where('title','like','%'.$title.'%');
         }
 
         if(\is_array($attributes)){
@@ -192,7 +192,7 @@ class HomeController extends Controller
     public function services(Request $request){
 
         
-        $name = @$request->get('name');
+        $title = @$request->get('name');
 
         $store_id = @$request->get('store_id');
 
@@ -227,8 +227,8 @@ class HomeController extends Controller
             $services->where('brand_id', $brand_id);
         }
 
-        if($name!=null){
-            $services->where('name', $name);
+        if($title!=null){
+            $services->where('title','like','%'.$title.'%');
         }
 
         if(is_numeric($ser_cat_id)){

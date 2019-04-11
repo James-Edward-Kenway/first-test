@@ -19,13 +19,13 @@ class UserController extends Controller
             'name' => 'required|max:255',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:6',
-            'login' => 'required|min:5',
+            'login' => 'required|min:5|unique:users',
             'imei' => 'required',
             'password_confirmation' => 'required|same:password'
         ]);
 
         if($validate->fails()){
-            return ['messages'=>$validate->errors()->all()]+['authorized'=>false];
+            return ['messages'=>(array)$validate->errors()->all()]+['authorized'=>false];
         }
 
         $user = new User(['name'=>$request->input('name'),'balance'=>0,'images'=>'[]',  'email'=>$request->input('email'), 'login'=>$request->input('login'),'password'=>\password_hash($request->input('password').'as@',PASSWORD_BCRYPT)]);
@@ -58,7 +58,7 @@ class UserController extends Controller
         $token->save();
         $res = [];
 
-        $res = ['authorized'=>true,'token'=>$token->toArray(), 'user'=>$user];
+        $res = ['authorized'=>true,'token'=>$token->toArray(), 'user'=>$user->toArray()];
 
         return $res;
     }
@@ -67,14 +67,15 @@ class UserController extends Controller
 
         //validation
         $validate = validator($request->all(), [
-            'email' => 'required|email',
+            'email' => 'required',
             'password' => 'required',
             'imei' => 'required',
         ]);
 
+
         
         if($validate->fails()){
-            return ['messages'=>$validate->errors()->all()]+['authorized'=>false];
+            return ['messages'=>(array)$validate->errors()->all()]+['authorized'=>false];
         }
         
         
@@ -82,7 +83,7 @@ class UserController extends Controller
         $user = User::where('email',$request->input('email'))->orWhere('login',$request->input('email'))->where('use_google',0)->first();
 
         if($user==null){
-            return ['authorized'=>false,'messages'=>['note'=>'user not found']];
+            return ['authorized'=>false,'messages'=>['user not found','']];
         }
 
         if(!password_verify($request->input('password').'as@',$user->password)){
@@ -93,21 +94,16 @@ class UserController extends Controller
 
         if($token!=null){
             
-            $token->token = bcrypt(microtime().'i'.random_int(0,100000));
-            $token->save();
-            $res = [];
-            
-            $res = ['authorized'=>true,'token'=>$token->toArray(), 'user'=>$user];
-            
-            return $res;
+            $token->delete();
         }
+
 
         $token = new Token(['user_id'=>$user->id,'token'=>bcrypt(microtime().'i'.random_int(0,100000)),'imei'=>$request->input('imei',12345),'description'=>$this->tokenDesc($request)]);
 
         $token->save();
         $res = [];
 
-        $res = ['authorized'=>true,'token'=>$token->toArray(), 'user'=>$user];
+        $res = ['authorized'=>true,'token'=>$token->toArray(), 'user'=>$user->toArray()];
         
 
         return $res;
@@ -143,14 +139,7 @@ class UserController extends Controller
 
         if($token!=null){
             
-            $token->token = bcrypt(microtime().'i'.random_int(0,100000));
-            $token->save();
-            $res = [];
-            
-            $res = ['authorized'=>true, 'token'=>$token->toArray()];
-            
-            return $res;
-            
+            $token->delete();
         }
 
         $token = new Token(['user_id'=>$user->id,'token'=>bcrypt(microtime().'i'.random_int(0,100000)),'imei'=>$request->input('imei',12345),'description'=>$this->tokenDesc($request)]);
